@@ -29,6 +29,8 @@ export class Penalite1620484045500 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable("Penalite");
+
     }
 
 }

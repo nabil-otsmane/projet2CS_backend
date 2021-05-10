@@ -36,6 +36,9 @@ export class Locataire1620485860407 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+
+        await queryRunner.dropTable("Locataire");
+
     }
 
 }

@@ -32,6 +32,8 @@ export class CarteAbonnement1620484519500 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable("CarteAbonnement");
+
     }
 
 }

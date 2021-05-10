@@ -52,6 +52,9 @@ export class Location1620485518678 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+
+        await queryRunner.dropTable("Location");
+
     }
 
 }

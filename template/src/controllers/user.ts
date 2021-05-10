@@ -9,7 +9,7 @@ export const addUser = async (req: Request, res: Response) => {
     const user = User.create({
         firstName: req.body.first,
         lastName: req.body.last,
-        age: req.body.age
+       // age: req.body.age
     })
 
     await user.save()

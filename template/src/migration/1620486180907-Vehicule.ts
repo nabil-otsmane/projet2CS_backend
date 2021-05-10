@@ -40,6 +40,8 @@ export class Vehicule1620486180907 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable("Vehicule");
+
     }
 
 }
