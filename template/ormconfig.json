@@ -5,7 +5,7 @@
    "username": "tyghtxqhuptxxd",
    "password": "257d1007c939f77f23d8a46356bd9c8f1b686b4fc9bff3cacc02c80bfaccc839",
    "database": "d9b10av9a1ddhh",
-   "synchronize": true,
+   "synchronize": false,
    "logging": false,
    "ssl": true,
    "extra": {
