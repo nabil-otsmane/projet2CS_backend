@@ -3,10 +3,10 @@ import { StripeCustomers, PaymentMethods } from '../entity'
 export const addPaymentMethod = async (req: any, res: any) => {
     /** body request validation here  */
     const user = req.user
-    let customer = await StripeCustomers.findOne({ where: { userId: user.id } })
+    let customer = await StripeCustomers.findOne({ where: { userId: user.idUser } })
     if (!customer) {
         /** create a new customer if the user hasn't yet  */
-        let stripeCustomer = await createCustomer({ email: user.email })
+        let stripeCustomer = await createCustomer({ description: user.phoneNumber })
         if (!stripeCustomer) {
             return res.status(400).send(
                 {
@@ -17,7 +17,7 @@ export const addPaymentMethod = async (req: any, res: any) => {
         }
         customer = StripeCustomers.create({
             cusromerId: stripeCustomer.id,
-            userId: user.id
+            userId: user.idUser
         })
         customer = await customer.save()
     }
@@ -87,7 +87,7 @@ export const payForCustomer = async (req: any, res: any) => {
                 }
             );
         }
-        let customer = await StripeCustomers.findOne({ where: { userId: user.id } })
+        let customer = await StripeCustomers.findOne({ where: { userId: user.idUser } })
         if (!customer) {
             return res.status(400).send(
                 {
@@ -111,8 +111,8 @@ export const payForCustomer = async (req: any, res: any) => {
                 {
                     ok: true,
                     message: {
-                        amount: payed.amount_received / 100,
-                        reciep: payed.data.charges.receipt_url
+                        amount: payed.amount / 100,
+                        reciep: payed.charges.data[0].receipt_url
                     }
                 }
             );
@@ -129,7 +129,7 @@ export const payForCustomer = async (req: any, res: any) => {
 }
 export const fetchAllCards = async (req: any, res: any) => {
     const user = req.user
-    let customer = await StripeCustomers.findOne({ where: { userId: user.id } })
+    let customer = await StripeCustomers.findOne({ where: { userId: user.idUser } })
     if (!customer) {
         return res.status(200).send(
             {

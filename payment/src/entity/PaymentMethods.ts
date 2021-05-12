@@ -20,5 +20,4 @@ export class PaymentMethods extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date;
 
-
 }

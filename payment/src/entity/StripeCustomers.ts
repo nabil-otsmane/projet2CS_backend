@@ -17,5 +17,4 @@ export class StripeCustomers extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date;
 
-
 }

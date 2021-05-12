@@ -6,6 +6,7 @@ import { json } from "express";
 import * as cors from 'cors';
 import * as morgan from 'morgan';
 import Router from './routes'
+import { User } from './entity'
 
 const app = express()
 

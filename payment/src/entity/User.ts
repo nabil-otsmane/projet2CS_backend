@@ -1,15 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
-@Entity("users")
+@Entity("User")
 export class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    idUser: number;
 
     @Column()
-    email: string;
-
-    @Column()
-    uuid: string;
+    phoneNumber: string;
 
 }

@@ -2,10 +2,10 @@ version: '3.8'
 services:
     template:
         build:
-            context: ./template
+            context: ./payment
             target: development
         volumes:
-            - ./template:/src
+            - ./payment:/src
             - /src/node_modules
         command: npm run start:dev
         ports:
