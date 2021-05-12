@@ -5,9 +5,9 @@ import { authToken } from '../middleware'
 const router = Router();
 
 
-router.post('/cards/add', authToken, addPaymentMethod);
-router.post('/cards/pay', authToken, payForCustomer);
-router.get('/cards/all', authToken, fetchAllCards);
+router.post('/payment/cards/add', authToken, addPaymentMethod);
+router.post('/payment/cards/pay', authToken, payForCustomer);
+router.get('/payment/cards/all', authToken, fetchAllCards);
 
 
 export default router;
