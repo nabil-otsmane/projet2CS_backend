@@ -13,11 +13,8 @@ export const get = (_req: Request, res: Response) => {
 //get All vehicles
 export async function getVehicles(req: Request, res: Response) {
     
-    //const limit=Number(req.query.limit || "8")
-   // const page=Number(req.query.page || "0")
-
-   const page=0
-   const limit=3
+    const limit=Number(req.query.limit || "8")
+    const page=Number(req.query.page || "0")
 
     console.log(req.query);
 
