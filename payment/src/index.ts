@@ -14,9 +14,8 @@ app.use(json())
 app.use(cors())
 app.use(morgan("dev"))
 app.use(Router)
-
 createConnection().then(async _connection => {
-    app.listen(8000, () => {
+    app.listen(8500, () => {
         console.log("server started.")
     })
 }).catch(error => console.log(error));

@@ -1,15 +1,15 @@
 version: '3.8'
 services:
-    template:
+    payment:
         build:
             context: ./payment
             target: development
         volumes:
             - ./payment:/src
             - /src/node_modules
-        command: npm run start:dev
+        command: npm run start
         ports:
-            - "8000:8000"
+            - "8500:8500"
         environment: 
             NODE_ENV: development
             DEBUG: src:*

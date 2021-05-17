@@ -1,5 +1,5 @@
 import { createCustomer, createPaymentMethod, attachPaymentMethod, payUserAmount, fetchCustomerPaymentMethods } from '../services';
-import { StripeCustomers, PaymentMethods } from '../entity'
+import { StripeCustomers, PaymentMethods, Rental } from '../entity'
 export const addPaymentMethod = async (req: any, res: any) => {
     /** body request validation here  */
     const user = req.user
@@ -66,7 +66,6 @@ export const addPaymentMethod = async (req: any, res: any) => {
     return res.status(200).send({
         ok: true,
         paymentInfo: {
-            paymentMthod: paymentMthod,
             paymentId: paymentMthod.id,
             card: {
                 brand: payment.card.brand,
@@ -106,7 +105,18 @@ export const payForCustomer = async (req: any, res: any) => {
             );
         }
         if (req.body.amount > 0) {
+            const rental = await Rental.findOne(req.body.idLocation);
+            if (!rental) {
+                return res.status(200).send(
+                    {
+                        ok: false,
+                        errors: "Please pay for a valid car location"
+                    }
+                );
+            }
             let payed = await payUserAmount(customer.cusromerId, req.body.paymentId, req.body.amount)
+            rental.rentalstate = "paid"
+            rental.save()
             return res.status(200).send(
                 {
                     ok: true,
@@ -116,6 +126,7 @@ export const payForCustomer = async (req: any, res: any) => {
                     }
                 }
             );
+
         }
     } catch (e) {
         return res.status(400).send(
