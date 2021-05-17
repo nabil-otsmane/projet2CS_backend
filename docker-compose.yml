@@ -9,7 +9,7 @@ services:
             - /src/node_modules
         command: npm run start:dev
         ports:
-            - "8081:8000"
+            - "8081:8200"
         environment: 
             NODE_ENV: development
             DEBUG: src:*
@@ -26,16 +26,4 @@ services:
         environment: 
             NODE_ENV: development
             DEBUG: src:*    
-    utilisateur:
-        build:
-            context: ./utilisateur
-            target: development
-        volumes:
-            - ./utilisateur:/src
-            - /src/node_modules
-        command: npm run start:dev
-        ports:
-            - "8100:8000"
-        environment: 
-            NODE_ENV: development
-            DEBUG: src:*
+

@@ -13,8 +13,12 @@ export const get = (_req: Request, res: Response) => {
 //get All vehicles
 export async function getVehicles(req: Request, res: Response) {
     
-    const limit=Number(req.query.limit || "8")
-    const page=Number(req.query.page || "0")
+    //const limit=Number(req.query.limit || "8")
+   // const page=Number(req.query.page || "0")
+
+   const page=0
+   const limit=3
+
     console.log(req.query);
 
     var vehicles:any = await getManager()
@@ -34,13 +38,14 @@ export async function getVehicles(req: Request, res: Response) {
             .addSelect("user.firstName as firstname")
             .addSelect("user.lastName as lastname")
             .addSelect("rental.rentaldate as rentalDate ")
+            .addSelect("rental.idRental as idRental ")
             .addSelect("rental.plannedrestitutiondate as availibleDate ")
             .from(Vehicle, "vehicle")
             .innerJoin(Rental, "rental", "vehicle.idVehicle=rental.idVehicle")
             .innerJoin(Tenant, "tenant", "rental.idTenant=tenant.idTenant")
             .innerJoin(User, "user", "tenant.idUser=user.idUser")
             .getRawOne()
-            vehicles[i]=toReturn
+             vehicles[i]=toReturn
        }
     }
     let nbVehicles=await Vehicle.count()
