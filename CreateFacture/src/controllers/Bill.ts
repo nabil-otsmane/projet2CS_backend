@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import {Bill} from "../entity/Bill";
-
-/*export const get =  (_req: Request, res: Response) => {
-    res.end("Hello there this is service of creation of facture.");
-}*/
-
+import {Rental} from "../entity/Rental";
 export const addBill = async (req: Request, res: Response) => {
-    console.log("on va ajouter une facture");
+    const  rental= await Rental.find({
+        where : {idRental : req.body.idRental}
+    });
+    const nb=Math.floor(Math.random() * (1000 - 2 + 1)) + 2;
+   const date=rental[0].rentaldate
+    console.log(date);
     const bill = Bill.create({
-        idBill : req.body.idBill,
-        nbBill : req.body.nbBill,
+        nbBill : nb,
         idRental: req.body.idRental,
-        creationDate: req.body.CreationDate,
+        creationDate: date,
         baseRate :req.body.baseRate,
         penaltyRate : req.body.penaltyRate,
         totalRate: req.body.totalRate,
@@ -27,8 +27,9 @@ export async function getBills(_req:Request, res:Response){
     const bills =await Bill.find();
     res.json(bills)
 }
-
-/*export async function getUsers(_req: Request, res: Response) {
-    const users = await User.find();
-    res.json(users)
-}*/
+export async function getBillTenant(req:Request, res:Response){
+    const  bill= await Bill.find({
+        where : {idRental : req.body.idRental}
+    });
+    res.json(bill)
+}
