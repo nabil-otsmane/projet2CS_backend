@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Double, getConnection } from "typeorm";
 import {Rental} from "../entity/Rental";
 import {Vehicle} from "../entity/Vehicle";
 import {RentalPenalty} from "../entity/RentalPenalty";
@@ -27,8 +26,8 @@ export async function getPricingPerHour(_req: Request, res: Response) {
             //turning the date and time into one object of type Date
             const rentalDate = new Date(
                 (rental.rentaldate!!).toUTCString()
-                                          .replace("22:00:00", 
-                                           rental?.rentaltime!!));
+                                     .replace("22:00:00", 
+                                      rental?.rentaltime!!));
             const vehicle = await Vehicle.findOne(rental.idVehicle);
             //in case the vehicle is deleted the rental is not, but we cannot
             //use this api
@@ -37,8 +36,8 @@ export async function getPricingPerHour(_req: Request, res: Response) {
 
                 const restitutionDate = new Date(
                     (rental.restitutionDate!!).toUTCString()
-                                                .replace("22:00:00", 
-                                                rental?.restitutionTime!!));
+                                              .replace("22:00:00", 
+                                               rental?.restitutionTime!!));
                 rentalDurationInHours = getDifferenceInHours(rentalDate, 
                     restitutionDate)
             
@@ -99,6 +98,7 @@ export async function getPenalties(_req: Request, res: Response) {
             }
             res.json({
                 price: penaltiesPricing,
+                rentalPenalties:rentalPenalties,
                 msg: "Total pricing of penalties"
             });
         }else{
