@@ -14,7 +14,34 @@ export async function get(_req: Request, res: Response) {
 }
 
 
-// Tarification par Heures
+// Returns the pricing of the rental per Day
+export async function getPricingPerDay(_req: Request, res: Response) {
+    const idRental=_req.params.id;
+    const rental = await Rental.findOne(idRental);
+    
+    if(rental){
+        const vehicle = await Vehicle.findOne(rental.idVehicle);
+        const unitPricePDay= vehicle?.unitpriceperday ;
+        const unitPricePerDay= Number(unitPricePDay);
+        console.log(unitPricePerDay);
+        const plannedRestitutionDate =rental.plannedrestitutiondate;
+        const rentalDate=rental.rentaldate;
+
+        const differenceInDays = getDifferenceInDays(
+                                    rentalDate,plannedRestitutionDate);
+        
+        const pricingPerDay= calculateBasePrice(
+                                    unitPricePerDay,differenceInDays);
+        res.json({
+            price: pricingPerDay,
+            msg: "success"
+        });
+    }
+    else{
+        res.json({ msg: "Rental Not Found" });
+    }
+    
+}
 
 
 // Returns the pricing of the rental per hour
@@ -68,10 +95,14 @@ check the bill history"
         }
     }else{
         res.json({ 
-            msg: "You have provided to provide a parameter" 
+            msg: "You have to provide a parameter" 
         });
     }
     
+}
+
+export const getDifferenceInDays = (beginingDate:Date, endDate:Date) => {
+    return Math.ceil((endDate.getTime() - beginingDate.getTime())/(3600000*24))
 }
 
 export const getDifferenceInHours = (beginingDate:Date, endDate:Date) => {
@@ -79,7 +110,11 @@ export const getDifferenceInHours = (beginingDate:Date, endDate:Date) => {
 }
 
 export const calculateBasePrice = (duration:number, unitPrice:number) => {
-    return duration*unitPrice;
+    if((unitPrice>=0)&&(duration>=0)){
+        return duration*unitPrice;
+    }else{
+        return -1;
+    }
 }
 
 export async function getPenalties(_req: Request, res: Response) {

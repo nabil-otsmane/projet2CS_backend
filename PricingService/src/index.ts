@@ -16,11 +16,14 @@ app.use(cors())
 app.use(morgan("dev"))
 
 app.use(Router)
-
+var s;
 createConnection().then(async _connection => {   
-    app.listen(8080, () => {
+    s = app.listen(8080, () => {
         console.log("server started.")
     })
     
 
 }).catch(error => console.log(error));
+
+export const server = s;
+export default app;
