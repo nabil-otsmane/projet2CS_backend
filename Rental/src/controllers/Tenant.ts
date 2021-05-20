@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {Tenant} from "../entity/Tenant";
 import {User} from "../entity/User" ;
  
-export async function getTenants(_req:Request, res:Response){
+export async function getTenants(_req:Request, res:Response){ //outputs : idUser
     const Tenants =await Tenant.find(); 
     const len=Tenants.length;
     let  user = new Array();

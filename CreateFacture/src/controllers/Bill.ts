@@ -27,7 +27,7 @@ export async function getBills(_req:Request, res:Response){
     const bills =await Bill.find();
     res.json(bills)
 }
-export async function getBillTenant(req:Request, res:Response){
+export async function getBillTenant(req:Request, res:Response){ //input : idRental output : bill
     const  bill= await Bill.find({
         where : {idRental : req.body.idRental}
     });
