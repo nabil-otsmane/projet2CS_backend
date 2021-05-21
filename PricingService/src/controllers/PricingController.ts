@@ -1,18 +1,12 @@
 import { Request, Response } from "express";
-import {Rental} from "../entity/Rental";
-import {Vehicle} from "../entity/Vehicle";
-import {RentalPenalty} from "../entity/RentalPenalty";
-import { Penalty } from "../entity/Penalty";
+import { Rental} from "../entity/Rental";
+import { Vehicle} from "../entity/Vehicle";
 
 
-
-
-
-
+// Function for testing server response
 export async function get(_req: Request, res: Response) {
     res.end("Pricing Service")
 }
-
 
 // Returns the pricing of the rental per Day
 export async function getPricingPerDay(_req: Request, res: Response) {
@@ -21,24 +15,31 @@ export async function getPricingPerDay(_req: Request, res: Response) {
     
     if(rental){
         const vehicle = await Vehicle.findOne(rental.idVehicle);
-        const unitPricePDay= vehicle?.unitpriceperday ;
-        const unitPricePerDay= Number(unitPricePDay);
-        console.log(unitPricePerDay);
-        const plannedRestitutionDate =rental.plannedrestitutiondate;
-        const rentalDate=rental.rentaldate;
+        if(vehicle){
+            const unitPricePerDay= Number(vehicle.unitpriceperday);
+            const plannedRestitutionDate =rental.plannedrestitutiondate;
+            const rentalDate=rental.rentaldate;
 
-        const differenceInDays = getDifferenceInDays(
-                                    rentalDate,plannedRestitutionDate);
-        
-        const pricingPerDay= calculateBasePrice(
-                                    unitPricePerDay,differenceInDays);
-        res.json({
-            price: pricingPerDay,
-            msg: "success"
-        });
+            const differenceInDays = getDifferenceInDays(
+                                        rentalDate,plannedRestitutionDate);
+            
+            const pricingPerDay = calculateBasePrice(
+                                        unitPricePerDay,differenceInDays);
+            res.json({
+                price: pricingPerDay,
+                msg: "success"
+            });
+        }else{
+            res.json({
+                msg: "The vehicle concerned is not available, check the bill \
+history"
+            })
+        }
     }
     else{
-        res.json({ msg: "Rental Not Found" });
+        res.json({ 
+            msg: "Rental Not Found" 
+        });
     }
     
 }
@@ -69,7 +70,7 @@ export async function getPricingPerHour(_req: Request, res: Response) {
                     restitutionDate)
             
                 if(Number(rentalDurationInHours)>0){
-                    res.json({
+                    res.status(200).json({
                         price : calculateBasePrice(
                                     Number(vehicle.unitpriceperhour),
                                     Number(rentalDurationInHours)
@@ -82,14 +83,13 @@ export async function getPricingPerHour(_req: Request, res: Response) {
                     })
                 }
             }else{
-                //message to check if a bill was made
                 res.json({
                     msg: "The vehicle concerned is not available, \
 check the bill history"
                 })
             }
         }else{
-            res.json({ 
+            res.status(400).json({ 
                 msg: "Wrong id, the rental doesn't exist!" 
             });
         }
@@ -101,10 +101,30 @@ check the bill history"
     
 }
 
+// Returns the pricing from duration and base
+export async function getRealTimePricing(_req: Request, res: Response) {
+    const rentalDuration = Number(_req.params.rentalDuration);
+    const unitPrice = Number(_req.params.unitPrice);
+    
+    if(rentalDuration>0){
+        res.json({
+            price : calculateBasePrice(unitPrice, rentalDuration),
+            msg: "success"
+        });
+    }else{
+        res.json({
+            msg: "Enter a valid duration"
+        });
+    }
+    
+}
+
+// Getting difference in time
 export const getDifferenceInDays = (beginingDate:Date, endDate:Date) => {
     return Math.ceil((endDate.getTime() - beginingDate.getTime())/(3600000*24))
 }
 
+// Getting difference in time
 export const getDifferenceInHours = (beginingDate:Date, endDate:Date) => {
     return Math.ceil((endDate.getTime() - beginingDate.getTime())/(3600000))
 }
@@ -113,34 +133,8 @@ export const calculateBasePrice = (duration:number, unitPrice:number) => {
     if((unitPrice>=0)&&(duration>=0)){
         return duration*unitPrice;
     }else{
-        return -1;
+        return {
+            msg : "Error"
+        };
     }
-}
-
-export async function getPenalties(_req: Request, res: Response) {
-    const idRental=_req.params.id;
-    if(idRental){
-        const rentalPenalties = await RentalPenalty.find({
-            where : {idRental : idRental}
-        });
-        
-        if(rentalPenalties[0]){
-            var penaltiesPricing = 0;
-            var penalty;
-            for(var i=0; i<rentalPenalties.length;i++){
-                penalty = await Penalty.findOne(rentalPenalties[i].idPenalty);
-                penaltiesPricing += Number(penalty?.penaltyTotal);
-            }
-            res.json({
-                price: penaltiesPricing,
-                rentalPenalties:rentalPenalties,
-                msg: "Total pricing of penalties"
-            });
-        }else{
-            res.json({ 
-                price: 0,
-                msg: "No penalties found"
-            });
-        }
-    } 
 }
