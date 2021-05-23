@@ -7,50 +7,19 @@ import * as morgan from "morgan";
 
 import { AuthenticationRoutes } from "./Routes/userRoutes";
 
-class Server {
-  private authenticationRoutes: AuthenticationRoutes;
-  private app: express.Application;
+const app = express();
 
-  constructor() {
-    this.app = express(); // init the application
-    this.configuration();
-    this.routes();
+app.use(json());
+app.use(cors());
+app.use(morgan("dev"));
 
-    this.app.use(json());
-    this.app.use(cors());
-    this.app.use(morgan("dev"));
-  }
+let authenticationRoutes = new AuthenticationRoutes();
+app.use(`/`, authenticationRoutes.router);
 
-  /**
-   * Method to configure the server,
-   * If we didn't configure the port into the environment
-   * variables it takes the default port 8000
-   */
-  public configuration() {
-    this.app.set("port", process.env.PORT || 8000);
-  }
+createConnection();
 
-  /**
-   * Method to configure the routes
-   */
-  public routes() {
-    this.authenticationRoutes = new AuthenticationRoutes();
-    this.app.use(`/`, this.authenticationRoutes.router); // Configure the new routes of the controller user
-  }
+const server = app.listen(8000, () => {
+  console.log("Authentication Service Up 🚀");
+});
 
-  /**
-   * Used to start the server
-   */
-  public async start() {
-    await createConnection()
-      .then(async (_connection) => {
-        this.app.listen(8000, () => {
-          console.log("server started.");
-        });
-      })
-      .catch((error) => console.log(error));
-  }
-}
-
-const server = new Server(); // Create server instance
-server.start(); // Execute the server
+module.exports = server;

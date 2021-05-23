@@ -1,17 +1,13 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Generated,
-  BaseEntity,
-  CreateDateColumn,
-} from "typeorm";
-import { IsEmail, IsEnum, Length } from "class-validator";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { IsEmail, Length } from "class-validator";
 
-@Entity("Auth_utilisateur")
+@Entity("AuthUser")
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  idAuthUser: number;
+
+  @Column()
+  idUser: number;
 
   @Column()
   @Length(1, 255)
@@ -21,37 +17,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column()
-  @Generated("uuid")
-  uuid: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @Column({
-    type: "enum",
-    enum: [
-      "locataire",
-      "agent",
-      "decideur",
-      "adminAegnt",
-      "adminCompte",
-      "adminTechnique",
-    ],
-    default: "locataire",
-  })
-  @IsEnum([
-    "locataire",
-    "agent",
-    "decideur",
-    "adminAegnt",
-    "adminCompte",
-    "adminTechnique",
-    undefined,
-  ])
-  role: string;
-
   toJSON() {
-    return { ...this, id: undefined, password: undefined };
+    return { ...this, password: undefined };
   }
 }
