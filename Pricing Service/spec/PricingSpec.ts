@@ -68,5 +68,13 @@ describe("Testing Server Response for Pricing", function() {
             expect(text).toEqual("Pricing Service")
         }); 
     })
+    describe("GET /pricing/", function() {
+        it("should return the real time pricing to return success mssg", async () => {
+            const {status, text} = await request(app).get("/pricing/getRealTimePricing/100/20")
+            expect(status).toEqual(200)
+            expect(JSON.parse(text).msg).toEqual("success")
+            console.log(text)
+        }); 
+    })
 })
 
