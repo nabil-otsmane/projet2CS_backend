@@ -1,12 +1,16 @@
 import { type } from "node:os";
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity,PrimaryColumn, OneToOne, JoinColumn} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
-import{User} from './User'
 
 @Entity("Tenant")
-export class Tenant extends User {
+export class Tenant extends BaseEntity {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     idTenant: number;
 
+    @Column()
+    accountState: string;
+
+    @Column()
+    subCard: number;
 }
