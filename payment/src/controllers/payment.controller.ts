@@ -1,5 +1,7 @@
 import { createCustomer, createPaymentMethod, attachPaymentMethod, payUserAmount, fetchCustomerPaymentMethods } from '../services';
 import { StripeCustomers, PaymentMethods, Rental } from '../entity'
+import { FACTURATION_URL } from '../config'
+import axios from 'axios'
 export const addPaymentMethod = async (req: any, res: any) => {
     /** body request validation here  */
     const user = req.user
@@ -78,8 +80,16 @@ export const addPaymentMethod = async (req: any, res: any) => {
 export const payForCustomer = async (req: any, res: any) => {
     try {
         const user = req.user
+        if (['rentalRate', 'penaltyRate'].indexOf(req.body.type) === -1) {
+            return res.status(500).send(
+                {
+                    ok: false,
+                    message: "This api can pay just for new rental or penalty"
+                }
+            );
+        }
         if (typeof req.body.amount === "number" && req.body.amount < 0) {
-            return res.status(200).send(
+            return res.status(500).send(
                 {
                     ok: false,
                     message: "The amount you will pay must greater than 0"
@@ -88,7 +98,7 @@ export const payForCustomer = async (req: any, res: any) => {
         }
         let customer = await StripeCustomers.findOne({ where: { userId: user.idUser } })
         if (!customer) {
-            return res.status(400).send(
+            return res.status(500).send(
                 {
                     ok: false,
                     errors: "The payment can't be processed, please add a credit card"
@@ -97,37 +107,39 @@ export const payForCustomer = async (req: any, res: any) => {
         }
         let paymentId = await PaymentMethods.findOne({ where: { paymentId: req.body.paymentId, stripeCustomerId: customer.id } })
         if (!paymentId) {
-            return res.status(400).send(
+            return res.status(500).send(
                 {
                     ok: false,
                     errors: "The paymentMethod is wrong , or you are not allowed to use this paymentMethod"
                 }
             );
         }
-        if (req.body.amount > 0) {
-            const rental = await Rental.findOne(req.body.idLocation);
-            if (!rental) {
-                return res.status(200).send(
-                    {
-                        ok: false,
-                        errors: "Please pay for a valid car location"
-                    }
-                );
+        const rental = await Rental.findOne(req.body.idRental);
+        if (!rental) return res.status(500).send(
+            {
+                ok: false,
+                errors: "Please pay for a valid car location"
             }
-            let payed = await payUserAmount(customer.cusromerId, req.body.paymentId, req.body.amount)
-            rental.rentalstate = "paid"
-            rental.save()
-            return res.status(200).send(
-                {
-                    ok: true,
-                    message: {
-                        amount: payed.amount / 100,
-                        reciep: payed.charges.data[0].receipt_url
-                    }
+        );
+        let payed = await payUserAmount(customer.cusromerId, req.body.paymentId, req.body.amount)
+        rental.rentalstate = "paid"
+        rental.save()
+        const payedAmount = payed.amount / 100
+        axios.post(FACTURATION_URL + '/bill/add', {
+            idRental: req.body.idRental,
+            typeBill: req.body.type,
+            amountToBill: payedAmount
+        })
+        return res.status(200).send(
+            {
+                ok: true,
+                message: {
+                    amount: payedAmount,
+                    reciep: payed.charges.data[0].receipt_url
                 }
-            );
+            }
+        );
 
-        }
     } catch (e) {
         return res.status(400).send(
             {
