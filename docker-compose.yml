@@ -42,6 +42,12 @@ services:
       - "8123:8000"
     env_file: 
       - ormconfig.local.env
+    environment: 
+      - REDIS_SERVER=redis:6379
+      - LOG_SERVICE=log:8000
+      - AUTH_SERVICE=authentication:8005
+      - USER_SERVICE=user:8100
+      - NAME=association-service
     depends_on: 
       - redis
       - database
