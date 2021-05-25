@@ -65,7 +65,7 @@ export class UserController {
 
       const payload = {
         user: {
-          id: user.idAuthUser,
+          id: user.idUser,
         },
       };
 
@@ -119,6 +119,10 @@ export class UserController {
     const users = await userRepository.find();
     res.json(users);
   };
+
+  public user = async (_: Request, res: Response) => {
+    res.json(res.locals.jwtPayload)
+  }
 
   public update = async (_req: Request, res: Response) => {
     const idUser = parseInt(_req.params.uuid);

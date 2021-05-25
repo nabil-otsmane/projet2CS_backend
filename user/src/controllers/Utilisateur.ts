@@ -23,7 +23,6 @@ export const getUtilisateur =  (req: Request, res: Response) => {
 export const addUtilisateur = async (req: Request, res: Response) => {
     try {
         const user = User.create({
-            idUser: 1,
             lastName: req.body.nom,
             firstName: req.body.prenom,
             phoneNumber: req.body.numeroTelephone,
