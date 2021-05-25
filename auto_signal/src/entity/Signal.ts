@@ -1,5 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, Timestamp} from "typeorm";
 
+
 @Entity("Signal")
 export class Signal extends BaseEntity {
 
@@ -7,21 +8,25 @@ export class Signal extends BaseEntity {
     idSignal: number;
 
     @Column()
-    signalType: string
+    signalType:String;
 
     @Column()
-    message: string;
+    message:String;
 
     @Column()
-    sourceType: string;
+    sourceType:String;
 
-    @Column()
-    idUserSource: number
-
-    @Column()
-    idVehicle: number
-
-    @Column()
-    sent_at: number
+    @Column({ nullable: true })
+    idUserSource:number;
+    default:null;
    
+    @Column()
+    idVehicle:number;
+
+    @Column()
+    sent_at:Date;
+
+    @Column()
+    treated:boolean;
+
 }

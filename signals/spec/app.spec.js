@@ -54,6 +54,36 @@ describe("POST /signals", () => {
     });
 });
 
+describe("GET /panne_signals", () => {
+    
+    it("returns status code 200", () => {
+        
+        var status = 200;
+        
+        Request.get("http://localhost:8000/panne_signals", (error, response, body) => {
+                status = response.statusCode;
+            });
+
+        expect(status).toBe(200);
+    });
+
+});
+
+describe("GET /theft_signals", () => {
+    
+    it("returns status code 200", () => {
+        
+        var status = 200;
+        
+        Request.get("http://localhost:8000/theft_signals", (error, response, body) => {
+                status = response.statusCode;
+            });
+
+        expect(status).toBe(200);
+    });
+
+});
+
 
 
 
