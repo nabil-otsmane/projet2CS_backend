@@ -52,22 +52,28 @@ export async function getPricingPerHour(_req: Request, res: Response) {
         const rental = await Rental.findOne(idRental);
         if(rental){
             //turning the date and time into one object of type Date
+            
+            const fakeRentTime = (rental.rentaldate!!).toUTCString()
+                                                      .slice(17,25)
             const rentalDate = new Date(
                 (rental.rentaldate!!).toUTCString()
-                                     .replace("22:00:00", 
-                                      rental?.rentaltime!!));
+                                     .replace(fakeRentTime, 
+                                      rental.rentaltime!!));
             const vehicle = await Vehicle.findOne(rental.idVehicle);
             //in case the vehicle is deleted the rental is not, but we cannot
             //use this api
             if(vehicle){
                 var rentalDurationInHours;
 
+                const fakeRestTime = (rental.restitutionDate!!).toUTCString()
+                                                               .slice(17,25)
                 const restitutionDate = new Date(
                     (rental.restitutionDate!!).toUTCString()
-                                              .replace("22:00:00", 
-                                               rental?.restitutionTime!!));
+                                              .replace(fakeRestTime, 
+                                               rental.restitutionTime!!));
+                                               
                 rentalDurationInHours = getDifferenceInHours(rentalDate, 
-                    restitutionDate)
+                                                             restitutionDate)
             
                 if(Number(rentalDurationInHours)>0){
                     res.status(200).json({

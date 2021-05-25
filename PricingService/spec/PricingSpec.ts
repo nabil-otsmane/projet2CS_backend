@@ -1,8 +1,10 @@
 
 import "jasmine";
+import { Request, Response } from "express";
 import app, {server} from '../src/index';
 import PricingController = require('../src/controllers/PricingController');
 import PromoCodeController = require('../src/controllers/PromoCodeController');
+import { resourceLimits } from "node:worker_threads";
 var request = require("supertest");
 
 
@@ -66,14 +68,6 @@ describe("Testing Server Response for Pricing", function() {
             const {status, text} = await request(app).get("/pricing")
             expect(status).toEqual(200)
             expect(text).toEqual("Pricing Service")
-        }); 
-    })
-    describe("GET /pricing/", function() {
-        it("should return the real time pricing to return success mssg", async () => {
-            const {status, text} = await request(app).get("/pricing/getRealTimePricing/100/20")
-            expect(status).toEqual(200)
-            expect(JSON.parse(text).msg).toEqual("success")
-            console.log(text)
         }); 
     })
 })
