@@ -1,6 +1,6 @@
-
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, JoinColumn} from "typeorm";
 import {Tenant} from "./Tenant";
+
 @Entity("Rental")
 export class Rental extends BaseEntity {
 

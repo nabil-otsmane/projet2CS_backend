@@ -1,4 +1,3 @@
-import { type } from "node:os";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 
@@ -12,5 +11,5 @@ export class Tenant extends BaseEntity {
     accountState: string;
 
     @Column()
-    subCard: number;
+    subCard: number|null;
 }

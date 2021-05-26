@@ -15,7 +15,7 @@ app.use(json())
 app.use(cors())
 app.use(morgan("dev"))
 
-app.use('/pricing',Router)
+app.use('/subscription',Router)
 var s;
 createConnection().then(async _connection => {   
     s = app.listen(8080, () => {
