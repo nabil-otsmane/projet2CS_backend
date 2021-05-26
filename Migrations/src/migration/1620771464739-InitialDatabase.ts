@@ -217,10 +217,14 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "address",
                     type: "varchar"
+                },
+                {
+                    name: "creationDate",
+                    type: "timestamp",
+                    default: "now()"
                 }
             ]
         }), true)
-
       
         await queryRunner.createTable(new Table({
             name: "AuthUser",
@@ -242,7 +246,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "password",
-                    type: "varchar"
+                    type: "varchar",
                 }
             ]
         }), true);
@@ -421,17 +425,28 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "subCard",
-                    type: "int"
+                    type: "int",
+                    isNullable: true
                 },
                 {
                     name: "points",
-                    type: "int"
+                    type: "int",
+                    isNullable: true
                 },
                 {
                     name: "accountState",
-                    type: "varchar"
+                    type: "varchar",
+                },
+                {
+                    name: "stateMessage",
+                    type: "varchar",
+                    isNullable: true
+                },
+                {
+                    name: "validationDate",
+                    type: "date",
+                    isNullable: true
                 }
-
             ]
         }), true);
 
@@ -1050,9 +1065,6 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
         await queryRunner.dropTable("Signal");
         await queryRunner.dropTable("VehiculeTracking");
         await queryRunner.dropTable("TaskState");
-
-     
-
     }
 
 }
