@@ -178,5 +178,23 @@ services:
     depends_on:
       - database
 
+  log:
+    build:
+      context: ./log
+      target: development
+    volumes:
+      - ./log:/src
+      - /src/node_modules
+    command: npm run start:dev
+    ports:
+      - "8006:8000"
+    environment:
+      NODE_ENV: development
+      DEBUG: src:*
+    env_file: 
+      - ormconfig.local.env
+    depends_on:
+      - database
+
 volumes:
   database-data: # named volumes can be managed easier using docker-compose
