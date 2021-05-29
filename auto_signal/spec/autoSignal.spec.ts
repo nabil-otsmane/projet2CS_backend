@@ -31,8 +31,8 @@ describe("Service Test : ", () => {
   describe("POST /estRemorquer", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
-        "http://localhost:8002/estRemorquer?remorque=true&idVehicle=3",
+      Request.post(
+        "http://localhost:8002/estRemorquee?remorque=true&idVehicle=3",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
           data.body = JSON.parse(body);
@@ -52,7 +52,7 @@ describe("Service Test : ", () => {
    describe("POST /dateDepassee", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
+      Request.post(
         "http://localhost:8002/dateDepassee?idVehicle=3",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;

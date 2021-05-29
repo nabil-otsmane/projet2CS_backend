@@ -106,12 +106,12 @@ services:
       NODE_ENV: development
       DEBUG: src:*
 
-  signal:
+  signals:
     build:
-        context: ./signal
+        context: ./signals
         target: development
     volumes:
-        - ./user:/src
+        - ./signals:/src
         - /src/node_modules
     command: npm run start:dev
     ports:
@@ -119,3 +119,17 @@ services:
     environment: 
         NODE_ENV: development
         DEBUG: src:*
+  stats:
+    build:
+      context: ./stats
+      target: development
+    volumes:
+      - ./stats:/src
+      - /src/node_modules
+    command: npm run start:dev
+    ports:
+      - "8089:8000"
+    environment:
+      NODE_ENV: development
+      DEBUG: src:*
+    

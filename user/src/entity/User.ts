@@ -23,5 +23,12 @@ export class User extends BaseEntity {
 
     @Column()
     phoneNumber: String
+
+    @Column({
+        nullable: false,
+        default: () => 'NOW()',
+        type: 'timestamp'
+    })
+    creationDate: string
    
 }

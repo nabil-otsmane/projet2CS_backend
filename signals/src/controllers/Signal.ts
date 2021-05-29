@@ -9,6 +9,7 @@ import {User} from "../entity/User";
 
 
 import { getManager } from "typeorm";
+import { Borne } from "../entity/Borne";
 
 
 
@@ -69,7 +70,7 @@ export const deleteSignal = async (req: Request, res: Response) => {
 }
 //update the state of signal treated=true 
 export async function updateSignalsState(req: Request, res: Response) {
-    const id= Number(req.params.idSignal)
+    const id= Number(req.query.idSignal)
     try {
         const signal= await Signal.findOneOrFail({idSignal:id})
         signal.treated=true,
@@ -95,13 +96,16 @@ export async function updateSignalsState(req: Request, res: Response) {
             const vehicle = await Vehicle.findOneOrFail({idVehicle:signals[i].idVehicle});
             const rental = await Rental.find({idVehicle:signals[i].idVehicle});
             const tenant = await Tenant.findOneOrFail({idTenant:rental[rental.length-1].idTenant});
+            const borneDepart=await Borne.findOneOrFail({idBorne:rental[rental.length-1].iddepartborne});
+            const borneDest=await Borne.findOneOrFail({idBorne:rental[rental.length-1].iddestborne});
             const user = await User.findOneOrFail({idUser:tenant.idUser});
 
+        
             if(signals[i].treated){
-            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user)
+            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city})
             index1++
             }else{
-            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user)
+            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city})
             index2++
             }
         }
@@ -130,13 +134,15 @@ export async function updateSignalsState(req: Request, res: Response) {
             const vehicle = await Vehicle.findOneOrFail({idVehicle:signals[i].idVehicle});
             const rental = await Rental.find({idVehicle:signals[i].idVehicle});
             const tenant = await Tenant.findOneOrFail({idTenant:rental[rental.length-1].idTenant});
+            const borneDepart=await Borne.findOneOrFail({idBorne:rental[rental.length-1].iddepartborne});
+            const borneDest=await Borne.findOneOrFail({idBorne:rental[rental.length-1].iddestborne});
             const user = await User.findOneOrFail({idUser:tenant.idUser});
 
             if(signals[i].treated){
-            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user)
+            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city})
             index1++
             }else{
-            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user)
+            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city})
             index2++
             }
         }

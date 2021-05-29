@@ -1,12 +1,13 @@
 var Request = require("request");
 
+
 describe("GET /signal", () => {
     
     it("returns status code 200", () => {
         
         var status = 200;
         
-        Request.get("http://localhost:8111/signals/2", (error, response, body) => {
+        Request.get("http://localhost:8000/signals/2", (error, response, body) => {
                 status = response.statusCode;
             });
 
@@ -22,7 +23,7 @@ describe("GET /signals", () => {
         
         var status = 200;
         
-        Request.get("http://localhost:8111/signals/2", (error, response, body) => {
+        Request.get("http://localhost:8000/signals/2", (error, response, body) => {
                 status = response.statusCode;
             });
 
@@ -36,7 +37,7 @@ describe("POST /signals", () => {
     it("Returns status code 200", () => {
         var status;
         Request.post({
-            url: "http://localhost:8111/signals",
+            url: "http://localhost:8000/signals",
             headers: {"content-type": "application/json"},
             body: JSON.stringify({
                 signalType: "panne",
@@ -84,6 +85,20 @@ describe("GET /theft_signals", () => {
 
 });
 
+describe("PUT /signals_treated?idSignal=5", () => {
+    
+    it("returns status code 200", () => {
+        
+        var status = 200;
+        
+        Request.get("http://localhost:8000/theft_signals", (error, response, body) => {
+                status = response.statusCode;
+            });
+
+        expect(status).toBe(200);
+    });
+
+});
 
 
 

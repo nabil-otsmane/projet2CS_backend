@@ -58,6 +58,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/jasmine@^3.7.4":
+  "integrity" "sha512-L3FKeEwMm8e8hqGvt7cSesVmGtavpRyHV1FNDq+Pm5pS4x5eFmE70ZERXCSBWAiLQqXBcZRUrwV59FZLQl/GxQ=="
+  "resolved" "https://registry.npmjs.org/@types/jasmine/-/jasmine-3.7.4.tgz"
+  "version" "3.7.4"
+
 "@types/mime@^1":
   "integrity" "sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw=="
   "resolved" "https://registry.npmjs.org/@types/mime/-/mime-1.3.2.tgz"
@@ -1056,6 +1061,13 @@
   "resolved" "https://registry.npmjs.org/jasmine-core/-/jasmine-core-3.7.1.tgz"
   "version" "3.7.1"
 
+"jasmine-ts@^0.3.3":
+  "integrity" "sha512-ISBmhSe1imdT2V3u681YgIIlpnt68dhdu8l94JeWfL4sYE67bfoHj2Coc1k1ND3u+DxQcHMTn8nCZ7Pr3dV6TQ=="
+  "resolved" "https://registry.npmjs.org/jasmine-ts/-/jasmine-ts-0.3.3.tgz"
+  "version" "0.3.3"
+  dependencies:
+    "yargs" "^16.2.0"
+
 "jasmine@^3.7.0":
   "integrity" "sha512-wlzGQ+cIFzMEsI+wDqmOwvnjTvolLFwlcpYLCqSPPH0prOQaW3P+IzMhHYn934l1imNvw07oCyX+vGUv3wmtSQ=="
   "resolved" "https://registry.npmjs.org/jasmine/-/jasmine-3.7.0.tgz"
@@ -1714,6 +1726,11 @@
   "version" "3.2.2"
   dependencies:
     "readable-stream" "^3.0.0"
+
+"sqlite@^4.0.23":
+  "integrity" "sha512-dSdmSkrdIhUL7xP/fiEMfFuAo4dxb0afag3rK8T4Y9lYxE3g3fXT0J8H9qSFvmcKxnM0zEA8yvLbpdWQ8mom3g=="
+  "resolved" "https://registry.npmjs.org/sqlite/-/sqlite-4.0.23.tgz"
+  "version" "4.0.23"
 
 "sshpk@^1.7.0":
   "integrity" "sha512-HXXqVUq7+pcKeLqqZj6mHFUMvXtOJt1uoUx09pFW6011inTMxqI8BA8PM95myrIyyKwdnzjdFjLiE6KBPVtJIg=="
