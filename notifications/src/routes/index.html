@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		<title>RegistrationForm_v7 by Colorlib</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+
 <style>
 
 body {
@@ -203,21 +205,32 @@ p {
 				<form action="">
                     <p>Testing notification system</p>
 					<label class="form-group" >
-						<textarea name="" id="" class="form-control" required></textarea>
+						<textarea name="" id="idPanne" class="form-control" required></textarea>
 						<span for="">Panne ID</span>
 						<span class="border"></span>
 					</label>
 					<label class="form-group" >
-						<textarea name="" id="" class="form-control" required></textarea>
+						<textarea name="" id="message" class="form-control" required></textarea>
 						<span for="">Your Message</span>
 						<span class="border"></span>
 					</label>
-                    <button>Push breakdown notification
+                    <button onclick="sendMessage()" value="Send Message">Push breakdown notification
 						<i class="zmdi zmdi-arrow-right"></i>
 					</button>
 				</form>
 			</div>
 		</div>
+        <script>
+            var socket = io("http://localhost:8000");
+            function sendMessage() {
+                socket.emit("messageSent", {
+                    "idPanne": document.getElementById("idPanne").value,
+                    "message": document.getElementById("message").value
+                });
+                // fetch data into notification table
+            }
+            
+        </script>
 		
 	</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
