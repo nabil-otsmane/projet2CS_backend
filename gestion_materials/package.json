@@ -35,7 +35,7 @@
     "start": "nodemon --exec ts-node src/index.ts",
     "build": "tsc -p .",
     "start:dev": "ts-node src/index.ts",
-    "test": "NODE_ENV=test jasmine",
+    "test": "jasmine",
     "pretest": "tsc",
     "doc": "npx typedoc --out docs src && google-chrome ./docs/index.html"
   }

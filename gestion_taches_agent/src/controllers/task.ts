@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { read } from "node:fs";
 import { Task } from "../entity/Task";
+import { TaskModel } from "../entity/TaskModel";
 
 /**
  * Welcome endpoint for task management service.
@@ -14,7 +15,7 @@ import { Task } from "../entity/Task";
  *
  */
 export const get = (_req: Request, res: Response) => {
-  res.send("Hello, this is the agent Tasks' management service.");
+  res.send("Hello, this is the agent's Tasks management service.");
 };
 
 /**
@@ -25,15 +26,28 @@ export const get = (_req: Request, res: Response) => {
  *
  */
 export const addTask = async (req: Request, res: Response) => {
+  const {
+    idAgent,
+    idVehicle,
+    taskTitle,
+    description,
+    idTaskState,
+    idTaskModel,
+    assignmentDate,
+    endDate,
+  } = req.body;
   try {
+    const taskModel = await TaskModel.findOneOrFail({ id: idTaskModel });
     const task = Task.create({
-      idAgent: req.body.idAgent,
-      idVehicle: req.body.idVehicle,
-      description: req.body.description,
-      idTaskState: req.body.idTaskState,
-      idEquipment: req.body.idEquipment,
+      idAgent,
+      idVehicle,
+      taskTitle,
+      description,
+      taskModel,
+      idTaskState,
+      assignmentDate,
+      endDate,
     });
-
     await task.save();
     return res.send(task);
   } catch (err) {
@@ -51,9 +65,30 @@ export const addTask = async (req: Request, res: Response) => {
  */
 export async function getTasks(_req: Request, res: Response) {
   try {
-    const Tasks = await Task.find();
-    console.log(Tasks);
-    return res.json(Tasks);
+    const tasks = await Task.find({
+      relations: ["usedEquipments", "taskModel", "taskModel.steps"],
+    });
+    console.log(tasks);
+    return res.json(tasks);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+}
+
+// Update task without updating its steps
+export async function updateTaskState(req: Request, res: Response) {
+  const id = req.params.id;
+  try {
+    const task = await Task.findOneOrFail({
+      relations: ["usedEquipments", "taskModel", "taskModel.steps"],
+      where: {
+        uuid: id,
+      }, 
+    });
+    task.idTaskState = req.body.idTaskState;
+    await task.save();
+    return res.json(task);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
@@ -69,13 +104,20 @@ export async function getTasks(_req: Request, res: Response) {
  */
 export async function updateTask(req: Request, res: Response) {
   const id = req.params.id;
+  console.log("Hello");
+
   try {
-    const task = await Task.findOneOrFail(id);
-    task.idAgent = req.body.idAgent;
-    task.idVehicle = req.body.idVehicle;
-    task.description = req.body.description;
-    task.idTaskState = req.body.idTaskState;
-    task.idEquipment = req.body.idEquipment;
+    const task = await Task.findOneOrFail({
+      relations: ["usedEquipments", "taskModel", "taskModel.steps"],
+      where: {
+        uuid: id,
+      },
+    });
+
+    task.idAgent = req.body.idAgent || task.idAgent;
+    task.idVehicle = req.body.idVehicle || task.idVehicle;
+    task.description = req.body.description || task.description;
+    task.idTaskState = req.body.idTaskState || task.idTaskState;
     await task.save();
     return res.json(task);
   } catch (err) {
@@ -84,19 +126,12 @@ export async function updateTask(req: Request, res: Response) {
   }
 }
 
-/**
- * Delete a task request.
- *
- * @param _req - The request to update a task with parameter.
- * @param res - The response to the request.
- *
- */
+//Delete
 export async function deleteTask(req: Request, res: Response) {
-  const id = req.params.id;
   try {
-    const task = await Task.findOneOrFail(id);
+    const task = await Task.findOneOrFail({ uuid: req.params.id });
     await task.remove();
-    return res.json({ message: "Tâche supprimée avec succès" });
+    return res.json({ message: "Task deleted successfully" });
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
@@ -113,28 +148,29 @@ export async function deleteTask(req: Request, res: Response) {
 export async function getTask(req: Request, res: Response) {
   const id = req.params.id;
   try {
-    const task = await Task.findOneOrFail(id);
+    const task = await Task.find({
+      relations: ["usedEquipments", "taskModel", "taskModel.steps"],
+      where: {
+        uuid: id,
+      },
+    });
     return res.json(task);
   } catch (err) {
     console.log(err);
-    return res.json({ message: "Tâche introuvable" });
+    return res.json({ message: "Task not found" });
   }
 }
 
-/**
- * Find all all tasks request by AgentID.
- *
- * @param _req - The request to find all tasks with parameter (AgentID).
- * @param res - The response to the request.
- *
- */
+// Find all the tasks of an Agent
 export async function getTaskByAgentId(req: Request, res: Response) {
-  const id = req.query.id;
-  // console.log('paramatre id = ', id);
+  const id = req.params.id;
+  console.log("paramatre id = ", id);
   try {
     const tasks = await getManager()
       .createQueryBuilder(Task, "task")
       .where("task.idAgent = :id", { id: id })
+      .leftJoinAndSelect("task.usedEquipments", "usedEquipments")
+      .leftJoinAndSelect("task.taskModel", "taskModel")
       .getMany();
 
     return res.send(tasks);
