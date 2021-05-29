@@ -511,11 +511,11 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "int"
                 },
                 {
-                    name: "iddepartborne",
+                    name: "idDepartBorne",
                     type: "int"
                 },
                 {
-                    name: "iddestborne",
+                    name: "idDestBorne",
                     type: "int"
                 }
                 
@@ -945,7 +945,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "idUserSource",
                     type: "int",
-                    nulable:true,
+                    isNullable:true,
                     default:null
                 },
                 {
@@ -961,7 +961,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "treated",
                     type: "boolean", 
                     default: 'false',
-                    nullable:true
+                    isNullable:true
 
                 }
             ]
