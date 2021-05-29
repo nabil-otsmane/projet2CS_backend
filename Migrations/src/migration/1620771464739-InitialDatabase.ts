@@ -107,19 +107,19 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     isPrimary: true
                 },
                 {
-                    name: "registration",
-                    type: "int"
+                    name: "registrationNumber",
+                    type: "varchar"
                 },
                 {
                     name: "vehicleType",
                     type: "varchar"
                 },  
                 {
-                    name: "vehicleBrand",
+                    name: "vehiclebrand",
                     type: "varchar"
                 },
                 {
-                    name: "vehicleModel",
+                    name: "vehiclemodel",
                     type: "varchar"
                 },
                 {
@@ -469,7 +469,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     isPrimary:  true
                 },
                 {
-                    name: "rentalState",
+                    name: "rentalstate",
                     type: "enum",
                     enum: ["archived", "active"], 
                     default: "'active'"
@@ -483,15 +483,15 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "int"
                 },
                 {
-                    name: "rentalDate",
+                    name: "rentaldate",
                     type: "date"
                 },
                 {
-                    name: "rentalTime",
-                    type: "time"
+                    name: "rentaltime",
+                    type: "varchar"
                 },
                 {
-                    name: "plannedRestitutionDate",
+                    name: "plannedrestitutiondate",
                     type: "date"
                 },
                 {
@@ -504,18 +504,18 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "restitutionTime",
-                    type: "time"
+                    type: "varchar"
                 },
                 {
                     name: "rentalType",
                     type: "int"
                 },
                 {
-                    name: "idDepartBorne",
+                    name: "iddepartborne",
                     type: "int"
                 },
                 {
-                    name: "idDestBorne",
+                    name: "iddestborne",
                     type: "int"
                 }
                 
@@ -945,7 +945,8 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "idUserSource",
                     type: "int",
-                    default:0
+                    nulable:true,
+                    default:null
                 },
                 {
                     name: "idVehicle",
@@ -955,6 +956,13 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "sent_at",
                     type: "timestamp", 
                     default: 'now()'
+                },
+                {
+                    name: "treated",
+                    type: "boolean", 
+                    default: 'false',
+                    nullable:true
+
                 }
             ]
         }), true)

@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, Timestamp} from "typeorm";
 import { VehiclePosition } from "./VehiclePosition";
 
 @Entity("VehicleTracking")
@@ -13,8 +13,8 @@ export class VehicleTracking extends BaseEntity {
     @Column("decimal", {precision: 9, scale: 6})
     longitude: number;
 
-    @Column("timestamp")
-    created_at: Date;
+    @Column()
+    created_at: string;
 
     @Column()
     idPosition: number;

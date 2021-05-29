@@ -1,8 +1,6 @@
-import { createConnection, getConnection, InsertResult } from "typeorm";
 import "reflect-metadata";
 import { Request, json } from "express";
 import { Server } from "http";
-const request = require("supertest");
 
 interface IData {
   status?: number;
@@ -16,7 +14,7 @@ describe("Service Test : ", () => {
     let data: IData = {};
     beforeAll((done) => {
       Request.get(
-        "http://localhost:8001",
+        "http://localhost:8002",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
           data.body = body;
@@ -30,11 +28,11 @@ describe("Service Test : ", () => {
     });
   });
  
-  describe("GET /vehicle_state", () => {
+  describe("POST /estRemorquer", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
-        "http://localhost:8001/vehicle_state?idVehicle=3",
+      Request.post(
+        "http://localhost:8002/estRemorquee?remorque=true&idVehicle=3",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
           data.body = JSON.parse(body);
@@ -48,11 +46,14 @@ describe("Service Test : ", () => {
       expect(data.status).toBe(200);
     });
   });
-   describe("GET /rental_info", () => {
+
+  
+
+   describe("POST /dateDepassee", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
-        "http://localhost:8001/rental_info?idVehicle=3",
+      Request.post(
+        "http://localhost:8002/dateDepassee?idVehicle=3",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
           data.body = JSON.parse(body);
@@ -67,4 +68,3 @@ describe("Service Test : ", () => {
     });
   });
 });
-
