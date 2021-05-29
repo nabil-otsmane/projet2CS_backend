@@ -127,11 +127,11 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "varchar"
                 },
                 {
-                    name: " unitPricePerHour",
+                    name: "unitPricePerHour",
                     type: "float"
                 },
                 {
-                    name: " unitPricePerDay",
+                    name: "unitPricePerDay",
                     type: "float"
                 },
                 {
