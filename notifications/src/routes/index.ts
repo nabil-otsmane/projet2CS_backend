@@ -7,7 +7,7 @@ const router = Router();
 
 
 router.get('/', (_req: Request, res: Response) => {
-    res.end("Notification service up to work");
+    res.sendFile(__dirname + "/" + "index.html");
 });
 
 // breakdown notifications
