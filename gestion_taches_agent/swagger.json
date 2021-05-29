@@ -1,0 +1,558 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8000",
+    "info": {
+    "version": "1.0.0",
+    "title": "Documentation du service gestion des taches des agents 😄",
+    "description": "Cette documentation contient tout les endpoint du service gestion des taches des agents. \nVeuillez-trouvez tout les détails dans la section models. ",
+    "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+        }
+    }, 
+    "tags": [{
+        "name": "Tache des agents",
+        "description": "Tout les méthodes sur le endpoint AgentTask :"
+    }],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+
+
+    "definitions": {
+        "Task": {
+        "type": "object",
+        "properties": {
+            "idTask": {
+            "type": "number"
+            },
+            "idAgent": {
+            "type": "number"
+            },
+            "idVehicle": {
+            "type": "number"
+            },
+            "description": {
+            "type": "string"
+            },
+            "taskTitle": {
+                "type": "string"
+            }, 
+            "idTaskState": {
+            "type": "number"
+            },
+            "assignmentDate": {
+            "type": "string"
+            },
+            " endDate": {
+            "type": "string"
+            },
+            "taskModelId": {
+                "type": "array", 
+                "additionalProperties": {
+                    "$ref": "#/definitions/TaskModel"
+                }
+            }, 
+            "usedEquipments": {
+            "type": "array",
+            "additionalProperties": {
+                "$ref": "#/definitions/UsedEquipment"
+            }
+            }, 
+            " uuid": {
+                "type": "number"
+            }
+            }
+        },
+        "UsedEquipment": {
+            "type": "object",
+            "properties": {
+            "idUsedEquipment": {
+                "type": "number"
+            },
+            "description": {
+                "type": "string"
+            },
+            "quantity": {
+                "type": "number"
+            },
+            "task": {
+                "type": "array", 
+                "additionalProperties": {
+                "$ref": "#/definitions/Task"
+                }
+            }
+            }
+        },
+        "TaskModel": {
+            "type": "object",
+            "properties": {
+            "id": {
+                "type": "number"
+            },
+            "taskModelName": {
+                "type": "string"
+            },
+            "steps": {
+                "type": "array", 
+                "additionalProperties": {
+                "$ref": "#/definitions/Step"
+                }
+            }, 
+            "tasks": {
+                "type": "array", 
+                "additionalProperties": {
+                "$ref": "#/definitions/Task"
+                }
+            }
+            }
+        }, 
+        "Step": {
+            "type": "object",
+            "properties": {
+            "idStep": {
+                "type": "number"
+            },
+            "step": {
+                "type": "string"
+            }, 
+            "modelId": {
+                "type": "number"
+            }
+            }
+        }
+    },
+
+
+    "paths": {
+        "/":{
+            "get": {
+                "summary": "welcome to the agent's Tasks management service.🖐️",
+                "tags": [
+                    "Task"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. task not found."
+                    }
+                }
+            }
+        },
+        "/task": {
+            "get": {
+                "description": "API endpoint pour avoir tout les taches des agents de maintenanace dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404*",
+                "summary": "API endpoint pour avoir tout les taches des agents de maintenanace dans le système 👌",
+                "tags": [
+                    "Task"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }, 
+            "post": {
+                "tags": [
+                    "Task"
+                ],
+                "description": "API endpoint pour créer une tache taches de maintenanace dans le système \n \n*Une requête de création avec succès va retourner un Status code HTTP 200 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404*",
+                "summary": "API endpoint pour créer une tache pour un agents de maintenanace dans le système 🌚",
+                "parameters": [{
+                    "in": "body",
+                    "name": "body", 
+                    "description": "création d'une tache 🌚", 
+                    "schema": {
+                        "properties": {
+                            "idAgent": {
+                                "example": 100
+                            },
+                            "idVehicle": {
+                                "example": 1
+                            },
+                            "taskTitle": {
+                                "example": "task title of a task from swagger"
+                            }, 
+                            "description": {
+                                "example": "this is a tasked added by swagger"
+                            },
+                            "idTaskState": {
+                                "example": 1
+                            },
+                            "assignmentDate": {
+                                "example": "2021-05-28T19:57:13.887Z"
+                            },
+                            "endDate": {
+                                "example": null
+                            },
+                            "idTaskModel": {
+                                "example": 1
+                            }, 
+                            "usedEquipments": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                  "example": "J ai utiliser 20 litres d huile Quoi !"
+                                },
+                                "quantity": {
+                                  "example": 20
+                                },
+                                "equipment": {
+                                  "example": "282d4458-aaeb-4e92-a674-12320b1de36a"
+                                },
+                                "taskUUID": {
+                                  "example": "282d4458-aaeb-4e92-a674-12320b1de46a"
+                                }
+                              }
+                            }
+                        }
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ], 
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Failed"
+                    }
+                }
+
+            }
+        }, 
+        "/task/{uuid}":{
+            "parameters": [{
+                "name": "uuid",
+                "in": "path",
+                "required": true,
+                "description": "l'uuid à récupérer: ", 
+                "type": "string"
+            }],
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "description": "API endpoint pour avoir une tache d'un agent de maintenanace dans le système à travers son uuid \n \nUne requête de récupération avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500  \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour récupérer une tache d'un agent de maintenanace dans le système à travers son uuid 👍",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "404": {
+                        "description": "Failed. Task not found."
+                    }
+                }
+            },
+
+            "put": {
+                "description": "API endpoint pour modifier une tache d'un agent de maintenanace déjà existante dans le système en utilisant son uuid\n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour modifier un une tache d'un agent de maintenanace déjà existant dans le système 👉👈",
+                "tags": [
+                    "Task"
+                ],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "modifier les propriétés de la tache 📎",
+                    "schema": {
+                        "properties": {
+                            "idAgent": {
+                                "example": 100
+                            },
+                            "idVehicle": {
+                                "example": 1
+                            },
+                            "taskTitle": {
+                                "example": "task title of a task from swagger"
+                            }, 
+                            "description": {
+                                "example": "this is a tasked added by swagger"
+                            },
+                            "idTaskState": {
+                                "example": 1
+                            },
+                            "assignmentDate": {
+                                "example": "2021-05-28T19:57:13.887Z"
+                            },
+                            "endDate": {
+                                "example": null
+                            },
+                            "idTaskModel": {
+                                "example": 1
+                            }, 
+                            "usedEquipments": {
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                  "example": "J ai utiliser 20 litres d huile Quoi !"
+                                },
+                                "quantity": {
+                                  "example": 20
+                                },
+                                "equipment": {
+                                  "example": "282d4458-aaeb-4e92-a674-12320b1de36a"
+                                },
+                                "taskUUID": {
+                                  "example": "282d4458-aaeb-4e92-a674-12320b1de46a"
+                                }
+                              }
+                            }
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. task not found."
+                    }
+                }
+            },
+
+            "delete": {
+                "description": "API endpoint pour supprimer une tache de maintenanace dans le système à travers son uuid \n \n*Une requête de suppression avec succès va retourner un Status code HTTP 204 \nUne requête de suppression qui échoue va retourner un Status code HTTP 500 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour supprimer une tache de maintenanace dans le système à travers son uuid 🗑️",                
+                "tags": [
+                    "Task"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Failed. Task not found."
+                    }
+                }
+            }
+        },  
+
+        "/taskState/{uuid}":{
+            "parameters": [{
+                "name": "uuid",
+                "in": "path",
+                "required": true,
+                "description": "l'uuid à récupérer: ", 
+                "type": "string"
+            }],
+            "put": {
+                "description": "API endpoint pour modifier l'état d'une tache d'un agent de maintenanace déjà existante dans le système en utilisant son uuid\n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour modifier l'état d'une tache d'un agent de maintenanace déjà existant dans le système 1️⃣▶️2️⃣",                
+                "tags": [
+                    "Task"
+                ],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "new state of a state",
+                    "schema": {
+                        "properties": {
+                            "idTaskState": {
+                                "example": 1
+                            }
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. task not found."
+                    }
+                }
+            }
+        },
+        "/task/agent/{idAgent}":{
+            "parameters": [{
+                "name": "idAgent",
+                "in": "path",
+                "required": true,
+                "description": "retourner la tache avec l'id de l'agent spécifié en parametre 📎",
+                "type": "string"
+            }],
+            "get": {
+                "description": "API endpoint pour avoir tout les taches d'un agent de maintenanace dans le système en spécifiant son uuid\n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404*",
+                "summary": "API endpoint pour avoir tout les taches d'un agent de maintenanace dans le système en spécifiant son uuid 🤞",                
+                "tags": [
+                    "Task-Agent"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "404": {
+                        "description": "Failed. Task not found."
+                    }
+                }
+            }
+        }, 
+
+        "/taskModel":{
+            "get": {
+                "tags": [
+                    "Task-Model"
+                ],
+                "description": "API endpoint pour avoir tout les modeles des taches des agents de maintenanace dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404*",
+                "summary": "API endpoint pour avoir tout les modeles des taches des agents de maintenanace dans le système 👌",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }, 
+            "post": {
+                "tags": [
+                    "Task-Model"
+                ],
+                "description": "API endpoint pour avoir tout les modeles des taches des agents de maintenanace dans le système \n \n*Une requête de création avec succès va retourner un Status code HTTP 200 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404*",
+                "summary": "API endpoint pour créer un modele des taches pour un agents de maintenanace dans le système 🌚",
+                "produces": [
+                    "application/json"
+                ], 
+                "consumes":[
+                    "application/json"
+                ],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body", 
+                    "description": "création d'une modele de tache ", 
+                    "required": true, 
+                    "schema": {
+                        "properties": {
+                            "taskModelName": {
+                                "example": "Revision Général from swagger"
+                            }, 
+                            "steps": {
+                                "type": "object",
+                                "properties": {
+                                    "step": {
+                                        "example": "Step, Faire la vidange de la voiture from swagger"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Failed"
+                    }
+                }
+
+            }
+        },
+
+        "/taskModel/{id}":{
+            "parameters": [{
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "description": "l'id du model du tache: ", 
+                "type": "integer"
+            }],
+            "get": {
+                "tags": [
+                    "Task-Model"
+                ],
+                "description": "API endpoint pour avoir le modele des taches dans le système \n \nUne requête de récupération avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500  \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour avoir le modele des taches dans le système 👍",                
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "404": {
+                        "description": "Failed. Task not found."
+                    }
+                }
+            },
+
+            "put": {
+                "description": "API endpoint pour modifier un modele des taches d'un agent de maintenanace déjà existant dans le système\n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour modifier un un modele des taches d'un agent de maintenanace déjà existant dans le système 👉👈",                
+                "tags": [
+                    "Task-Model"
+                ],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "required": true,
+                    "description": "task model with new values of properties",
+                    "schema": {
+                        "properties": {
+                            "taskModelName": {
+                                "example": "Updated Revision Général from swagger"
+                            }
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. task not found."
+                    }
+                }
+            },
+
+            "delete": {
+                "description": "API endpoint pour supprimer un modele des taches de maintenanace dans le système\n \n*Une requête de suppression avec succès va retourner un Status code HTTP 204 \nUne requête de suppression qui échoue va retourner un Status code HTTP 500 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404",
+                "summary": "API endpoint pour supprimer un modele des taches de maintenanace dans le système 🗑️",                
+                "tags": [
+                    "Task-Model"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Failed. Task Model not found."
+                    }
+                }
+            }
+        }  
+    }     
+}

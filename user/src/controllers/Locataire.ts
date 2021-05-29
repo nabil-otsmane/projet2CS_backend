@@ -22,12 +22,10 @@ export const getLocataire =  (req: Request, res: Response) => {
 
 export const addLocataire = async (req: Request, res: Response) => {
     const locataire = Locataire.create({
-        idUser: req.body.idUtilisateur,
-        profilePicture: req.body.photoPersonnelle,
-        selfie: req.body.photoPermisSelfie,
-        permitPicture: req.body.permis,
-        subCard: 0,
-        points: 0,
+        idUser: req.body.idUser,
+        profilePicture: req.body.profilePicture,
+        selfie: req.body.selfie,
+        permitPicture: req.body.permitPicture,
         refPermit: "",
         accountState: "pending",
     })
@@ -43,21 +41,31 @@ export async function getLocataires(_req: Request, res: Response) {
 
 export const updateLocataire = async (req: Request, res: Response) => {
     
-    if(!req.body.idUtilisateur && !req.body.nom && !req.body.prenom && !req.body.adresse && !req.body.photoPersonnelle && !req.body.photoPermisSelfie && !req.body.idTypeAbonnement) {
+    const champs = ["idUser", "profilePicture", "selfie", "permitPicture", "accountState", "refPermit", "stateMessage", "validationDate"]
+
+    let isValid = true
+    for (let i of champs) {
+        if (!(i in req.body)) {
+            isValid = false
+            break
+        }
+    }
+    console.log(isValid)
+    if(!isValid) {
         return res.status(400).send({
             message: "Champs vides"
         });
     }
 
     Locataire.update({idTenant: parseInt(req.params.locataireId)}, {
-        idUser: req.body.idUtilisateur,
-        profilePicture: req.body.photoPersonnelle,
-        selfie: req.body.photoPermisSelfie,
-        permitPicture: req.body.permis,
-        accountState: req.body.state,
-        subCard: req.body.card,
-        points: req.body.points,
-        refPermit: req.body.refPermis,
+        idUser: req.body.idUser,
+        profilePicture: req.body.profilePicture,
+        selfie: req.body.selfie,
+        permitPicture: req.body.permitPicture,
+        accountState: req.body.accountState,
+        refPermit: req.body.refPermit,
+        stateMessage: req.body.stateMessage,
+        validationDate: req.body.validationDate
     })
     .then(locataire => {
         res.status(200).send(locataire);

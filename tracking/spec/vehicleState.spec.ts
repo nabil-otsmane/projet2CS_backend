@@ -1,6 +1,8 @@
+import { createConnection, getConnection, InsertResult } from "typeorm";
 import "reflect-metadata";
 import { Request, json } from "express";
 import { Server } from "http";
+const request = require("supertest");
 
 interface IData {
   status?: number;
@@ -64,3 +66,4 @@ describe("Service Test : ", () => {
     });
   });
 });
+

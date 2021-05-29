@@ -4,7 +4,7 @@ services:
   redis:
     image: "redis:alpine"
     ports:
-      - 6379:6379
+      - 6380:6379
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
 
@@ -106,12 +106,12 @@ services:
       NODE_ENV: development
       DEBUG: src:*
 
-  signal:
+  signals:
     build:
-        context: ./signal
+        context: ./signals
         target: development
     volumes:
-        - ./user:/src
+        - ./signals:/src
         - /src/node_modules
     command: npm run start:dev
     ports:
@@ -119,18 +119,17 @@ services:
     environment: 
         NODE_ENV: development
         DEBUG: src:*
-
-
-  pannes:
+  stats:
     build:
-        context: ./pannes
-        target: development
+      context: ./stats
+      target: development
     volumes:
-        - ./pannes:/src
-        - /src/node_modules
+      - ./stats:/src
+      - /src/node_modules
     command: npm run start:dev
     ports:
-        - "8004:8004"
-    environment: 
-        NODE_ENV: development
-        DEBUG: src:*
+      - "8089:8000"
+    environment:
+      NODE_ENV: development
+      DEBUG: src:*
+    
