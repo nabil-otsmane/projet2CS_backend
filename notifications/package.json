@@ -2,12 +2,15 @@
   "dependencies": {
     "@types/cors": "^2.8.10",
     "@types/morgan": "^1.9.2",
+    "@types/socket.io": "^3.0.2",
     "@types/swagger-ui-express": "^4.1.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "http": "0.0.1-security",
     "morgan": "^1.10.0",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^4.1.2",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "0.2.32"
   },
