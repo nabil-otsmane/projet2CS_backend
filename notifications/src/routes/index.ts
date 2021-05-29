@@ -5,7 +5,7 @@ import { addSignal, getSignal, readSignal, deleteSignal} from '../controllers/si
 
 const router = Router();
 
-
+// used to test the notifications
 router.get('/', (_req: Request, res: Response) => {
     res.sendFile(__dirname + "/" + "index.html");
 });
