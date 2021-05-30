@@ -6,7 +6,7 @@ export class Borne extends BaseEntity {
     @PrimaryGeneratedColumn()
     idBorne: number;
 
-    /*@Column()
+    @Column()
     nbOccupiedPlaces: number;
 
     @Column()
@@ -20,7 +20,7 @@ export class Borne extends BaseEntity {
     longitude: string;
 
     @Column()
-    latitude: string;*/
+    latitude: string;
 
     @Column()
     city: string;
