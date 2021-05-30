@@ -7,50 +7,78 @@ export const getVehicule =  (req: Request, res: Response) => {
     Vehicule.findOne({idVehicle: parseInt(req.params.idVehicule)})
     .then((vehicule: any) => {
         res.status(200).send(vehicule);
-    }).catch(() => {
+    }).catch(e => {
         res.status(500).send({
-            message: "Erreur Serveur"
+            message: e.message
         });
     });
 }
 
 export const addVehicule = async (req: Request, res: Response) => {
     const vehicule = Vehicule.create({
-        // There are somme fields missing
-        unitpriceperhour: req.body.unitpriceperhour,
-        unitpriceperday: req.body.unitpriceperday,
-        vehiculetype: req.body.vehiculetype,
-        vehiculebrand: req.body.vehiculebrand,
+        registrationNumber: req.body.registrationNumber,
+        unitPricePerHour: req.body.unitPricePerHour,
+        unitPricePerDay: req.body.unitPricePerDay,
+        vehicleType: req.body.vehicleType,
+        vehiclebrand: req.body.vehiclebrand,
         vehiclemodel: req.body.vehiclemodel,
-        availability: req.body.availability,
-        image: req.body.image
+        fuelType: req.body.fuelType,
+        idBorne: req.body.idBorne,
+        vehicleColor: req.body.vehicleColor,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
     })
 
-    await vehicule.save()
-    res.status(200).send(vehicule)
+    vehicule.save()
+    .then(() => {
+        res.status(200).send(vehicule)
+    })
+    .catch(e => {
+        res.status(500).send({ message: e.message })
+    })
 }
 
 export async function getVehicules(_req: Request, res: Response) {
-    const vehicules = await Vehicule.find();
-    res.status(200).json(vehicules)
+    Vehicule.find()
+    .then(vehicules => {
+        res.status(200).json(vehicules)
+    })
+    .catch(e => {
+        res.status(500).json({ message: e.message })
+    })
 }
 
 export const updateVehicule = async (req: Request, res: Response) => {
     
-    if(!req.body.unitpriceperhour || !req.body.unitpriceperday || !req.body.vehiculetype || !req.body.vehiculebrand || !req.body.vehiclemodel || !req.body.availability || !req.body.image) {
+    if(
+        !req.body.registrationNumber 
+        || !req.body.unitPricePerHour 
+        || !req.body.unitPricePerDay 
+        || !req.body.vehicleType 
+        || !req.body.vehiclebrand 
+        || !req.body.vehiclemodel 
+        || !req.body.fuelType
+        || !req.body.idBorne
+        || !req.body.vehicleColor
+        || !req.body.longitude
+        || !req.body.latitude) {
         return res.status(400).send({
             message: "Champs Vides"
         });
     }
 
     Vehicule.update({idVehicle: parseInt(req.params.idVehicule)}, {
-        unitpriceperhour: req.body.unitpriceperhour,
-        unitpriceperday: req.body.unitpriceperday,
-        vehiculetype: req.body.vehiculetype,
-        vehiculebrand: req.body.vehiculebrand,
+        registrationNumber: req.body.registrationNumber,
+        unitPricePerHour: req.body.unitPricePerHour,
+        unitPricePerDay: req.body.unitPricePerDay,
+        vehicleType: req.body.vehicleType,
+        vehiclebrand: req.body.vehiclebrand,
         vehiclemodel: req.body.vehiclemodel,
-        availability: req.body.availability,
-        image: req.body.image
+        fuelType: req.body.fuelType,
+        idBorne: req.body.idBorne,
+        vehicleColor: req.body.vehicleColor,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
     })
     .then((vehicule: any) => {
         return res.status(200).send(vehicule);
