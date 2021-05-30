@@ -17,38 +17,53 @@ export const getBorne =  (req: Request, res: Response) => {
 
 export const addBorne = async (req: Request, res: Response) => {
     const borne = Borne.create({
-        /*nbOccupiedPlaces: req.body.nbOccupiedPlaces,
+        nbOccupiedPlaces: req.body.nbOccupiedPlaces,
         nbTotalPlaces: req.body.nbTotalPlaces,
         nbMaintenanceAgents: req.body.nbMaintenanceAgents,
         latitude: req.body.latitude,
-        longitude: req.body.longitude,*/
-        city: req.body.wilaya
+        longitude: req.body.longitude,
+        city: req.body.city
     })
 
-    await borne.save()
-    res.status(200).send(borne)
+    borne.save()
+    .then(() => {
+        res.status(200).send(borne)
+    })
+    .catch(e => {
+        res.status(500).send({ message: e.message })
+    })
 }
 
 export async function getBornes(_req: Request, res: Response) {
-    const bornes = await Borne.find();
-    res.send(200).json(bornes)
+    Borne.find()
+    .then(bornes => {
+        res.status(200).json(bornes)
+    })
+    .catch(err => {
+        res.status(500).json({ error: err.message })
+    })
 }
 
 export const updateBorne = async (req: Request, res: Response) => {
     
-    if(!req.body.latitude || !req.body.longitude || !req.body.wilaya) {
+    if(!req.body.nbOccupiedPlaces 
+        || !req.body.nbTotalPlaces 
+        || !req.body.nbMaintenanceAgents
+        || !req.body.latitude
+        || !req.body.longitude
+        || !req.body.city) {
         return res.status(400).send({
             message: "Champs Vides"
         });
     }
 
     Borne.update({idBorne: parseInt(req.params.idBorne)}, {
-        /*nbOccupiedPlaces: req.body.nbOccupiedPlaces,
+        nbOccupiedPlaces: req.body.nbOccupiedPlaces,
         nbTotalPlaces: req.body.nbTotalPlaces,
         nbMaintenanceAgents: req.body.nbMaintenanceAgents,
         latitude: req.body.latitude,
-        longitude: req.body.longitude,*/
-        city: req.body.wilaya
+        longitude: req.body.longitude,
+        city: req.body.city
     })
     .then(borne => {
         return res.status(200).send(borne);

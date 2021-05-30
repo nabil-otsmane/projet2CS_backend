@@ -8,7 +8,7 @@ export class Log extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'timestamp' })
     date: string;
 
     @Column()

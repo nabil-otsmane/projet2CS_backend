@@ -1,29 +1,42 @@
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
 
-@Entity("Vehicule")
+@Entity("Vehicle")
 export class Vehicule extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     idVehicle: number;
 
     @Column()
-    unitpriceperhour: number;
+    unitPricePerHour: number;
 
     @Column()
-    unitpriceperday: number;
+    unitPricePerDay: number;
 
     @Column()
-    vehiculetype: String;
+    vehicleType: String;
 
     @Column()
-    vehiculebrand: String;
+    vehiclebrand: String;
 
     @Column()
     vehiclemodel: String;
 
     @Column()
-    availability: boolean;
+    fuelType: String
 
     @Column()
-    image: String;
+    registrationNumber: String
+
+    @Column()
+    vehicleColor: String
+
+    @Column()
+    idBorne: Number
+
+    @Column({ type: "float" })
+    longitude: Number
+
+    @Column({ type: "float" })
+    latitude: Number
+
 }

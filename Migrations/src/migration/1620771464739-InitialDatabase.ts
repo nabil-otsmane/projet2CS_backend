@@ -127,11 +127,11 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "varchar"
                 },
                 {
-                    name: " unitPricePerHour",
+                    name: "unitPricePerHour",
                     type: "float"
                 },
                 {
-                    name: " unitPricePerDay",
+                    name: "unitPricePerDay",
                     type: "float"
                 },
                 {
@@ -272,7 +272,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "idUser",
                     type: "int"
                 },
-{
+                {
                     name: "address",
                     type: "varchar"
                 }
@@ -511,11 +511,11 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "int"
                 },
                 {
-                    name: "iddepartborne",
+                    name: "idDepartBorne",
                     type: "int"
                 },
                 {
-                    name: "iddestborne",
+                    name: "idDestBorne",
                     type: "int"
                 }
                 
@@ -945,7 +945,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "idUserSource",
                     type: "int",
-                    nulable:true,
+                    isNullable:true,
                     default:null
                 },
                 {
@@ -961,7 +961,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "treated",
                     type: "boolean", 
                     default: 'false',
-                    nullable:true
+                    isNullable:true
 
                 }
             ]
@@ -1039,8 +1039,88 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
             referencedTableName: "VehiclePosition",
             onDelete: "SET NULL"
         }));
-        
-        
+
+        await queryRunner.createTable(new Table({
+            name: "Erreur",
+            columns: [
+                {
+                    name: "id",
+                    type: "int",
+                    isGenerated:true,
+                    generationStrategy: 'increment',
+                    isPrimary: true
+                },
+                {
+                    name: "message",
+                    type: "varchar"
+                }
+            ]
+        }))
+
+        await queryRunner.createTable(new Table({
+            name: "Application",
+            columns: [
+                {
+                    name: "id",
+                    type: "int",
+                    isGenerated:true,
+                    generationStrategy: 'increment',
+                    isPrimary: true
+                },
+                {
+                    name: "nomApp",
+                    type: "varchar"
+                },
+                {
+                    name: "tauxUtilisation",
+                    type: "float"
+                }
+            ]
+        }))
+
+        await queryRunner.createTable(new Table({
+            name: "Log",
+            columns: [
+                {
+                    name: "id",
+                    type: "int",
+                    isGenerated:true,
+                    generationStrategy: 'increment',
+                    isPrimary: true
+                },
+                {
+                    name: "date",
+                    type: "timestamp"
+                },
+                {
+                    name: "details",
+                    type: "varchar"
+                },
+                {
+                    name: "idApp",
+                    type: "int"
+                },
+                {
+                    name: "idErreur",
+                    type: "int"
+                }
+            ]
+        }))
+
+        await queryRunner.createForeignKey("Log", new TableForeignKey({
+            columnNames: ["idApp"],
+            referencedColumnNames: ["id"],
+            referencedTableName: "Application",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
+        }));
+
+        await queryRunner.createForeignKey("Log", new TableForeignKey({
+            columnNames: ["idErreur"],
+            referencedColumnNames: ["id"],
+            referencedTableName: "Erreur",
+            onDelete: "CASCADE"
+        }));
 
     }
 
