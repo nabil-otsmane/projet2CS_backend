@@ -9,7 +9,6 @@ interface IData {
   body?: string;
 }
 
-let Request = require("request");
 describe("Service Test : ", () => {
   
   describe("GET /", () => {
