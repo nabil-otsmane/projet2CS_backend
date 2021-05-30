@@ -1,13 +1,15 @@
 import { Router } from 'express';
-import { get, addSubscription,getSubscriptionCards,getSubscriptionByTenant, 
-    deleteExpiredSubscriptions} from '../controllers/SubscriptionController'
+import { get, getSubTypes, addSubscription,getSubscriptionCards,getSubscriptionByTenant, 
+    deleteExpiredSubscriptions, activateSubscription} from '../controllers/SubscriptionController'
 const router = Router();
 
 
 router.get('/', get);
-router.post('/addSub', addSubscription)
+router.get('/getSubTypes', getSubTypes)
 router.get('/getSubByTenant/:idTenant', getSubscriptionByTenant)
 router.get('/getSubCards', getSubscriptionCards)
+router.post('/addSub', addSubscription)
+router.post('/activateSub/:idSub', activateSubscription)
 router.post('/deleteExpiredSubs', deleteExpiredSubscriptions)
 
 export default router;

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, IsNull } from "typeorm";
 
 
 @Entity("Tenant")
@@ -10,6 +10,9 @@ export class Tenant extends BaseEntity {
     @Column()
     accountState: string;
 
-    @Column()
-    subCard: number|null;
+    @Column({ 
+        type: 'integer',
+        nullable: true
+    })
+    subCard!: number|null;
 }

@@ -1,10 +1,11 @@
-
+import { response } from "express";
 import "jasmine";
-import { Request, Response } from "express";
-import app, {server} from '../src/index';
-import PricingController = require('../src/controllers/PricingController');
-import PromoCodeController = require('../src/controllers/PromoCodeController');
-import { resourceLimits } from "node:worker_threads";
+import { RentalPenalty } from "../src/entity/RentalPenalty";
+import { Penalty } from "../src/entity/Penalty";
+import PricingController = require('../src/controllers/PricingController')
+import PromoCodeController = require('../src/controllers/PromoCodeController')
+import app,{server} from '../src/index';
+
 var request = require("supertest");
 
 
@@ -56,7 +57,7 @@ describe("Pricing Test Suite", function() {
     
 })
 
-describe("Testing Server Response for Pricing", function() {    
+describe("Testing Server Response for Pricing", () => {    
     describe("GET none existing URL /", function() {
         it("should return error 404", async () => {
             const {status} = await request(app).get("/")
@@ -70,5 +71,35 @@ describe("Testing Server Response for Pricing", function() {
             expect(text).toEqual("Pricing Service")
         }); 
     })
+    describe("GET /pricing/getPenalties/:id", function() {
+        it("should return the sentence Pricing Service", async () => {
+            spyOn(RentalPenalty, "find").and.returnValues(await 
+                new Promise<any>((resolve, _reject) => resolve([
+                    {
+                        idPenalty: 1,
+                        idRental: 1
+                    }
+                ]
+            )));
+            spyOn(Penalty, "findOne").and.returnValue( await 
+                new Promise<any>((resolve, _reject) => resolve(
+                    {
+                        idPenalty: 1,
+                        penaltyTotal: 400
+                    }
+            )));
+            const {status, text} = await request(app).get("/pricing/getPenalties/1")
+            expect(status).toEqual(200)
+            expect(text).toEqual(JSON.stringify(
+                {
+                    price:  400,
+                    msg: "Total pricing of penalties"
+                }
+            ))
+        }); 
+    })
+    
 })
+
+
 
