@@ -15,6 +15,7 @@ export async function getVehicles(req: Request, res: Response) {
     
     const limit=Number(req.query.limit || "8")
     const page=Number(req.query.page || "0")
+
     console.log(req.query);
 
     var vehicles:any = await getManager()
@@ -34,6 +35,7 @@ export async function getVehicles(req: Request, res: Response) {
             .addSelect("user.firstName as firstname")
             .addSelect("user.lastName as lastname")
             .addSelect("rental.rentaldate as rentalDate ")
+            .addSelect("rental.idRental as idRental ")
             .addSelect("rental.plannedrestitutiondate as availibleDate ")
             .addSelect("rental.idRental as idRental ")
             .from(Vehicle, "vehicle")
@@ -41,7 +43,7 @@ export async function getVehicles(req: Request, res: Response) {
             .innerJoin(Tenant, "tenant", "rental.idTenant=tenant.idTenant")
             .innerJoin(User, "user", "tenant.idUser=user.idUser")
             .getRawOne()
-            vehicles[i]=toReturn
+             vehicles[i]=toReturn
        }
     }
     let nbVehicles=await Vehicle.count()
