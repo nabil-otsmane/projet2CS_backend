@@ -10,5 +10,4 @@ export const authToken = async (req: any, res: any, next: Function) => {
             errors: "Authentification required"
         })
     }
-
 }

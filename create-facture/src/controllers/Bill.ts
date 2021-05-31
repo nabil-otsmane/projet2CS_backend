@@ -1,10 +1,6 @@
-import { Request, Response } from "express";
-import { Bill, Rental, Vehicle, AuthUser } from "../entity";
+import { getManager } from 'typeorm'
+import { Bill, Rental, Vehicle, AuthUser, Tenant, User } from "../entity";
 import { printFacture } from '../functions'
-
-/*export const get =  (_req: Request, res: Response) => {
-    res.end("Hello there this is service of creation of facture.");
-}*/
 
 export const addBill = async (req: any, res: any) => {
     const user = { ...req.user, ...(await AuthUser.findOne({ where: { idUser: req.user.idUser } })) }
@@ -61,12 +57,25 @@ export const addBill = async (req: any, res: any) => {
     }
 }
 
-export async function getBills(_req: Request, res: Response) {
-    const bills = await Bill.find();
-    res.json(bills)
-}
+export async function getBills(req: any, res: any) {
+    const user = req.user
+    try {
+        const listBills = await getManager()
+            .createQueryBuilder()
+            /*.select("user.lastName AS nom")
+            .addSelect("user.firstName AS prenom")
+            /*.addSelect("tenant.profilePicture AS picture")
+            .addSelect("bill.idBill,bill.nbBill,bill.idRental,bill.baseRate,bill.penaltyRate,bill.totalRate,bill.report")*/
+            .from(User, "user")
+            .innerJoin(Tenant, 'tenant', 'tenant.idUser=user.idUser')
+            .innerJoin(Rental, 'rental', 'rental.idTenant=tenant.idTenant')
+            .innerJoin(Bill, 'bill', 'bill.idRental=rental.idRental')
+            .where("user.idUser=:idUser", { idUser: user.idUser })
+            .getRawMany();
+        console.log(listBills)
+        res.status(200).send(listBills)
+    } catch (e) {
+        res.status(400).send(e)
+    }
 
-/*export async function getUsers(_req: Request, res: Response) {
-    const users = await User.find();
-    res.json(users)
-}*/
+}

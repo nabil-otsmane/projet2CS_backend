@@ -6,6 +6,9 @@ export class Rental extends BaseEntity {
     idRental: number;
 
     @Column()
+    idTenant: number;
+
+    @Column()
     idVehicle: number;
 
     @Column()

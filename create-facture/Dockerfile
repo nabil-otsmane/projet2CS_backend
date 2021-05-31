@@ -2,7 +2,7 @@ FROM node:14-alpine as base
 
 WORKDIR /src
 COPY package*.json /src/
-EXPOSE 8001
+EXPOSE 5056
 RUN npm ci
 COPY . /src
 
