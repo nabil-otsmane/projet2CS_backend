@@ -1191,7 +1191,7 @@
     "postgres-date" "~1.0.4"
     "postgres-interval" "^1.1.0"
 
-"pg@^8.6.0":
+"pg@^8.6.0", "pg@>=8.0":
   "integrity" "sha512-qNS9u61lqljTDFvmk/N66EeGq3n6Ujzj0FFyNMGQr6XuEv4tgNTXvJQTfJdcvGit5p5/DWPu+wj920hAJFI+QQ=="
   "resolved" "https://registry.npmjs.org/pg/-/pg-8.6.0.tgz"
   "version" "8.6.0"
@@ -1623,8 +1623,6 @@
     "is-typedarray" "^1.0.0"
 
 "typeorm@0.2.32":
-  "integrity" "sha512-LOBZKZ9As3f8KRMPCUT2H0JZbZfWfkcUnO3w/1BFAbL/X9+cADTF6bczDGGaKVENJ3P8SaKheKmBgpt5h1x+EQ=="
-  "resolved" "https://registry.npmjs.org/typeorm/-/typeorm-0.2.32.tgz"
   "version" "0.2.32"
   dependencies:
     "@sqltools/formatter" "^1.2.2"
@@ -1645,7 +1643,7 @@
     "yargs" "^16.2.0"
     "zen-observable-ts" "^1.0.0"
 
-"typescript@4.2.4":
+"typescript@>=2.7", "typescript@4.2.4":
   "integrity" "sha512-V+evlYHZnQkaz8TRBuxTA92yZBPotr5H+WhQ7bD3hZUndx5tGOa1fuCgeSjxAzM1RiN5IzvadIXTVefuuwZCRg=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.2.4.tgz"
   "version" "4.2.4"
