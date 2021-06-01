@@ -1,0 +1,138 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8000",
+    "info": {
+        "version": "1.0.0",
+        "title": "Documentation du service notification",
+        "description": "Cette documentation contient tous les endpoints du service Notification.\nCe service permet de controller les notifications (opérations CRUD) a fin de garder leur historique et notifier l'administrateur de chaque panne ou enlèvement.",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "tags": [
+        {
+            "name": "BreakdownNotification",
+            "description": "Toutes les opérations sur les notifications de pannes :"
+        },
+        {
+            "name": "SignalNotification",
+            "description": "Toutes les opérations sur les notifications des enlèvements :"
+        }
+
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "definitions": {
+        "BreakdownNotification": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number"
+                },
+                "read": {
+                    "type": "number"
+                },
+                "idPanne": {
+                    "type": "number"
+                }
+            }
+        },
+        "SignalNotification": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number"
+                },
+                "read": {
+                    "type": "number"
+                },
+                "idSignal": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/breakdown": {
+            "get": {
+                "tags": ["BreakdownNotification"],
+                "description": "Endpoint pour avoir toutes les notifications sur les pannes dans le service \n \n *Une requête renvoi un code HTTP 200 si elle est effectuée avec succès \n Si elle échoue, elle va retourner un code HTTP 500. \n Sinon, le endpoint n'existe pas et donc la requête retroune un code HTTP 404.*",
+                "summary": "Avoir toutes les notifications sur les pannes dans le système.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                                },
+                                "read": {
+                                    "example": "false"
+                                },
+                                "idPanne": {
+                                    "example": "2"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error."
+                    },
+                    "404": {
+                        "description": "Not Found." 
+                    }
+                }
+            },
+            "post": {
+                "tags": ["BreakdownNotification"],
+                "description": "Endpoint pour ajouter une  notification sur une panne dans le service \n \n *Une requête renvoi un code HTTP 200 si elle est effectuée avec succès \n Si elle échoue, elle va retourner un code HTTP 500. \n Sinon, le endpoint n'existe pas et donc la requête retroune un code HTTP 404.*",
+                "summary": "Créer une notification sur une panne dans le système.",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Une notification créée, modifier les propriétés selon votre besoin.",
+                        "schema": {
+                            "properties": {
+                                "read": {
+                                    "example": "false"
+                                },
+                                "idPanne": {
+                                    "example": "2"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                                },
+                                "read": {
+                                    "example": "false"
+                                },
+                                "idPanne": {
+                                    "example": "2"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error."
+                    },
+                    "404": {
+                        "description": "Not Found." 
+                    }
+               }
+            }
+        }
+    }
+}
