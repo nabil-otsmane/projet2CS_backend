@@ -24,11 +24,16 @@ export async function getSubTypes(_req: Request, res: Response) {
     res.status(200).send(subTypes)
 }
 
+export async function getSubType(req: Request, res: Response) {
+    const subTypes = await SubscriptionType.findOne(req.params.idSubType)
+    res.status(200).send(subTypes)
+}
+
 //Adding a subscription of SubType for a Tenant
 export async function addSubscription(req: Request, res:Response) {
     const subType = await SubscriptionType.findOne(req.body.idSubType)
     if(subType){
-        const tenant = await Tenant.findOne(req.body.idTenant)
+        let tenant = await Tenant.findOne(req.body.idTenant)
         if(tenant){
             if(tenant.accountState.toLocaleLowerCase()=="activated"){
                 if(tenant.subCard==null){
@@ -40,15 +45,15 @@ export async function addSubscription(req: Request, res:Response) {
                                     + (new Date()).getTime()),
                         subState : 'pending'
                     })
-                    const added = await subCard.save()
+                    const added = await Subscription.save(subCard)
                     if(added){
                         tenant.subCard=subCard.idSub
-                        await Tenant.save(tenant)
-                        res.send(added)
+                        tenant = await Tenant.save(tenant)
+                        res.status(201).send(added)
                     }
                 }else{
                     res.status(404).json({
-                        msg: "This tenant's already has an ongoing subscription"
+                        msg: "This tenant already has an ongoing subscription"
                     })
                 }
             }else{
@@ -73,7 +78,7 @@ export async function activateSubscription(req: Request, res:Response) {
     if(pendingSub){
         pendingSub.subState='active'
         let save = await Subscription.save(pendingSub)
-        if(save){
+        if(save.subState=="active"){
             res.status(201).json({ 
                 msg: 'success'
             })
@@ -115,7 +120,7 @@ export async function deleteExpiredSubscriptions(_req:Request,res:Response){
     let numDeletedSubs=0;
     const currentDate = (new Date()).getTime();
     for(let i=0;i<subscriptions.length;i++) {
-        if(subscriptions[i].expirationDate.getTime()>currentDate){
+        if(subscriptions[i].expirationDate.getTime()<currentDate){
             let tenant = await Tenant.findOne({
                 where: {
                     subCard : subscriptions[i].idSub
@@ -130,13 +135,13 @@ export async function deleteExpiredSubscriptions(_req:Request,res:Response){
             }
         }
     }
-    res.json({
+    res.status(201).json({
         msg: "operation successful! " + 
                                 numDeletedSubs + 
                                          " have been deleted."
     })
 }
-
+/*
 export async function deleteTenantSubscription(req:Request,res:Response) {
     const tenant = await Tenant.findOne(req.params.idTenant)
     if(tenant){
@@ -161,4 +166,4 @@ export async function deleteTenantSubscription(req:Request,res:Response) {
             msg: "This tenant doesn't exist"
         })
     }
-}
+}*/
