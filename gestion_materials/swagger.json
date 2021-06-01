@@ -1,0 +1,621 @@
+{
+  "swagger": "2.0",
+  "host": "localhost:8080",
+  "info": {
+    "version": "1.0.0",
+    "title": "Documentation du service materiel",
+    "description": "Cette documentation contient tout les endpoint du service materiel : Equipment / UsedEquipment. \nVeuillez-trouvez tout les détails dans la section models.\n\n\n*PS: on réfère à un UsedEquipment par un équipement à utiliser et un Equipment par un équipement modèle.*",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Equipment",
+      "description": "Tout les méthodes sur le endpoint equipment :"
+    },
+    {
+      "name": "UsedEquipment",
+      "description": "Tout les méthodes sur le endpoint usedEquipment :"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "definitions": {
+    "UsedEquipment": {
+      "type": "object",
+      "properties": {
+        "idUsedEquipment": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "category": {
+          "type": "string"
+        }
+      }
+    },
+    "Equipment": {
+      "type": "object",
+      "properties": {
+        "idEquipment": {
+          "type": "number"
+        },
+        "equipmentName": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "number"
+        },
+        "category": {
+          "type": "string"
+        },
+        "usedEquipments": {
+          "type": "array",
+          "additionalProperties": {
+            "$ref": "#/definitions/UsedEquipment"
+          }
+        }
+      }
+    },
+    "Task": {
+      "type": "object",
+      "properties": {
+        "idTask": {
+          "type": "number"
+        },
+        "idAgent": {
+          "type": "number"
+        },
+        "idVehicle": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "idTaskState": {
+          "type": "number"
+        },
+        "usedEquipments": {
+          "type": "array",
+          "additionalProperties": {
+            "$ref": "#/definitions/UsedEquipment"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/equipment": {
+      "get": {
+        "tags": ["Equipment"],
+        "description": "API endpoint pour avoir tout les équipements dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 ✅ \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
+        "summary": "API endpoint pour avoir tout les équipements dans le système 💯",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "unitPrice": {
+                  "example": "8"
+                },
+                "category": {
+                  "example": "Liquide"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Equipment"],
+        "description": "API endpoint pour créer un nouveau équipement type dans le système \n \n*Une requête de création avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
+        "summary": "API endpoint pour créer un équipement dans le système 🏭",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Un équipement que vous voullez créer, modifier les propriétés de votre équipement si besoin 🖊️👇",
+            "schema": {
+              "properties": {
+                "equipmentName": {
+                  "example": "Essuis Glasses"
+                },
+                "unitPrice": {
+                  "example": 2200
+                },
+                "category": {
+                  "example": "Solide"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "unitPrice": {
+                  "example": "8"
+                },
+                "category": {
+                  "example": "Liquide"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/equipment/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Le UUID de l'équipement que vous voullez récupérer, modifier le ID de l'équipement à récupérer 🖊️👇",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Equipment"],
+        "description": "API endpoint pour avoir un équipement dans le système à travers son ID \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 ✅ \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
+        "summary": "API endpoint pour récupérer un équipement dans le système à travers son ID 1️⃣",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "unitPrice": {
+                  "example": "8"
+                },
+                "category": {
+                  "example": "Liquide"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Equipment"],
+        "description": "API endpoint pour modifier un équipement déja existant dans le système \n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
+        "summary": "API endpoint pour modifier un équipement déja existant dans le système 🔄",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Un équipement que vous voullez modifier, modifier les propriétés de modification si besoin 🖊️👇",
+            "schema": {
+              "properties": {
+                "equipmentName": {
+                  "example": "Essuis Glasses"
+                },
+                "unitPrice": {
+                  "example": 2200
+                },
+                "category": {
+                  "example": "Solide"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T19:57:13.887Z"
+                },
+                "unitPrice": {
+                  "example": "8"
+                },
+                "category": {
+                  "example": "Liquide"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Equipment"],
+        "description": "API endpoint pour supprimer un équipement dans le système à travers son ID \n \n*Une requête de suppression avec succès va retourner un Status code HTTP 204 ✅ \nUne requête de suppression qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
+        "summary": "API endpoint pour supprimer un équipement dans le système à travers son ID 🗑️",
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "example": "Something went wrong while deleting ..."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/usedEquipment": {
+      "get": {
+        "tags": ["UsedEquipment"],
+        "description": "API endpoint pour avoir tout les équipements à utiliser dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 ✅ \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
+        "summary": "API endpoint pour avoir tout les équipements à utiliser dans le système 💯",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "2e4c7ca4-f500-4fd9-aeed-ce88bd0fc88b"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T21:01:04.319Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T21:01:04.319Z"
+                },
+                "description": {
+                  "example": "J'ai utiliser 20 litres d'huile Quoi !"
+                },
+                "quantity": {
+                  "example": 6
+                },
+                "equipment": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                    },
+                    "createdAt": {
+                      "example": "2021-05-25T19:57:13.887Z"
+                    },
+                    "updatedAt": {
+                      "example": "2021-05-25T19:57:13.887Z"
+                    },
+                    "unitPrice": {
+                      "example": "8"
+                    },
+                    "category": {
+                      "example": "Liquide"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["UsedEquipment"],
+        "description": "API endpoint pour créer un nouveau équipement à utiliser dans le système \n \n*Une requête de création avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
+        "summary": "API endpoint pour créer un équipement à utiliser dans le système 🏭",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Un équipement à utiliser que vous voullez créer, modifier les propriétés de votre équipement si besoin 🖊️👇",
+            "schema": {
+              "properties": {
+                "description": {
+                  "example": "J'ai utiliser 20 litres d'huile Quoi !"
+                },
+                "quantity": {
+                  "example": 20
+                },
+                "equipment": {
+                  "example": "282d4458-aaeb-4e92-a674-12320b1de46a"
+                },
+                "taskUUID": {
+                  "example": "969f0417-0611-4f7c-9fc3-1f4b3ca22573"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "26ac7bdf-fe8e-4ed7-8344-4afffde0b493"
+                },
+                "createdAt": {
+                  "example": "2021-05-27T18:08:32.953Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-27T18:08:32.953Z"
+                },
+                "description": {
+                  "example": "J'ai utiliser 20 litres d'huile Quoi !"
+                },
+                "quantity": {
+                  "example": 20
+                },
+                "equipment": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                    },
+                    "createdAt": {
+                      "example": "2021-05-25T19:57:13.887Z"
+                    },
+                    "updatedAt": {
+                      "example": "2021-05-25T19:57:13.887Z"
+                    },
+                    "unitPrice": {
+                      "example": "8"
+                    },
+                    "category": {
+                      "example": "Liquide"
+                    }
+                  }
+                },
+                "task": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "example": "969f0417-0611-4f7c-9fc3-1f4b3ca22573"
+                    },
+                    "idAgent": {
+                      "example": 100
+                    },
+                    "idVehicle": {
+                      "example": 1
+                    },
+                    "description": {
+                      "example": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
+                    },
+                    "idTaskState": {
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/usedEquipment/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Le UUID de usedEquipment que vous voullez récupérer, modifier le ID de l'équipement à récupérer 🖊️👇",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["UsedEquipment"],
+        "description": "API endpoint pour avoir un équipement à utiliser dans le système à travers son ID \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 ✅ \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
+        "summary": "API endpoint pour récupérer un équipement à utiliser dans le système à travers son ID 1️⃣",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "2e4c7ca4-f500-4fd9-aeed-ce88bd0fc88b"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T21:01:04.319Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T21:01:04.319Z"
+                },
+                "description": {
+                  "example": "J'ai utiliser 20 litres d'huile Quoi !"
+                },
+                "quantity": {
+                  "example": 6
+                },
+                "equipment": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
+                    },
+                    "createdAt": {
+                      "example": "2021-05-25T19:57:13.887Z"
+                    },
+                    "updatedAt": {
+                      "example": "2021-05-25T19:57:13.887Z"
+                    },
+                    "unitPrice": {
+                      "example": "8"
+                    },
+                    "category": {
+                      "example": "Liquide"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["UsedEquipment"],
+        "description": "API endpoint pour modifier un équipement à utiliser, déja existant, dans le système \n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
+        "summary": "API endpoint pour modifier un équipement à utiliser, déja existant, dans le système 🔄",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Un équipement à utiliser que vous voullez modifier, modifier les propriétés de modification si besoin 🖊️👇",
+            "schema": {
+              "properties": {
+                "equipmentName": {
+                  "example": "Essuis Glasses"
+                },
+                "unitPrice": {
+                  "example": 2200
+                },
+                "category": {
+                  "example": "Solide"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "example": "2e4c7ca4-f500-4fd9-aeed-ce88bd0fc88b"
+                },
+                "createdAt": {
+                  "example": "2021-05-25T21:01:04.319Z"
+                },
+                "updatedAt": {
+                  "example": "2021-05-25T21:01:04.319Z"
+                },
+                "description": {
+                  "example": "J'ai utiliser 20 litres d'huile Quoi !"
+                },
+                "quantity": {
+                  "example": 6
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["UsedEquipment"],
+        "description": "API endpoint pour supprimer un équipement à utiliser dans le système à travers son ID \n \n*Une requête de suppression avec succès va retourner un Status code HTTP 204 ✅ \nUne requête de suppression qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
+        "summary": "API endpoint pour supprimer un équipement à utiliser dans le système à travers son ID 🗑️",
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "example": "Something went wrong while deleting ..."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  }
+}
