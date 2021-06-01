@@ -23,6 +23,10 @@ services:
     environment: 
       NODE_ENV: development
       DEBUG: src:*
+    env_file: 
+      - ormconfig.local.env
+    depends_on:
+      - database
   create_facture:
     build:
       context: ./create-facture
@@ -36,6 +40,10 @@ services:
     environment: 
       NODE_ENV: development
       DEBUG: src:*
+    env_file: 
+      - ormconfig.local.env
+    depends_on:
+      - database
   pricing_service:
     build:
       context: ./pricing-service
@@ -49,6 +57,10 @@ services:
     environment: 
       NODE_ENV: development
       DEBUG: src:*
+    env_file: 
+      - ormconfig.local.env
+    depends_on:
+      - database
   rental_service:
     build:
       context: ./rental-service
@@ -62,6 +74,10 @@ services:
     environment: 
       NODE_ENV: development
       DEBUG: src:*
+    env_file: 
+      - ormconfig.local.env
+    depends_on:
+      - database
   redis:
     image: "redis:alpine"
     ports:
