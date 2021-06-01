@@ -8,8 +8,6 @@
    "synchronize": false,
    "logging": false,
    "ssl": true,
-   "migrationsTableName": "migrations_typeorm",
-   "migrationsRun": true,
    "extra": {
       "ssl": {
          "rejectUnauthorized": false
