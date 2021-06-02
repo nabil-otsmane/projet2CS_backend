@@ -29,10 +29,10 @@ services:
       DEBUG: src:*
   pricing_service:
     build:
-      context: ./pricing-service
+      context: ./PricingService
       target: development
     volumes:
-      - ./pricing-service:/src
+      - ./PricingService:/src
       - /src/node_modules
     command: npm run start
     ports:
@@ -42,10 +42,10 @@ services:
       DEBUG: src:*
   rental_service:
     build:
-      context: ./rental-service
+      context: ./Rental
       target: development
     volumes:
-      - ./rental-service:/src
+      - ./Rental:/src
       - /src/node_modules
     command: npm run start
     ports:
