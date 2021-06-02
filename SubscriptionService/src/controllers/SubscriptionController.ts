@@ -103,11 +103,24 @@ export async function getSubscriptionCards(_req: Request, res:Response) {
 }
 
 export async function getSubscriptionByTenant(req: Request, res:Response) {
-    const tenant = await Tenant.findOne(req.body.idTenant)
-    const subscr = await Subscription.findOne(tenant?.subCard!!)
-    res.json({
-        sub: subscr
-    })
+    const tenant = await Tenant.findOne(req.params.idTenant)
+    if((tenant)&&(tenant.subCard)){
+        const subscr = await Subscription.findOne(tenant.subCard)
+        if(subscr){
+            res.status(200).json({
+                sub: subscr,
+                msg: "success"
+            })
+        }else{
+            res.status(404).json({
+                msg: "Subscription not found."
+            })
+        }
+    }else{
+        res.status(404).json({
+            msg: "Tenant or subscription doesn't exist."
+        })
+    }
 }
 
 

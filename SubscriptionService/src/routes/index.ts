@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { get, getSubTypes, addSubscription,getSubscriptionCards,getSubscriptionByTenant, 
-    deleteExpiredSubscriptions, activateSubscription, hasSubscription,getSubType} from '../controllers/SubscriptionController'
+    deleteExpiredSubscriptions, activateSubscription, hasSubscription,getSubType}
+     from '../controllers/SubscriptionController'
 const router = Router();
 
 

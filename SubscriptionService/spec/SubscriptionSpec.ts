@@ -190,7 +190,8 @@ describe("Testing Subscription Service", () => {
                     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
                     subState: "active",
                     idSub: 3
-                }
+                },
+                msg: "success"
             }))
         }); 
     })
