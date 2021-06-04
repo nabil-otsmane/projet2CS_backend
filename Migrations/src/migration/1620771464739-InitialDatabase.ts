@@ -107,7 +107,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     isPrimary: true
                 },
                 {
-                    name: "vehicletype",
+                    name: "vehicleType",
                     type: "varchar"
                 },  
                 {
