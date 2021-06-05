@@ -281,10 +281,6 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "idUser",
                     type: "int"
-                },
-                {
-                    name: "address",
-                    type: "varchar"
                 }
             ]
         }), true);
@@ -419,7 +415,8 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "refPermit",
-                    type: "varchar"
+                    type: "varchar",
+                    isNullable: true
                 },
                 {
                     name: "profilePicture",
@@ -446,8 +443,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "accountState",
                     type: "enum", 
-                    enum: ["pending","validated", "refused"],
-                    default: "pending"
+                    enum: ["pending","validated", "refused"]
                 },
                 {
                     name: "stateMessage",
