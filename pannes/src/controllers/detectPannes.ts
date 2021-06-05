@@ -106,7 +106,7 @@ export async function detectPannes(req:Request,res:Response){
         })}
         else {
                 return res.status(200).json({
-                    message: "pas de pannes "
+                message: "pas de pannes "
             })
         }        
     }
