@@ -445,7 +445,9 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "accountState",
-                    type: "varchar",
+                    type: "enum", 
+                    enum: ["pending","validated", "refused"],
+                    default: "pending"
                 },
                 {
                     name: "stateMessage",
