@@ -34,8 +34,10 @@ export async function detectPannes(req:Request,res:Response){
     try {
         const rental=await Rental.findOneOrFail({idVehicle:idVehicle,rentalstate:"active"})
         const PanneState="received";
+        let detection=false;
 
             if (batteryCharge > 15.5 || batteryCharge < 12.6 ){
+                detection=true
                 var description=""
                 if(batteryCharge > 15.5){
                     description="La charge de la batterie est élevée"
@@ -52,6 +54,7 @@ export async function detectPannes(req:Request,res:Response){
             }
 
             if(fuelLevel < 56){
+                detection=true
                 const panne = Panne.create({
                     state :PanneState,
                     description :"Le niveau de carburant du véhicule est bas",
@@ -61,6 +64,7 @@ export async function detectPannes(req:Request,res:Response){
             }
 
             if(engineTemp > 110){
+                detection=true
                 const panne = Panne.create({
                     state :PanneState,
                     description :"La température du moteur est élevée",
@@ -71,6 +75,7 @@ export async function detectPannes(req:Request,res:Response){
             }
 
             if(brakeFuild < 2){
+                detection=true
                 const panne = Panne.create({
                     state :PanneState,
                     description :"Le niveau de liquide de frein est bas",
@@ -80,6 +85,7 @@ export async function detectPannes(req:Request,res:Response){
             }
 
             if (oilPressure>80 || oilPressure<5 ){
+                detection=true
                 var description=""
                 if(oilPressure > 80 ){
                     description="La charge de pression d'huile est élevée"
@@ -94,7 +100,15 @@ export async function detectPannes(req:Request,res:Response){
                 });
                 await panne.save();
             }
-        return res.status(200);
+        if (detection == true){
+            return res.status(200).json({
+                message: "de nouvelles pannes sont détectées dans ce véhicule"
+        })}
+        else {
+                return res.status(200).json({
+                    message: "pas de pannes "
+            })
+        }        
     }
     catch(err) {
         console.log(err);
