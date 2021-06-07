@@ -26,4 +26,15 @@ export class Signal extends BaseEntity {
    
     @Column({ nullable: true })
     treated: boolean
+
+    @Column({ nullable: true })
+    treatmentDate: Date
+
+    @Column({ nullable: true })
+    treatmentDescription:String
+
+    @Column({ nullable: true })
+    validatedByAgent:number
+    default:0
+    
 }
