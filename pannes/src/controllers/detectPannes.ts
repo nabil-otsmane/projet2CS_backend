@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { Rental } from "../entity/Rental";
 import { Vehicle } from "../entity/Vehicle";
-import { Panne } from "../entity/Panne";import { VehicleState } from "../entity/VehicleState";
+import { Panne } from "../entity/Panne";
+import { VehicleState } from "../entity/VehicleState";
 import { stat } from "node:fs";
-;
+
 
 export const get = (_req: Request, res: Response) => {
     res.end("Pannes service is up and running !");
