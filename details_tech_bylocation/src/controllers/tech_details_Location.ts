@@ -13,7 +13,6 @@ export const add_techDetails_ByLocation = async (req: Request, res: Response) =>
     const {idRental,engineTemp,fuelLevel,oilPressure,batteryCharge,brakeFuild,speed,kilos} = req.body;
 
       const state= await VehicleState.findOne({idRental:idRental})
-      console.log(state)
         if(!state){
             const vehiclestate = VehicleState.create({
                 idRental: req.body.idRental,
