@@ -9,75 +9,6 @@ services:
       - database.env
     volumes:
       - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
-    
-  payment:
-    build:
-      context: ./payment
-      target: development
-    volumes:
-      - ./payment:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8007:8000"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
-  create_facture:
-    build:
-      context: ./create-facture
-      target: development
-    volumes:
-      - ./create-facture:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8008:8001"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
-  pricing_service:
-    build:
-      context: ./PricingService
-      target: development
-    volumes:
-      - ./PricingService:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8009:8002"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
-  rental_service:
-    build:
-      context: ./Rental
-      target: development
-    volumes:
-      - ./Rental:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8010:8003"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
   redis:
     image: "redis:alpine"
     ports:
@@ -93,9 +24,9 @@ services:
       - ./Migrations:/src
       - /src/node_modules
     command: npm run migrate
-    env_file: 
+    env_file:
       - ormconfig.local.env
-    depends_on: 
+    depends_on:
       - database
 
   association:
@@ -108,18 +39,18 @@ services:
     command: npm run start:dev
     ports:
       - "8123:8000"
-    env_file: 
+    env_file:
       - ormconfig.local.env
-    environment: 
+    environment:
       - REDIS_SERVER=redis:6379
       - LOG_SERVICE=log:8000
       - AUTH_SERVICE=authentication:8000
       - USER_SERVICE=user:8000
       - NAME=association-service
-    depends_on: 
+    depends_on:
       - redis
       - database
-    
+
   vehicles:
     build:
       context: ./vehicles
@@ -133,7 +64,7 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
+    env_file:
       - ormconfig.local.env
     depends_on:
       - database
@@ -151,7 +82,7 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
+    env_file:
       - ormconfig.local.env
     depends_on:
       - database
@@ -169,7 +100,7 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
+    env_file:
       - ormconfig.local.env
     depends_on:
       - database
@@ -187,7 +118,7 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
+    env_file:
       - ormconfig.local.env
     depends_on:
       - database
@@ -205,7 +136,7 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
+    env_file:
       - ormconfig.local.env
     depends_on:
       - database
@@ -223,7 +154,7 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
+    env_file:
       - ormconfig.local.env
     depends_on:
       - database
@@ -241,46 +172,6 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
-
-  log:
-    build:
-      context: ./log
-      target: development
-    volumes:
-      - ./log:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8006:8000"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
-
-  signals:
-    build:
-      context: ./signals
-      target: development
-    volumes:
-      - ./signals:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8111:8000"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file: 
-      - ormconfig.local.env
-    depends_on:
-      - database
   stats:
     build:
       context: ./stats
@@ -294,12 +185,3 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file: 
-          - ormconfig.local.env
-    depends_on:
-      - database
-
-volumes:
-  database-data: # named volumes can be managed easier using docker-compose
-
-    
