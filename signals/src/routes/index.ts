@@ -7,7 +7,7 @@ import * as morgan from 'morgan';
 import { Router } from 'express';
 
 
-import { getSignal, getSignals, addSignal, deleteSignal,updateSignalsState,getSignaTheftlInformation,getSignalPannesInformation} from '../controllers/Signal'
+import { getSignal, getSignals, addSignal, deleteSignal,updateSignalsState,getSignaTheftlInformation,getSignalPannesInformation,validateSignal} from '../controllers/Signal'
 
 
 const router = Router();
@@ -18,6 +18,8 @@ router.delete('/signals/:idSignal', deleteSignal)
 router.get('/panne_signals', getSignalPannesInformation)
 router.get('/theft_signals', getSignaTheftlInformation)
 router.put('/signals_treated',updateSignalsState)
+router.put('/validate_signal',validateSignal)
+
 
 
 export default router;
