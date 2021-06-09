@@ -155,13 +155,9 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "float"
                 },
                 {
-                    name: "numberOfolace",
+                    name: "numberOfplaces",
                     type: "varchar"
-                },
-                {
-                    name: "registrationNumber",
-                    type: "varchar"
-                },
+                }
 
             ]
         }), true)
