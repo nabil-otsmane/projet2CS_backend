@@ -23,9 +23,10 @@ router.get("/bornes/:idBorne", getBorne);
 router.put("/bornes/:idBorne", updateBorne);
 router.delete("/bornes/:idBorne", deleteBorne);
 
+router.get("/borne/:idBorne/vehicles", getVehiculesByBorneId);
+
 router.post("/vehicules", addVehicule);
 router.get("/vehicules", getVehicules);
-router.get("/vehicules/:idBorne", getVehiculesByBorneId);
 router.get("/vehicules/:idVehicule", getVehicule);
 router.put("/vehicules/:idVehicule", updateVehicule);
 router.delete("/vehicules/:idVehicule", deleteVehicule);
