@@ -185,3 +185,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
+
+volumes:
+database-data: # named volumes can be managed easier using docker-compose
