@@ -149,7 +149,16 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "latitude",
                     type: "float"
+                },
+                {
+                    name: "speed",
+                    type: "float"
+                },
+                {
+                    name: "numberOfplaces",
+                    type: "varchar"
                 }
+
             ]
         }), true)
       
