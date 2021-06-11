@@ -26,18 +26,6 @@ export const add_techDetails_ByLocation = async (req: Request, res: Response) =>
             await vehiclestate.save()
             res.status(200).send(vehiclestate)
         }
-<<<<<<< HEAD
-        else {
-                state.engineTemp = engineTemp 
-                state.fuelLevel = fuelLevel 
-                state.oilPressure=oilPressure
-                state.batteryCharge=batteryCharge
-                state.brakeFuild=brakeFuild
-                state.speed=speed
-                state.kilos=kilos
-                await state.save()
-                res.status(200).send(state)
-=======
         else{
             state.engineTemp = engineTemp 
             state.fuelLevel = fuelLevel 
@@ -48,8 +36,7 @@ export const add_techDetails_ByLocation = async (req: Request, res: Response) =>
             state.kilos=kilos
             await state.save()
             res.status(200).send(state)
-        
->>>>>>> c9d0bd426c2971f628df05e2595707348b788ee8
+
         }
 }
     
