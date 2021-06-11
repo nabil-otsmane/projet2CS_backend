@@ -454,6 +454,16 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "validationDate",
                     type: "date",
                     isNullable: true
+                },
+                {
+                    name: "longitude",
+                    type: "float",
+                    default: "1.0021545"
+                },
+                {
+                    name: "latitude",
+                    type: "float",
+                    default: "1.54845"
                 }
             ]
         }), true);

@@ -26,10 +26,6 @@ const server = createServer(app);
 // initialising socket.io server
 const options: Partial<ServerOptions> = {
     path: "/socket",
-    cors: {
-        origin: "http://127.0.0.1:5500",
-        methods: ["GET", "POST"]
-    }
 };
 
 const socket = new Server(server, options);

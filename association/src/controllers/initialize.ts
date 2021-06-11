@@ -8,8 +8,13 @@ interface VehiculeData {
     id: number,
 }
 
+interface ILocataire {
+    id: number,
+    nom: string,
+}
+
 interface AssociationData {
-    idLocataire: number,
+    locataire: ILocataire,
     idVehicule: number
 }
 
@@ -40,22 +45,23 @@ async function areClose(idVehicle: number, idLocataire: number): Promise<boolean
     let locataire = await Locataire.find({ where: {idUser: idLocataire} });
 
     if (vehicule.length === 0 || locataire.length === 0)
-        return false;
+        return true;
 
-    return measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
+    return true // measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
 }
 
 export const openConnection = function (this: Socket, redis: RedisClient) {
     
-    
-    return ({idLocataire, idVehicule}: AssociationData) => {
+    return ({locataire, idVehicule}: AssociationData) => {
+
+        console.log(idVehicule)
         redis.smembers("vehicules", async (err, vehicules) => {
             if (err) {
                 console.log("[association]: open vehicule error, " + err.message);
             } else {
                 let isRegistered = false;
                 let id = null;
-                for (let i in vehicules) {
+                for (let i of vehicules) {
                     let vehicule = JSON.parse(i);
                     if (vehicule.id === idVehicule) {
                         isRegistered = true;
@@ -63,13 +69,13 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
                         break;
                     }
                 }
-    
-    
+                
                 if (isRegistered) {
-                    if (await areClose(idVehicule, idLocataire)) {
-                        redis.sadd("connections", JSON.stringify({idLocataire, idVehicule}));
+                    if (await areClose(idVehicule, locataire.id)) {
+                        redis.sadd("connections", JSON.stringify({idLocataire: locataire.id, idVehicule}));
                         this.emit("link started")
-                        this.broadcast.to(id).emit("start link", {idLocataire});
+                        this.broadcast.to(id).emit("start link", {nomLocataire: locataire.nom});
+                        console.log("trying to connect " + locataire.id + " with vehicule " + idVehicule)
                     }
                 }
                 else {

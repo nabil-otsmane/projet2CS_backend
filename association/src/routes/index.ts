@@ -8,7 +8,7 @@ import connection from './connection';
 
 export default function (io: Server, app: Express, redis: RedisClient) {
     io.use(Log);
-    io.use(SocketAuth);
+    // io.use(SocketAuth);
 
     io.on('connection', connection(redis));
 
@@ -19,7 +19,7 @@ export default function (io: Server, app: Express, redis: RedisClient) {
         res.send(result);
     })
 
-    app.get("/vehicules", Auth(["decision_maker", "account_admin", "technical_admin"]), async function (_req, res) {
+    app.get("/vehicules", async function (_req, res) {
         const result = await getVehicules(redis)
         res.send(result);
     })
