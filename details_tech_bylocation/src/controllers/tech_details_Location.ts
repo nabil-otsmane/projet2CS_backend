@@ -7,13 +7,12 @@ export const get = (_req: Request, res: Response) => {
     res.end("This service is up and running !");
 }
 
-
 export const add_techDetails_ByLocation = async (req: Request, res: Response) => {
 
     const {idRental,engineTemp,fuelLevel,oilPressure,batteryCharge,brakeFuild,speed,kilos} = req.body;
 
       const state= await VehicleState.findOne({idRental:idRental})
-        if(!state){
+        if(!state) {
             const vehiclestate = VehicleState.create({
                 idRental: req.body.idRental,
                 engineTemp: req.body.engineTemp,
@@ -37,7 +36,7 @@ export const add_techDetails_ByLocation = async (req: Request, res: Response) =>
             state.kilos=kilos
             await state.save()
             res.status(200).send(state)
-        
+
         }
 }
     

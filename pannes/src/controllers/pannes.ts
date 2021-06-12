@@ -11,7 +11,6 @@ export const get = (_req: Request, res: Response) => {
     res.end("Pannes service is up and running !");
 }
 
-
 //get All pannes
 export async function getPannes(_req: Request, res: Response) {
     try {
@@ -24,6 +23,84 @@ export async function getPannes(_req: Request, res: Response) {
       return res.status(500).json(err);
     }
 }
+
+
+//get panne by id
+export async function getPanneById(req: Request, res: Response) {
+    const idPanne = Number(req.params.idPanne);
+    try {
+      const panne = await Panne.findOneOrFail({ idPanne:idPanne });
+      return res.send(panne);
+    } catch (err) {
+      console.log(err);
+      return res.status(404).json({ message: "Panne introuvable" });
+    }
+}
+
+
+//add new panne
+export const addPanne = async (req: Request, res: Response) => {
+    const { dateNotifPanne,idAgentSentNotif, state, idVehicle, description, severityLevel } = req.body;
+    try {
+      const panne = Panne.create({
+        dateNotifPanne,
+        idAgentSentNotif,
+        state,
+        idVehicle,
+        description,
+        severityLevel
+      });
+  
+      await panne.save();
+      return res.send(panne);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+};
+
+//delete panne
+export async function deletePanne(req: Request, res: Response) {
+  const idPanne = Number(req.params.idPanne);
+  const msg = { message: "Panne supprimée avec succès" };
+  try {
+    const panne = await Panne.findOneOrFail({ idPanne });
+    await panne.remove();
+    return res.status(204).json(msg);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ error: " Un problème s'est produit .." });
+  }
+}
+
+
+//update panne
+export async function updatePanne(req: Request, res: Response) {
+    const idPanne = Number(req.params.idPanne);
+    const { dateNotifPanne,idAgentSentNotif, state, idVehicle, description, severityLevel } = req.body;
+  
+    try {
+      const panne = await Panne.findOneOrFail({ idPanne });
+  
+      panne.dateNotifPanne = dateNotifPanne;
+      panne.idAgentSentNotif = idAgentSentNotif;
+      panne.state = state
+      panne.idVehicle=idVehicle;
+      panne.description=description;
+      panne.severityLevel=severityLevel
+  
+      await panne.save();
+  
+      return res.json(panne);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: "Un problème s'est produit .." });
+    }
+  }
 
 
 //Automatically detect vehicle breakdowns by checking the technical state of each vehicle(according to the data retrieved from the tablet)
