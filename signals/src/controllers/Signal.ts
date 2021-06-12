@@ -4,6 +4,12 @@ import {Vehicle} from "../entity/Vehicle";
 import {Rental} from "../entity/Rental";
 import {Tenant} from "../entity/Tenant";
 import {User} from "../entity/User";
+import {BreakdownNotification} from "../entity/BreakdownNotification";
+import {Panne} from "../entity/Panne";
+import {Agent} from "../entity/Agent";
+
+
+
 
 
 
@@ -71,17 +77,34 @@ export const deleteSignal = async (req: Request, res: Response) => {
 //update the state of signal treated=true 
 export async function updateSignalsState(req: Request, res: Response) {
     const id= Number(req.query.idSignal)
+    const description=String(req.query.description)
     try {
         const signal= await Signal.findOneOrFail({idSignal:id})
         signal.treated=true,
+        signal.treatmentDate= new Date()
+        signal.treatmentDescription=description
         await signal.save()
-        return res.status(200)
+        return res.status(200).json({message:"data successfuly updated"})
     } catch (error) {
         console.error()
         return res.status(500).json(error)
-    }
-    
+    }  
 }
+//
+export async function validateSignal(req: Request, res: Response) {
+    const idSignal= Number(req.query.idSignal)
+    const idAgent=Number(req.query.idAgent)
+    try {
+        const signal= await Signal.findOneOrFail({idSignal:idSignal})
+        signal.validatedByAgent=idAgent,
+        await signal.save()
+        return res.status(200).json({message:"data successfuly updated"})
+    } catch (error) {
+        console.error()
+        return res.status(500).json(error)
+    }  
+}
+
     //getSignals panne 
     export const getSignalPannesInformation = async (_req: Request, res: Response) => {
         try{
@@ -90,9 +113,21 @@ export async function updateSignalsState(req: Request, res: Response) {
         var signalsTreated=[]
         var index1=0;
         var index2=0
-        const signals = await Signal.find({signalType:"panne"});
+        const signals = await Signal.find({signalType:"panne",validatedByAgent:0});
+        var agentSentNotif=null
+        var agentTreatPanne=null
         for(var i=0;i<signals.length;i++){
-            
+            agentSentNotif=null
+            agentTreatPanne=null
+            //get panne info 
+            const panneNotification=await BreakdownNotification.findOneOrFail({idSignal:signals[i].idSignal});
+            const panne=await Panne.findOneOrFail({idPanne:panneNotification.idPanne});
+            //get Agents info 
+            if(panne.idAgentSentNotif!=null)
+             agentSentNotif=await Agent.findOneOrFail({idAgent:panne.idAgentSentNotif});
+            if(panne.idAgentTreatPanne!=null) 
+             agentTreatPanne=await Agent.findOneOrFail({idAgent:panne.idAgentTreatPanne});
+            //get vehicle info 
             const vehicle = await Vehicle.findOneOrFail({idVehicle:signals[i].idVehicle});
             const rental = await Rental.find({idVehicle:signals[i].idVehicle});
             const tenant = await Tenant.findOneOrFail({idTenant:rental[rental.length-1].idTenant});
@@ -102,10 +137,10 @@ export async function updateSignalsState(req: Request, res: Response) {
 
         
             if(signals[i].treated){
-            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city})
+            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city},panne,{agentSentNotif:agentSentNotif},{agentTreatPanne:agentTreatPanne})
             index1++
             }else{
-            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city})
+            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city},panne,{agentSentNotif:agentSentNotif},{agentTreatPanne:agentTreatPanne})
             index2++
             }
         }
@@ -121,6 +156,7 @@ export async function updateSignalsState(req: Request, res: Response) {
     }
     }
 
+
     export const getSignaTheftlInformation = async (_req: Request, res: Response) => {
         try{
         var result={}
@@ -128,7 +164,7 @@ export async function updateSignalsState(req: Request, res: Response) {
         var signalsTreated=[]
         var index1=0;
         var index2=0
-        const signals = await Signal.find({signalType:"theft"});
+        const signals = await Signal.find({signalType:"theft",validatedByAgent:0});
         for(var i=0;i<signals.length;i++){
             
             const vehicle = await Vehicle.findOneOrFail({idVehicle:signals[i].idVehicle});
