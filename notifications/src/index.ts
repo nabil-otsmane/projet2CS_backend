@@ -40,7 +40,7 @@ const PORT = 8000;
 
 // start server and socket event listener
 http.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    console.log(`Notification server listening on port ${PORT}`);
     io.on("connection", (socket: any) => {
         socket.on("messageSent", (message: any) => {
             socket.broadcast.emit("messageSent", message);
