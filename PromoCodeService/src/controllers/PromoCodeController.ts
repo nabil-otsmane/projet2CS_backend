@@ -45,25 +45,30 @@ export async function deletePromoCode(req: Request, res:Response) {
 }
 
 export async function updatePromoCode(req: Request, res:Response) {
-    const promoCode= await PromoCode.findOne(req.body.idPromoCode)
+    let promoCode= await PromoCode.findOne(req.body.idPromoCode)
+    
     if(promoCode){
-        promoCode.pricePoints = 
-                    promoCode.pricePoints | req.body.pricePoints
-        promoCode.reductionRate = 
-                    promoCode.reductionRate | req.body.reductionRate
+        if(req.body.pricePoints){
+            promoCode.pricePoints = req.body.pricePoints
+        }
+
+        if(req.body.reductionRate){
+            promoCode.reductionRate = req.body.reductionRate
+        }
+         
         const saved = await PromoCode.save(promoCode)
         if(saved){
             res.json({
                 msg: "success",
-                promoCode: saved
+                promoCode: promoCode
             })
         }else{
-            res.json({
+            res.status(500).json({
                 msg: "This operation was not successful"
             })
         }
     }else{
-        res.json({
+        res.status(404).json({
             msg : "Promo code doesn't exist"
         })
     }
