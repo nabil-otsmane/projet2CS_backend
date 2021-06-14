@@ -32,7 +32,7 @@ export async function getVehicles(req: Request, res: Response) {
             const vehicle=await Vehicle.findOneOrFail(vehicles[i])
             const tenant = await Tenant.findOneOrFail(rental.idTenant)
             const user= await User.findOneOrFail(tenant.idUser)
-            vehicles[i]=Object.assign(vehicle,tenant,user)
+            vehicles[i]=Object.assign(vehicle,tenant,user, rental)
        }
     }
     let nbVehicles=await Vehicle.count()
