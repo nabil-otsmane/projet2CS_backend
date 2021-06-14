@@ -12,7 +12,6 @@ import { getSignal, getSignals, addSignal, deleteSignal,updateSignalsState,getSi
 
 const router = Router();
 router.post('/signals', addSignal)
-router.get('/signals', getSignals)
 router.get('/signals/:idSignal', getSignal)
 router.delete('/signals/:idSignal', deleteSignal)
 router.get('/panne_signals', getSignalPannesInformation)

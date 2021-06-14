@@ -84,7 +84,7 @@ export async function updateSignalsState(req: Request, res: Response) {
         signal.treatmentDate= new Date()
         signal.treatmentDescription=description
         await signal.save()
-        return res.status(200).json({message:"data successfuly updated"})
+        return res.status(200).json(signal)
     } catch (error) {
         console.error()
         return res.status(500).json(error)
