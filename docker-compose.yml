@@ -1,12 +1,25 @@
 version: "3.8"
 
 services:
-  payment:
+  notification:
     build:
-      context: ./payment
+      context: ./notifications
       target: development
     volumes:
-      - ./payment:/src
+      - ./notifications:/src
+      - /src/node_modules
+    command: npm run start
+    ports:
+      - "8004:8000"
+    environment: 
+      NODE_ENV: development
+      DEBUG: src:*
+  payment:
+    build:
+      context: ./PricingService
+      target: development
+    volumes:
+      - ./PricingService:/src
       - /src/node_modules
     command: npm run start
     ports:
@@ -16,32 +29,6 @@ services:
       DEBUG: src:*
   create_facture:
     build:
-      context: ./create-facture
-      target: development
-    volumes:
-      - ./create-facture:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8007:8001"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  pricing_service:
-    build:
-      context: ./PricingService
-      target: development
-    volumes:
-      - ./PricingService:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8008:8002"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  rental_service:
-    build:
       context: ./Rental
       target: development
     volumes:
@@ -49,7 +36,7 @@ services:
       - /src/node_modules
     command: npm run start
     ports:
-      - "8009:8003"
+      - "8007:8001"
     environment: 
       NODE_ENV: development
       DEBUG: src:*
