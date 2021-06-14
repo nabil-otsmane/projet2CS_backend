@@ -57,6 +57,12 @@ export async function getVehicles(req: Request, res: Response) {
 }
 
 
+/**
+ *
+ * descr : endpoint to return the list of vehicles
+ *         depending on their availability
+ *
+**/
 export async function getVehiclesByAvailibility(req: Request, res: Response) {
     
     const limit = Number(req.query.limit || "8");
