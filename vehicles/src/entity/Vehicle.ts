@@ -10,8 +10,26 @@ export class Vehicle extends BaseEntity {
     vehicletype: string;
 
     @Column()
+    vehiclemodel: string;
+
+    @Column()
     vehiclebrand: string;
 
     @Column()
+    image: string;
+
+    @Column()
+    vehicleColor:string;
+
+    @Column()
+    registrationNumber:string;
+
+    @Column()
     availibility:string;
+
+    @Column()
+    unitpriceperhour:number;
+
+    @Column()
+    unitpriceperday:number;
 }

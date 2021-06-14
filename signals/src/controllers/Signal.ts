@@ -14,7 +14,7 @@ import {Agent} from "../entity/Agent";
 
 
 
-import { getManager } from "typeorm";
+import { getManager, Not } from "typeorm";
 import { Borne } from "../entity/Borne";
 
 
@@ -44,8 +44,6 @@ export const addSignal = async (req: Request, res: Response) => {
         sourceType: req.body.sourceType,
         idVehicle: req.body.idVehicle,
         sent_at: req.body.sent_at,
-
-        
     })
 
     await signal.save()
@@ -104,6 +102,58 @@ export async function validateSignal(req: Request, res: Response) {
         return res.status(500).json(error)
     }  
 }
+    //get list of validate signal panne
+    
+    export const getValidateSignalPannes = async (_req: Request, res: Response) => {
+        try{
+        var result={}
+        var signalsNotTreated=[]
+        var signalsTreated=[]
+        var index1=0;
+        var index2=0
+        const signals = await (await Signal.find({signalType:"panne",validatedByAgent:Not(0)}));
+        var agentSentNotif=null
+        var agentTreatPanne=null
+        for(var i=0;i<signals.length;i++){
+            agentSentNotif=null
+            agentTreatPanne=null
+            //get panne info 
+            const panneNotification=await BreakdownNotification.findOneOrFail({idSignal:signals[i].idSignal});
+            const panne=await Panne.findOneOrFail({idPanne:panneNotification.idPanne});
+            //get Agents info 
+            if(panne.idAgentSentNotif!=null)
+             agentSentNotif=await Agent.findOneOrFail({idAgent:panne.idAgentSentNotif});
+            if(panne.idAgentTreatPanne!=null) 
+             agentTreatPanne=await Agent.findOneOrFail({idAgent:panne.idAgentTreatPanne});
+            //get vehicle info 
+            const vehicle = await Vehicle.findOneOrFail({idVehicle:signals[i].idVehicle});
+            const rental = await Rental.find({idVehicle:signals[i].idVehicle});
+            const tenant = await Tenant.findOneOrFail({idTenant:rental[rental.length-1].idTenant});
+            const borneDepart=await Borne.findOneOrFail({idBorne:rental[rental.length-1].iddepartborne});
+            const borneDest=await Borne.findOneOrFail({idBorne:rental[rental.length-1].iddestborne});
+            const user = await User.findOneOrFail({idUser:tenant.idUser});
+
+        
+            if(signals[i].treated){
+            signalsTreated[index1]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city},panne,{agentSentNotif:agentSentNotif},{agentTreatPanne:agentTreatPanne})
+            index1++
+            }else{
+            signalsNotTreated[index2]=Object.assign(signals[i],vehicle, rental[rental.length-1],user,{depatBorne:borneDepart.city,destBorne:borneDest.city},panne,{agentSentNotif:agentSentNotif},{agentTreatPanne:agentTreatPanne})
+            index2++
+            }
+        }
+       result={
+           signlasTreated: signalsTreated,
+           signalsNotTreated:signalsNotTreated
+       }
+        res.status(200).json(result)
+    }catch (err){
+        console.log(err)
+        res.status(500).json(err)
+
+    }
+    }
+
 
     //getSignals panne 
     export const getSignalPannesInformation = async (_req: Request, res: Response) => {
@@ -156,7 +206,6 @@ export async function validateSignal(req: Request, res: Response) {
     }
     }
 
-
     export const getSignaTheftlInformation = async (_req: Request, res: Response) => {
         try{
         var result={}
@@ -190,7 +239,6 @@ export async function validateSignal(req: Request, res: Response) {
     }catch (err){
         console.log(err)
         res.status(500).json(err)
-
     }
     }
  

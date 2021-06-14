@@ -160,17 +160,17 @@ services:
 
   signals:
     build:
-        context: ./signals
-        target: development
+      context: ./signals
+      target: development
     volumes:
-        - ./signals:/src
-        - /src/node_modules
+      - ./signals:/src
+      - /src/node_modules
     command: npm run start:dev
     ports:
-        - "8111:8000"
+      - "8111:8000"
     environment: 
-        NODE_ENV: development
-        DEBUG: src:*
+      NODE_ENV: development
+      DEBUG: src:*
   stats:
     build:
       context: ./stats
