@@ -43,7 +43,8 @@ export async function addSubscription(req: Request, res:Response) {
                         expirationDate: new Date(
                             subType.subTypeDuration*3600000*24
                                     + (new Date()).getTime()),
-                        subState : 'pending'
+                        subState : 'pending',
+                        idTenant : req.body.idTenant
                     })
                     const added = await Subscription.save(subCard)
                     if(added){
@@ -103,6 +104,54 @@ export async function getSubscriptionCards(_req: Request, res:Response) {
         })
     }else{
         msg : "No subscriptions to show"
+    }
+}
+
+export async function getActiveSubscriptions(_req: Request, res:Response) {
+    const subscriptions = await Subscription.find({
+        relations : ["subTypeO","tenant"],
+        where: { 
+            subState : 'active'
+        }
+    })
+    if(subscriptions.length!=0){
+        res.status(200).json(subscriptions)
+    }else{
+        res.status(404).json({
+            msg : "No subscriptions to show"
+        })
+    }
+}
+
+export async function getPendingSubscriptions(_req: Request, res:Response) {
+    const subscriptions = await Subscription.find({
+        relations : ["subTypeO","tenant"],
+        where: { 
+            subState : 'pending'
+        }
+    })
+    if(subscriptions.length!=0){
+        res.status(200).json(subscriptions)
+    }else{
+        res.status(404).json({
+            msg : "No subscriptions to show"
+        })
+    }
+}
+
+export async function getExpiredSubscriptions(_req: Request, res:Response) {
+    const subscriptions = await Subscription.find({
+        relations : ["subTypeO","tenant"],
+        where: { 
+            subState : 'expired'
+        }
+    })
+    if(subscriptions.length!=0){
+        res.status(200).json(subscriptions)
+    }else{
+        res.status(404).json({
+            msg : "No subscriptions to show"
+        })
     }
 }
 

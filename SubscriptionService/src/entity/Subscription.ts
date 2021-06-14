@@ -1,5 +1,8 @@
 import { type } from "node:os";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, 
+                BaseEntity, ManyToOne, JoinColumn, OneToOne } from "typeorm";
+import { SubscriptionType } from "./SubscriptionType";
+import { Tenant } from "./Tenant";
 
 
 @Entity("Subscription")
@@ -22,5 +25,16 @@ export class Subscription extends BaseEntity {
 
     @Column()
     subState: string;
+
+    @Column()
+    idTenant: number;
+
+    @ManyToOne(()=> SubscriptionType, subTypeO => subTypeO.subs)
+    @JoinColumn({ name: "subType"})
+    subTypeO : SubscriptionType
+
+    @OneToOne(()=> Tenant, tenant => tenant.sub)
+    @JoinColumn({ name: "idTenant"})
+    tenant : Tenant
 
 }
