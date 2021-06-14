@@ -2,7 +2,8 @@ import { createConnection, getConnection, InsertResult } from "typeorm";
 import "reflect-metadata";
 import { Request, json } from "express";
 import { Server } from "http";
-const request = require("supertest");
+import {} from "jasmine";
+const request = require("request");
 
 interface IData {
   status?: number;
@@ -14,7 +15,7 @@ describe("Service Test : ", () => {
   describe("GET /", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
+      request.get(
         "http://localhost:8001",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
@@ -32,7 +33,7 @@ describe("Service Test : ", () => {
   describe("GET /vehicle_state", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
+      request.get(
         "http://localhost:8001/vehicle_state?idVehicle=3",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
@@ -50,7 +51,7 @@ describe("Service Test : ", () => {
    describe("GET /rental_info", () => {
     let data: IData = {};
     beforeAll((done) => {
-      Request.get(
+      request.get(
         "http://localhost:8001/rental_info?idVehicle=3",
         (_error: any, response: any, body: any) => {
           data.status = response.statusCode;
