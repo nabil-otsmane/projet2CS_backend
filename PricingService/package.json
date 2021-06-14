@@ -8,6 +8,8 @@
       "morgan": "^1.10.0",
       "pg": "^8.6.0",
       "reflect-metadata": "^0.1.13",
+      "swagger-ui": "^3.50.0",
+      "swagger-ui-dist": "^3.50.0",
       "typeorm": "0.2.32"
    },
    "devDependencies": {

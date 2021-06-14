@@ -16,6 +16,9 @@ export class Subscription extends BaseEntity {
 
     @Column()
     expirationDate: Date;
+    
+    @Column()
+    solde: number;
 
     @Column()
     subState: string;

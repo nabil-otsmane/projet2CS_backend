@@ -1,5 +1,5 @@
 import { type } from "node:os";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, JoinColumn } from "typeorm";
 import { Subscription } from "./Subscription";
 
 
@@ -21,7 +21,8 @@ export class SubscriptionType extends BaseEntity {
     @Column()
     bonusPointsRate: number;
 
-    @OneToMany(()=> Subscription, subTypeO => subTypeO.subTypeO)
+    @OneToMany(()=> Subscription, subs => subs.subTypeO)
+    @JoinColumn({ name: "subs"})
     subs : SubscriptionType[]
 
 }

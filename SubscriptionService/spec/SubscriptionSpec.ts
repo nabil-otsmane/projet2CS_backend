@@ -32,6 +32,7 @@ const subType2 = {
 }
 const subscript = {
     subType: 1,
+    solde:30000.0,
     creationDate: new Date("2021-05-30T00:35:20.459Z"),
     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
     subState: "pending",
@@ -39,6 +40,7 @@ const subscript = {
 }
 const subscript2 = {
     subType: 1,
+    solde: 21000.0,
     creationDate: new Date("2021-05-30T00:35:20.459Z"),
     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
     subState: "active",
@@ -122,6 +124,7 @@ describe("Testing Subscription Service", () => {
             spyOn(Subscription, "create").and.returnValue(
                await new Promise<any>((resolve, _reject) => resolve({
                     subType: 1,
+                    solde:30000.0,
                     creationDate: new Date("2021-05-30T00:35:20.459Z"),
                     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
                     subState: "pending",
@@ -142,6 +145,7 @@ describe("Testing Subscription Service", () => {
             expect(text).toEqual(JSON.stringify(
                 {
                     subType: 1,
+                    solde:30000.0,
                     creationDate: new Date("2021-05-30T00:35:20.459Z"),
                     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
                     subState: "pending",
@@ -155,6 +159,7 @@ describe("Testing Subscription Service", () => {
             spyOn(Subscription, "findOne").and.returnValue(
                await new Promise<any>((resolve, _reject) => resolve({
                     subType: 1,
+                    solde:30000.0,
                     creationDate: new Date("2021-05-30T00:35:20.459Z"),
                     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
                     subState: "pending",
@@ -186,6 +191,7 @@ describe("Testing Subscription Service", () => {
             expect(text).toEqual(JSON.stringify({
                 sub : {
                     subType: 1,
+                    solde:21000.0,
                     creationDate: new Date("2021-05-30T00:35:20.459Z"),
                     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
                     subState: "active",
@@ -207,12 +213,78 @@ describe("Testing Subscription Service", () => {
             expect(text).toEqual(JSON.stringify({
                 subs : [{
                     subType: 1,
+                    solde: 21000.0,
                     creationDate: new Date("2021-05-30T00:35:20.459Z"),
                     expirationDate: new Date("2021-06-29T00:35:20.459Z"),
                     subState: "active",
                     idSub: 3
                 }]
             }))
+        }); 
+    })
+    describe("GET /subscription/getBalance/:idSub", function() {
+        it("should return a success message and solde value 12000.0", async () => {
+            spyOn(Subscription, "findOne").and.returnValue(
+               await new Promise<any>((resolve, _reject) => resolve({
+                    subType: 1,
+                    solde: 12000.0,
+                    creationDate: new Date("2021-05-30T00:35:20.459Z"),
+                    expirationDate: new Date("2021-06-29T00:35:20.459Z"),
+                    subState: "pending",
+                    idSub:3
+                }
+            )));
+            const {status, text} = 
+                await request(app).get("/subscription/getBalance/1")
+            expect(status).toEqual(201)
+            expect(text).toEqual(JSON.stringify(
+                {
+                    price : 12000.0,
+                    msg : "success"
+                }
+            ))
+        }); 
+    })
+    describe("POST /subscription/debitBalance/:idSub", function() {
+        it("should return a success message and solde", async () => {
+            spyOn(Subscription, "findOne").and.returnValue(
+                await new Promise<any>((resolve, _reject) => resolve({
+                    subType: 1,
+                    solde: 12000.0,
+                    creationDate: new Date("2021-05-30T00:35:20.459Z"),
+                    expirationDate: new Date("2021-06-29T00:35:20.459Z"),
+                    subState: "active",
+                    idSub:3
+                }
+            )));
+            spyOn(Subscription, "save").and.returnValue(
+                new Promise<any>((resolve, _reject) => resolve(subscript2)));
+            const {status, text} = 
+                await request(app).post("/subscription/debitBalance/1")
+            expect(status).toEqual(201)
+            console.log(JSON.parse(text))
+            //expect((JSON.parse(text)).)
+        }); 
+    })
+    describe("POST /subscription/debitBalance/:idSub", function() {
+        it("should return a success message and solde", async () => {
+            spyOn(Subscription, "findOne").and.returnValue(
+                await new Promise<any>((resolve, _reject) => resolve({
+                    subType: 1,
+                    solde: 12000.0,
+                    creationDate: new Date("2021-05-30T00:35:20.459Z"),
+                    expirationDate: new Date("2021-06-29T00:35:20.459Z"),
+                    subState: "active",
+                    idSub:3
+                }
+            )));
+            spyOn(Subscription, "save").and.returnValue(
+                new Promise<any>((resolve, _reject) => resolve(subscript2)));
+            const {status, text} = 
+                await request(app).post("/subscription/debitBalance/1")
+            expect(status).toEqual(201)
+            console.log(JSON.parse(text))
+            //expect((JSON.parse(text)).)
         }); 
     })
     describe("POST /subscription/deleteExpiredSubs", function() {

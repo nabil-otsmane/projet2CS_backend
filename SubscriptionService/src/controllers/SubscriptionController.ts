@@ -25,8 +25,8 @@ export async function getSubTypes(_req: Request, res: Response) {
 }
 
 export async function getSubType(req: Request, res: Response) {
-    const subTypes = await SubscriptionType.findOne(req.params.idSubType)
-    res.status(200).send(subTypes)
+    const subType = await SubscriptionType.findOne(req.params.idSubType)
+    res.status(200).send(subType)
 }
 
 //Adding a subscription of SubType for a Tenant
@@ -97,9 +97,13 @@ export async function getSubscriptionCards(_req: Request, res:Response) {
             subState : 'active'
         }
     })
-    res.status(200).json({
-        subs : subscriptions
-    })
+    if(subscriptions.length!=0){
+        res.status(200).json({
+            subs : subscriptions
+        })
+    }else{
+        msg : "No subscriptions to show"
+    }
 }
 
 export async function getSubscriptionByTenant(req: Request, res:Response) {
@@ -123,6 +127,57 @@ export async function getSubscriptionByTenant(req: Request, res:Response) {
     }
 }
 
+export async function debitBalance(req:Request, res:Response){
+    const subCard = await Subscription.findOne(req.params.idSub)
+    if(subCard){
+        subCard.solde = subCard.solde - req.body.prix
+        const saved = await Subscription.save(subCard)
+        if(saved){
+            res.status(201).json({
+                balance : saved.solde,
+                msg: "success"
+            })
+        }else{
+            res.json({
+                msg: "The changes could not be saved."
+            })
+        }
+    }else{
+        res.json({
+            msg: "Card doesn't exist."
+        })
+    }
+}
+
+export async function rechargeCard(req:Request, res:Response){
+    const subCard = await Subscription.findOne(req.params.idSub)
+    if(subCard){
+        subCard.solde = subCard.solde + req.body.prix
+        const saved = await Subscription.save(subCard)
+        res.status(201).json({
+            balance : saved.solde,
+            msg: "success"
+        })
+    }else{
+        res.json({
+            msg: "Card doesn't exist."
+        })
+    }
+}
+
+export async function getBalance(req:Request, res:Response){
+    const subCard = await Subscription.findOne(req.params.idSub)
+    if(subCard){
+        res.status(201).json({
+            price : subCard.solde,
+            msg: "success"
+        })
+    }else{
+        res.json({
+            msg: "Card doesn't exist."
+        })
+    }
+}
 
 export async function deleteExpiredSubscriptions(_req:Request,res:Response){
     const subscriptions = await Subscription.find({
@@ -180,3 +235,22 @@ export async function deleteTenantSubscription(req:Request,res:Response) {
         })
     }
 }*/
+
+export async function updateSuscriptionType(req:Request, res:Response){
+    const subType = await SubscriptionType.findOne(req.params.idSubType)
+    if(subType){
+        subType.bonusPointsRate = 
+                    subType.bonusPointsRate | req.body.ptsRate
+        subType.reductionRate = subType.reductionRate | req.body.reductRate
+        const saved = await SubscriptionType.save(subType)
+        if(saved){
+            res.status(201).json({
+                msg: "success"
+            })
+        }else{
+            res.json({
+                msg: "This operation was not successful"
+            })
+        }
+    }
+}

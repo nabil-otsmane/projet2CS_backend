@@ -48,5 +48,31 @@ describe("server", ()=>{
             }))
         }); 
     })
+    describe("GET /promocode/updatePromoCode", function() {
+        it("should return the sentence Pricing Service", async () => {
+            spyOn(PromoCode, "findOne").and.returnValue(new Promise<any>((resolve, _reject) => resolve(
+                {
+                    idPromoCode: 1,
+                    pricePoints: 10,
+                    reductionRate: 0.2
+                }
+            )));
+            const {status, text} = await request(app).get("/promocode/updatePromoCode", {
+                idPromoCode: 1,
+                pricePoints : 15,
+                reductionRate:null
+            })
+            expect(status).toEqual(200)
+            expect(text).toEqual(JSON.stringify({
+                msg : "success",
+                promoCode :
+                    {
+                        idPromoCode: 1,
+                        pricePoints: 15,
+                        reductionRate: 0.2
+                    }
+            }))
+        }); 
+    })
 })
 
