@@ -5,7 +5,6 @@ import { createServer } from 'http';
 import "reflect-metadata";
 import { Connection, createConnection } from "typeorm";
 import * as express from 'express';
-import { json } from "express";
 import { createClient } from 'redis'
 import * as cors from 'cors';
 import * as morgan from 'morgan';
@@ -16,7 +15,7 @@ import initConnection from './routes'
 const app = express()
 
 // using various middlewares
-app.use(json())
+app.use(express.json())
 app.use(cors())
 app.use(morgan("dev"))
 
