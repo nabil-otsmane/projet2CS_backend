@@ -50,8 +50,9 @@ export class Seed2617378125500 implements MigrationInterface {
         await queryRunner.query("INSERT INTO \"DecisionMaker\"(\"idUser\") VALUES (1)")
 
         // Borne
-        await queryRunner.query("INSERT INTO \"Borne\"(\"idBorne\", \"nbOccupiedPlaces\", \"nbTotalPlaces\", \"nbMaintenanceAgents\", longitude, latitude, city) VALUES (1, 0, 20, 0, 36.762214, 3.051917, 'sidi mhamed')")
-        await queryRunner.query("INSERT INTO \"Borne\"(\"idBorne\", \"nbOccupiedPlaces\", \"nbTotalPlaces\", \"nbMaintenanceAgents\", longitude, latitude, city) VALUES (2, 0, 20, 0, 36.762214, 3.051917, 'sidi mhamed')")
+        await queryRunner.query("INSERT INTO \"Borne\"(\"idBorne\", \"nbOccupiedPlaces\", \"nbTotalPlaces\", \"nbMaintenanceAgents\", longitude, latitude, city) VALUES (1, 0, 20, 0, 3.085053, 36.739847, 'alger')")
+        await queryRunner.query("INSERT INTO \"Borne\"(\"idBorne\", \"nbOccupiedPlaces\", \"nbTotalPlaces\", \"nbMaintenanceAgents\", longitude, latitude, city) VALUES (2, 0, 20, 0, 6.622049, 36.333905, 'constantine')")
+        await queryRunner.query("INSERT INTO \"Borne\"(\"idBorne\", \"nbOccupiedPlaces\", \"nbTotalPlaces\", \"nbMaintenanceAgents\", longitude, latitude, city) VALUES (3, 0, 20, 0, -0.641282, 35.698566, 'oran')")
 
         // Vehicle
         await queryRunner.query("INSERT INTO \"Vehicle\"(\"idBorne\", \"vehicleType\", vehiclebrand, vehiclemodel, availibility, image, \"fuelType\", \"unitPricePerHour\", \"unitPricePerDay\", \"vehicleColor\", longitude, latitude, \"registrationNumber\") VALUES (1, 'Electric', 'TOYOTA', 'AURIS HYBRID', 'available', 'test', 'super', 100, 500, 'black', 36.762214, 3.051917, '04122 212 25')")
