@@ -7,19 +7,23 @@ export class Panne extends BaseEntity {
     idPanne: number;
 
     @Column()
-    dateNotifPanne:Date;
+    state:String;
+
+    @Column()
+    description:String; 
+
+    @Column()
+    dateNotifPanne:Date; 
+
+    @Column()
+    dateReparationPanne:Date; 
 
     @Column()
     idAgentSentNotif:number;
 
+    
     @Column()
-    state:String;
-
-    @Column()
-    idVehicle:number
-
-    @Column()
-    description:String; 
+    idAgentTreatPanne:number;
 
     @Column()
     severityLevel:number;

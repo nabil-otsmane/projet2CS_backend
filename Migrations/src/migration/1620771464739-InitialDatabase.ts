@@ -160,6 +160,15 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "registrationNumber",
                     type: "varchar"
                 },
+                {
+                    name: "speed",
+                    type: "float"
+                },
+                {
+                    name: "numberOfplaces",
+                    type: "varchar"
+                }
+
             ]
         }), true)
       
@@ -936,6 +945,38 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
         }));
 
 
+        await queryRunner.createTable(new Table({
+            name: "BreakdownNotification",
+            columns: [
+                {
+                    name: "id",
+                    type: "int",
+                    isGenerated:true,
+                    generationStrategy: 'increment',
+                    isPrimary: true
+                },
+                {
+                    name: "read",
+                    type: "boolean",
+                    isNullable:true,
+                    default: "false"
+                },
+                {
+                    name: "idPanne",
+                    type: "int",
+                    isNullable:true,
+                    default: "0"
+                },
+                {
+                    name: "idSignal",
+                    type: "int",
+                    isNullable:true,
+                    default: "0"
+                }
+            ]
+        }), true);
+
+
 
         
 
@@ -984,6 +1025,22 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     default: 'false',
                     isNullable:true
 
+                },
+                {
+                    name: "validatedByAgent",
+                    type: "int", 
+                    default: 0,
+                    isNullable:true
+                },
+                {
+                    name: "treatmentDescription",
+                    type: "varchar", 
+                    isNullable:true
+                },
+                {
+                    name: "treatmentDate",
+                    type: "timestamp", 
+                    isNullable:true
                 }
             ]
         }), true)
