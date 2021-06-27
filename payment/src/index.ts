@@ -1,22 +1,19 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-
 import * as express from 'express';
 import { json } from "express";
 import * as cors from 'cors';
 import * as morgan from 'morgan';
 import Router from './routes'
-import { User } from './entity'
 
 const app = express()
 
 app.use(json())
 app.use(cors())
 app.use(morgan("dev"))
-app.use(Router)
-
+app.use("/payment", Router)
 createConnection().then(async _connection => {
-    app.listen(8000, () => {
+    app.listen(5040, () => {
         console.log("server started.")
     })
 }).catch(error => console.log(error));

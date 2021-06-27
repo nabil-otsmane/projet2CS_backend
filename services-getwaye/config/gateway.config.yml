@@ -1,0 +1,98 @@
+http:
+  port: 7000
+apiEndpoints:
+  payments:
+    host: 54.37.87.85
+    paths: '/payment/*'
+  pricings:
+    host: 54.37.87.85
+    paths: '/pricing/*'
+  subscriptions:
+    host: 54.37.87.85
+    paths: '/subscription/*'
+  facturations:
+    host: 54.37.87.85
+    paths: ['/bill/*','/download/bill/:token']
+  vhicules:
+    host: 54.37.87.85
+    paths: '/cars/*'
+  promotions:
+    host: 54.37.87.85
+    paths: '/promocode/*'
+  auths:
+    host: 54.37.87.85
+    paths: '/auth/*'
+serviceEndpoints:
+  payments:
+    url: 'http://payment.api:5040'
+  pricings:
+    url: 'http://pricing.api:5030'
+  subscriptions:
+    url: 'http://subscription.api:5020'
+  facturations:
+    url: 'http://facture.api:5056'
+  vhicules:
+    url: 'http://vehicle.api:5000'
+  promotions:
+    url: 'http://promotion.api:5090'
+  auths:
+    url: 'http://auth.api:5084'
+policies:
+  - proxy
+pipelines:
+  payments:
+    apiEndpoints:
+      - payments
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: payments 
+              changeOrigin: true
+  pricings:
+    apiEndpoints:
+      - pricings
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: pricings 
+              changeOrigin: true
+  subscriptions:
+    apiEndpoints:
+      - subscriptions
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: subscriptions 
+              changeOrigin: true
+  facturations:
+    apiEndpoints:
+      - facturations
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: facturations 
+              changeOrigin: true
+  vhicules:
+    apiEndpoints:
+      - vhicules
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: vhicules 
+              changeOrigin: true
+  promotions:
+    apiEndpoints:
+      - promotions
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: promotions 
+              changeOrigin: true
+  auths:
+    apiEndpoints:
+      - auths
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: auths 
+              changeOrigin: true

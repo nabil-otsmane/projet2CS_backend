@@ -1,0 +1,24 @@
+{
+   "type": "postgres",
+   "host": "54.37.87.85",
+   "port": 5050,
+   "username": "project2Cs",
+   "password": "Dr5XKRnFLsesPf73KCjNg",
+   "database": "project_2cs",
+   "synchronize": false,
+   "logging": false,
+   "entities": [
+      "**/src/entity/**/*.ts"
+   ],
+   "migrations": [
+      "**/src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+   }
+}

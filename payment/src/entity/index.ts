@@ -1,3 +1,6 @@
 export * from './PaymentMethods'
 export * from './StripeCustomers'
 export * from './User'
+export * from './Rental'
+export * from './Tenant'
+export * from './PromoCode'

@@ -1,15 +1,155 @@
 version: '3.8'
 services:
-    template:
-        build:
-            context: ./payment
-            target: development
-        volumes:
-            - ./payment:/src
-            - /src/node_modules
-        command: npm run start:dev
-        ports:
-            - "8000:8000"
-        environment: 
-            NODE_ENV: development
-            DEBUG: src:*
+ db_project:
+  image: postgres
+  ports:
+   - "5050:5432"
+  environment:
+   - POSTGRES_PORT=5050
+   - POSTGRES_DB=project_2cs
+   - POSTGRES_USER=project2Cs
+   - POSTGRES_PASSWORD=Dr5XKRnFLsesPf73KCjNg
+ payment:
+  depends_on:
+   - db_project
+  build:
+   context: ./payment
+   target: development
+  ports:
+   - "5040:5040"
+  volumes:
+   - ./payment:/src
+   - /src/node_modules
+  command: npm run start:dev
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - payment.api
+ pricing_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./PricingService
+   target: development
+  volumes:
+   - ./PricingService:/src
+   - /src/node_modules
+  command: npm run start:dev
+  ports:
+   - "5030:5030"
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - pricing.api
+ subscription_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./SubscriptionService
+   target: development
+  volumes:
+   - ./SubscriptionService:/src
+   - /src/node_modules
+  command: npm run start:dev
+  ports:
+   - "5020:5020"
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - subscription.api
+ create-facture:
+  depends_on:
+   - db_project
+  build:
+   context: ./create-facture
+   target: development
+  volumes:
+   - ./create-facture:/src
+   - /src/node_modules
+  command: npm run start:dev
+  ports:
+   - "5056:5056"
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - facture.api
+ template:
+  depends_on:
+   - db_project
+  build:
+   context: ./template
+   target: development
+  volumes:
+   - ./template:/src
+   - /src/node_modules
+  command: npm run start:dev
+  ports:
+   - "5000:5000"
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - vehicle.api
+ services_getwaye:
+  build: ./services-getwaye
+  volumes:
+   - ./services-getwaye:/app
+   - /app/node_modules
+  command: npm start
+  ports:
+   - "7000:7000"
+  environment: 
+   NODE_ENV: development
+   LOG_LEVEL: debug
+ promo_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./PromoCodeService
+   target: development
+  volumes:
+   - ./PromoCodeService:/src
+   - /src/node_modules
+  command: npm run start:dev
+  ports:
+   - "5090:5090"
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - promotion.api
+ auth_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./Authentication
+   target: development
+  volumes:
+   - ./Authentication:/src
+   - /src/node_modules
+  command: npm start
+  ports:
+   - "5084:5084"
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - auth.api

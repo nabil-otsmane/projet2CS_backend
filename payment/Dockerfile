@@ -2,8 +2,8 @@ FROM node:14-alpine as base
 
 WORKDIR /src
 COPY package*.json /src/
-EXPOSE 8000
-RUN npm ci
+EXPOSE 5040
+RUN npm install
 COPY . /src
 
 
