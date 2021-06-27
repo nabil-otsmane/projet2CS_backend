@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getManager } from "typeorm";
 import { PromoCode } from "../entity/PromoCode";
 
 
@@ -6,12 +7,24 @@ import { PromoCode } from "../entity/PromoCode";
 export const get = (_req: Request, res: Response) => {
     res.end("Promotion Codes Service")
 }
-
+//for Kotlin : returns list of promo codes in json array format
 export async function getAllPromoCodes(_req: Request, res:Response) {
     const promoCodesList = await PromoCode.find()
-    res.json({
-        promoCodes: promoCodesList
-    })
+    res.json(promoCodesList)
+}
+
+//for Web : returns list of promo codes in 
+export async function getAllPromoCodesPages(_req: Request, res:Response) {
+
+    try {
+        const promoCodesList = await getManager()
+            .createQueryBuilder()
+            .from(PromoCode, "PromoCode")
+            .getRawMany();
+        res.status(200).send(promoCodesList)
+    } catch (e) {
+        res.status(404).send(e)
+    }
 }
 
 export async function addPromoCode(req: Request, res:Response) {
