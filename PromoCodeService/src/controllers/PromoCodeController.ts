@@ -14,16 +14,33 @@ export async function getAllPromoCodes(_req: Request, res:Response) {
 }
 
 //for Web : returns list of promo codes in 
-export async function getAllPromoCodesPages(_req: Request, res:Response) {
+export async function getAllPromoCodesPages(req: any, res:Response) {
 
+    const perPage = 10
+    const page = parseInt(req.query.page) || 1
     try {
-        const promoCodesList = await getManager()
+        const queryList = getManager()
             .createQueryBuilder()
-            .from(PromoCode, "PromoCode")
+            .from(PromoCode, "promocode")
+        console.log(queryList)
+        const total = await queryList.getCount();
+        const promoCodesList = await queryList
+            .limit(perPage)
+            .offset((page - 1) * perPage)
+            .orderBy("promocode.idPromoCode", "ASC")
             .getRawMany();
-        res.status(200).send(promoCodesList)
+        console.log(promoCodesList)
+        res.status(200).send({
+            ok: true,
+            data: {
+                list: promoCodesList,
+                currentPage: page,
+                perPage: perPage,
+                total: total
+            }
+        })
     } catch (e) {
-        res.status(404).send(e)
+        res.status(400).send(e)
     }
 }
 
