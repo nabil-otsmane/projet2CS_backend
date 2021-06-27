@@ -1,64 +1,55 @@
 version: "3.8"
 
 services:
-  payment:
-    build:
-      context: ./payment
-      target: development
-    volumes:
-      - ./payment:/src
-      - /src/node_modules
-    command: npm run start
+  database:
+    image: "postgres"
     ports:
-      - "8006:8000"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  create_facture:
-    build:
-      context: ./create-facture
-      target: development
+      - 5433:5432
+    env_file:
+      - database.env
     volumes:
-      - ./create-facture:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8007:8001"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  pricing_service:
-    build:
-      context: ./PricingService
-      target: development
-    volumes:
-      - ./PricingService:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8008:8002"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  rental_service:
-    build:
-      context: ./Rental
-      target: development
-    volumes:
-      - ./Rental:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8009:8003"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
+      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
   redis:
     image: "redis:alpine"
     ports:
       - 6380:6379
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+
+  migration:
+    build:
+      context: ./Migrations
+      target: development
+    volumes:
+      - ./Migrations:/src
+      - /src/node_modules
+    command: npm run migrate
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
+
+  association:
+    build:
+      context: ./association
+      target: development
+    volumes:
+      - ./association:/src
+      - /src/node_modules
+    command: npm run start:dev
+    ports:
+      - "8123:8000"
+    env_file:
+      - ormconfig.local.env
+    environment:
+      - REDIS_SERVER=redis:6379
+      - LOG_SERVICE=log:8000
+      - AUTH_SERVICE=authentication:8000
+      - USER_SERVICE=user:8000
+      - NAME=association-service
+    depends_on:
+      - redis
+      - database
 
   vehicles:
     build:
@@ -73,6 +64,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
 
   gestion_taches_agent:
     build:
@@ -87,6 +82,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
 
   user:
     build:
@@ -101,6 +100,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
 
   tracking:
     build:
@@ -115,6 +118,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
 
   borne-vehicule:
     build:
@@ -129,6 +136,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
 
   geolocalisation:
     build:
@@ -143,6 +154,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
 
   authentication:
     build:
@@ -157,20 +172,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-
-  signals:
-    build:
-      context: ./signals
-      target: development
-    volumes:
-      - ./signals:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8111:8000"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
   stats:
     build:
       context: ./stats
@@ -184,4 +189,10 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    
+    env_file:
+      - ormconfig.local.env
+    depends_on:
+      - database
+
+volumes:
+  database-data: # named volumes can be managed easier using docker-compose

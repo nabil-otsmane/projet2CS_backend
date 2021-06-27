@@ -1,4 +1,4 @@
-import { IncomingMessage } from "node:http";
+import { IncomingMessage } from "http";
 import { Socket } from "socket.io";
 import { ExtendedError } from "socket.io/dist/namespace";
 import axios from 'axios'

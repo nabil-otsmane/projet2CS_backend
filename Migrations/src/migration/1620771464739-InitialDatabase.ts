@@ -107,10 +107,6 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     isPrimary: true
                 },
                 {
-                    name: "registrationNumber",
-                    type: "varchar"
-                },
-                {
                     name: "vehicleType",
                     type: "varchar"
                 },  
@@ -120,6 +116,16 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "vehiclemodel",
+                    type: "varchar"
+                },
+                {
+                    name: "availibility",
+                    type: "enum",
+                    enum: ["stopped", "allocated", "available","maintained"],
+                    default: "'available'"
+                },
+                {
+                    name: "image",
                     type: "varchar"
                 },
                 {
@@ -149,7 +155,11 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "latitude",
                     type: "float"
-                }
+                },               
+                {
+                    name: "registrationNumber",
+                    type: "varchar"
+                },
             ]
         }), true)
       
@@ -271,10 +281,6 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: "idUser",
                     type: "int"
-                },
-                {
-                    name: "address",
-                    type: "varchar"
                 }
             ]
         }), true);
@@ -409,7 +415,8 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "refPermit",
-                    type: "varchar"
+                    type: "varchar",
+                    isNullable: true
                 },
                 {
                     name: "profilePicture",
@@ -435,7 +442,8 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "accountState",
-                    type: "varchar",
+                    type: "enum", 
+                    enum: ["pending","validated", "refused"]
                 },
                 {
                     name: "stateMessage",
@@ -446,6 +454,16 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     name: "validationDate",
                     type: "date",
                     isNullable: true
+                },
+                {
+                    name: "longitude",
+                    type: "float",
+                    default: "1.0021545"
+                },
+                {
+                    name: "latitude",
+                    type: "float",
+                    default: "1.54845"
                 }
             ]
         }), true);
@@ -708,7 +726,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: "varchar"
                 },
                 {
-                    name: "numChassis",
+                    name: "idVehicle",
                     type: "varchar"
                 },
                 {
@@ -870,14 +888,16 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     isPrimary: true
                 },
                 {
-                    name: "availability",
-                    type: "enum",
-                    enum: ["stopped", "allocated", "available","maintained"],
-                    default: "'available'"
+                    name: 'idRental',
+                    type: 'int',
                 },
                 {
-                  name: 'kilos',
-                  type: 'float',
+                    name: 'idBorne',
+                    type: 'int',
+                },
+                {
+                    name: 'kilos',
+                    type: 'float',
                 },
                 {
                     name: 'engineTemp',
@@ -888,7 +908,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                     type: 'float',
                 },
                 {
-                    name: 'oilLevel',
+                    name: 'oilPressure',
                     type: 'float',
                 },
                 {
@@ -898,11 +918,12 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 {
                     name: 'brakeFuild',
                     type: 'float',
-                },
+                }, 
                 {
-                    name: 'idRental',
-                    type: 'int',
-                },
+                    name:'speed', 
+                    type: 'float'
+                }
+                
             ]
         }), true);
 
@@ -1151,7 +1172,7 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
         await queryRunner.dropTable("VehiclePosition");
         await queryRunner.dropTable("Equipment");
         await queryRunner.dropTable("Signal");
-        await queryRunner.dropTable("VehiculeTracking");
+        await queryRunner.dropTable("VehicleTracking");
         await queryRunner.dropTable("TaskState");
     }
 
