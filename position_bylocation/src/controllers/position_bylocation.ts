@@ -29,14 +29,13 @@ export const add_position_ByLocation = async (req: Request, res: Response) => {
 
     }
     else{
-        const tracking=await VehicleTracking.findOneOrFail({idPosition:Vehiclepos?.idPosition})
-        tracking.idPosition=Vehiclepos.idPosition,
-        tracking.latitude=latitude
-        tracking.longitude=longitude
+        const tracking=await VehicleTracking.create({
+            idPosition:Vehiclepos?.idPosition,
+            latitude:latitude, 
+            longitude:longitude
+        })
         await tracking.save()
         res.status(200).send(tracking)
     }
 }
     
-
-

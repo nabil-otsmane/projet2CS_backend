@@ -2,7 +2,7 @@ import { createConnection, getConnection, InsertResult } from "typeorm";
 import "reflect-metadata";
 import { Request, json } from "express";
 import { Server } from "http";
-const request = require("supertest");
+const Request = require("supertest");
 
 interface IData {
   status?: number;

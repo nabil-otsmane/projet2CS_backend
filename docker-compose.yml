@@ -171,4 +171,31 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    
+
+  state:
+    build:
+      context: ./details_tech_bylocation
+      target: development
+    volumes:
+      - ./details_tech_bylocation:/src
+      - /src/node_modules
+    command: npm run start:dev
+    ports:
+      - "8400:8000"
+    environment:
+      NODE_ENV: development
+      DEBUG: src:*
+  location:
+    build:
+      context: ./position_bylocation
+      target: development
+    volumes:
+      - ./position_bylocation:/src
+      - /src/node_modules
+    command: npm run start
+    ports:
+      - "8500:8000"
+    environment: 
+      NODE_ENV: development
+      DEBUG: src:*
+      
