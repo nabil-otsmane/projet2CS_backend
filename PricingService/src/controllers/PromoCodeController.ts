@@ -32,7 +32,7 @@ export async function applyPromoCode(_req : Request, _res: Response){
                     tenant.points = tenant.points - promoCode.pricePoints
                     console.log(tenant.points)
                     const result = await Tenant.save(tenant);
-                    _res.json(result);
+                    _res.json(tenant);
                 
             }else{
                 _res.json({
