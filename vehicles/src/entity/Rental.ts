@@ -16,6 +16,9 @@ export class Rental extends BaseEntity {
     rentaldate: Date;
 
     @Column()
+    rentalstate:String;
+
+    @Column()
     plannedrestitutiondate: Date;
 }
 
