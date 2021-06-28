@@ -15,6 +15,7 @@ export async function BorneRentsByDay(_req: Request, res: Response) {
         order by h.day )`,"V")
     .where(`"V".id=:id`,{id: _req.params.id})
     .getRawMany();
+
     res.json(qur);
 }
 

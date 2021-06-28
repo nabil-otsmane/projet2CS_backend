@@ -90,12 +90,12 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
 }
 
 export const closeConnection = function (this: Socket, redis: RedisClient) {
-    return ({ locataire }: AssociationData) => {
+    return ({ idLocataire }: any) => {
         redis.smembers("connections", (_err, connections) => {
             for (let i of connections) {
                 let connection = JSON.parse(i)
 
-                if (connection.idLocataire === locataire.id) {
+                if (connection.idLocataire === idLocataire) {
                     let {idVehicule} = connection
                     getRepository("Vehicle").update({ idVehicle: idVehicule }, {availibility: "available"})
 
