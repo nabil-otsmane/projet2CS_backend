@@ -1,33 +1,12 @@
 version: "3.8"
 
 services:
-  database:
-    image: "postgres"
-    ports:
-      - 5433:5432
-    env_file:
-      - database.env
-    volumes:
-      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
   redis:
     image: "redis:alpine"
     ports:
       - 6380:6379
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-
-  migration:
-    build:
-      context: ./Migrations
-      target: development
-    volumes:
-      - ./Migrations:/src
-      - /src/node_modules
-    command: npm run migrate
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
 
   association:
     build:
@@ -39,8 +18,6 @@ services:
     command: npm run start:dev
     ports:
       - "8123:8000"
-    env_file:
-      - ormconfig.local.env
     environment:
       - REDIS_SERVER=redis:6379
       - LOG_SERVICE=log:8000
@@ -49,43 +26,34 @@ services:
       - NAME=association-service
     depends_on:
       - redis
-      - database
 
-  vehicles:
-    build:
-      context: ./vehicles
-      target: development
-    volumes:
-      - ./vehicles:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8000:8000"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
+  # vehicles:
+  #   build:
+  #     context: ./vehicles
+  #     target: development
+  #   volumes:
+  #     - ./vehicles:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
-  gestion_taches_agent:
-    build:
-      context: ./gestion_taches_agent
-      target: development
-    volumes:
-      - ./gestion_taches_agent:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8001:8000"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
+  # gestion_taches_agent:
+  #   build:
+  #     context: ./gestion_taches_agent
+  #     target: development
+  #   volumes:
+  #     - ./gestion_taches_agent:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8001:8000"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
   user:
     build:
@@ -100,28 +68,20 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
 
-  tracking:
-    build:
-      context: ./tracking
-      target: development
-    volumes:
-      - ./tracking:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8003:8001"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
+  # tracking:
+  #   build:
+  #     context: ./tracking
+  #     target: development
+  #   volumes:
+  #     - ./tracking:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8003:8001"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
   borne-vehicule:
     build:
@@ -136,28 +96,20 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
 
-  geolocalisation:
-    build:
-      context: ./geolocalisation
-      target: development
-    volumes:
-      - ./geolocalisation:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8002:8002"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
+  # geolocalisation:
+  #   build:
+  #     context: ./geolocalisation
+  #     target: development
+  #   volumes:
+  #     - ./geolocalisation:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8002:8002"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
   authentication:
     build:
@@ -172,10 +124,6 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
   stats:
     build:
       context: ./stats
@@ -189,10 +137,3 @@ services:
     environment:
       NODE_ENV: development
       DEBUG: src:*
-    env_file:
-      - ormconfig.local.env
-    depends_on:
-      - database
-
-volumes:
-  database-data: # named volumes can be managed easier using docker-compose

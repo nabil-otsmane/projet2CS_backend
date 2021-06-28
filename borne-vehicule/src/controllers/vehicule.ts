@@ -24,7 +24,7 @@ export const getVehiculesByBorneId = async (req: Request, res: Response) => {
       .from(Vehicule, "Vehicle")
       .where("Vehicle.idBorne = :id", { id: parseInt(req.params.idBorne) })
       .getMany();
-    console.log(vehicles);
+      
     res.status(200).send(vehicles);
   } catch (err) {
     res.status(500).send({
@@ -64,6 +64,7 @@ export async function getVehicules(_req: Request, res: Response) {
       res.status(200).json(vehicules);
     })
     .catch((e) => {
+      console.log(e)
       res.status(500).json({ message: e.message });
     });
 }
