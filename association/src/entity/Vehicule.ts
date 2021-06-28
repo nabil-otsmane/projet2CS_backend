@@ -11,4 +11,7 @@ export class Vehicule extends BaseEntity {
 
     @Column()
     latitude: number;
+
+    @Column()
+    availibility: string
 }

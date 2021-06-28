@@ -1,5 +1,6 @@
 import { RedisClient } from "redis"
 import { Socket } from "socket.io";
+import { getRepository } from "typeorm";
 import { Locataire } from "../entity/Locataire";
 import { Vehicule } from "../entity/Vehicule";
 import measureDistance from "../lib/measurement"
@@ -47,7 +48,7 @@ async function areClose(idVehicle: number, idLocataire: number): Promise<boolean
     if (vehicule.length === 0 || locataire.length === 0)
         return true;
 
-    return true // measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
+    return measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
 }
 
 export const openConnection = function (this: Socket, redis: RedisClient) {
@@ -83,6 +84,24 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
                 }    
             }
 
+        })
+    }
+}
+
+export const closeConnection = function (this: Socket, redis: RedisClient) {
+    return ({ locataire }: AssociationData) => {
+        redis.smembers("connections", (_err, connections) => {
+            for (let i of connections) {
+                let connection = JSON.parse(i)
+
+                if (connection.idLocataire === locataire.id) {
+                    let {idVehicule} = connection
+                    getRepository("Vehicle").update({ idVehicle: idVehicule }, {availibility: "available"})
+                    redis.srem("connections", i, (_err) => {
+                        console.log("error while removing location.")
+                    });
+                }
+            }
         })
     }
 }
