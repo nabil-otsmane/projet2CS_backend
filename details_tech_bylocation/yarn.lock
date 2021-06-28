@@ -2777,10 +2777,10 @@
   dependencies:
     "is-typedarray" "^1.0.0"
 
-"typeorm@^0.2.32":
-  "integrity" "sha512-LOBZKZ9As3f8KRMPCUT2H0JZbZfWfkcUnO3w/1BFAbL/X9+cADTF6bczDGGaKVENJ3P8SaKheKmBgpt5h1x+EQ=="
-  "resolved" "https://registry.npmjs.org/typeorm/-/typeorm-0.2.32.tgz"
-  "version" "0.2.32"
+"typeorm@^0.2.34":
+  "integrity" "sha512-FZAeEGGdSGq7uTH3FWRQq67JjKu0mgANsSZ04j3kvDYNgy9KwBl/6RFgMVgiSgjf7Rqd7NrhC2KxVT7I80qf7w=="
+  "resolved" "https://registry.npmjs.org/typeorm/-/typeorm-0.2.34.tgz"
+  "version" "0.2.34"
   dependencies:
     "@sqltools/formatter" "^1.2.2"
     "app-root-path" "^3.0.0"

@@ -4,6 +4,9 @@ import { stat } from "node:fs";
 import { VehiclePosition } from "../entity/VehiclePosition";
 import { VehicleTracking } from "../entity/VehicleTracking";
 
+
+
+
 export const get = (_req: Request, res: Response) => {
     res.end("This service is up and running !");
 }
@@ -12,6 +15,7 @@ export const get = (_req: Request, res: Response) => {
 export const add_position_ByLocation = async (req: Request, res: Response) => {
 
     const {idRental,latitude,longitude} = req.body;
+    try{
     const Vehiclepos = await VehiclePosition.findOne({idRental:idRental})
 
     if(!Vehiclepos){
@@ -37,5 +41,8 @@ export const add_position_ByLocation = async (req: Request, res: Response) => {
         await tracking.save()
         res.status(200).send(tracking)
     }
+}catch(error){
+        res.status(500).json(error)
 }
-    
+}
+
