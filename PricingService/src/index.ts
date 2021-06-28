@@ -18,7 +18,7 @@ app.use(morgan("dev"))
 app.use('/pricing',Router)
 var s;
 createConnection().then(async _connection => {   
-    s = app.listen(8000, () => {
+    s = app.listen(8080, () => {
         console.log("server started.")
     })
     

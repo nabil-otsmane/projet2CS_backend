@@ -1,6 +1,46 @@
 version: "3.8"
 
 services:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - 6380:6379
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  association:
+    build:
+      context: ./association
+      target: development
+    volumes:
+      - ./association:/src
+      - /src/node_modules
+    command: npm run start:dev
+    ports:
+      - "8123:8000"
+    environment:
+      - REDIS_SERVER=redis:6379
+      - LOG_SERVICE=log:8000
+      - AUTH_SERVICE=authentication:8000
+      - USER_SERVICE=user:8000
+      - NAME=association-service
+    depends_on:
+      - redis
+
+    vehicles:
+      build:
+        context: ./vehicles
+        target: development
+      volumes:
+        - ./vehicles:/src
+        - /src/node_modules
+      command: npm run start:dev
+      ports:
+        - "8000:8000"
+      environment:
+        NODE_ENV: development
+        DEBUG: src:*
+    
   notification:
     build:
       context: ./notifications
@@ -14,6 +54,7 @@ services:
     environment: 
       NODE_ENV: development
       DEBUG: src:*
+
   payment:
     build:
       context: ./PricingService
@@ -25,39 +66,6 @@ services:
     ports:
       - "8006:8000"
     environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  create_facture:
-    build:
-      context: ./Rental
-      target: development
-    volumes:
-      - ./Rental:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8007:8001"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
-  redis:
-    image: "redis:alpine"
-    ports:
-      - 6380:6379
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-
-  vehicles:
-    build:
-      context: ./vehicles
-      target: development
-    volumes:
-      - ./vehicles:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8000:8000"
-    environment:
       NODE_ENV: development
       DEBUG: src:*
 
@@ -142,20 +150,6 @@ services:
     ports:
       - "8005:8000"
     environment:
-      NODE_ENV: development
-      DEBUG: src:*
-
-  signals:
-    build:
-      context: ./signals
-      target: development
-    volumes:
-      - ./signals:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8111:8000"
-    environment: 
       NODE_ENV: development
       DEBUG: src:*
   stats:
