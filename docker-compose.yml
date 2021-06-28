@@ -27,19 +27,19 @@ services:
     depends_on:
       - redis
 
-    vehicles:
-      build:
-        context: ./vehicles
-        target: development
-      volumes:
-        - ./vehicles:/src
-        - /src/node_modules
-      command: npm run start:dev
-      ports:
-        - "8000:8000"
-      environment:
-        NODE_ENV: development
-        DEBUG: src:*
+  vehicles:
+    build:
+      context: ./vehicles
+      target: development
+    volumes:
+      - ./vehicles:/src
+      - /src/node_modules
+    command: npm run start:dev
+    ports:
+      - "8000:8000"
+    environment:
+      NODE_ENV: development
+      DEBUG: src:*
     
   notification:
     build:
