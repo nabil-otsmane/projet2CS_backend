@@ -21,4 +21,13 @@ export class Vehicle extends BaseEntity {
 
     @Column()
     vehicleColor:String;
+
+    @Column()
+    idBorne:number;
+
+    @Column()
+    longitude:number;
+
+    @Column()
+    latitude:number;
 }

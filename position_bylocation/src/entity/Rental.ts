@@ -16,4 +16,7 @@ export class Rental extends BaseEntity {
 
     @Column()
     rentalstate:String;
+
+    @Column()
+    iddestborne:number;
 }
