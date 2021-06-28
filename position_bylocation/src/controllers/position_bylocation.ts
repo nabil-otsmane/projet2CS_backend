@@ -12,6 +12,7 @@ export const get = (_req: Request, res: Response) => {
 export const add_position_ByLocation = async (req: Request, res: Response) => {
 
     const {idRental,latitude,longitude} = req.body;
+    try{
     const Vehiclepos = await VehiclePosition.findOne({idRental:idRental})
 
     if(!Vehiclepos){
@@ -29,13 +30,18 @@ export const add_position_ByLocation = async (req: Request, res: Response) => {
 
     }
     else{
-        const tracking=await VehicleTracking.findOneOrFail({idPosition:Vehiclepos?.idPosition})
-        tracking.idPosition=Vehiclepos.idPosition,
-        tracking.latitude=latitude
-        tracking.longitude=longitude
-        await tracking.save()
-        res.status(200).send(tracking)
+       // const tracking=await VehicleTracking.findOneOrFail({idPosition:Vehiclepos?.idPosition})
+      const newtracking=VehicleTracking.create({
+        idPosition:Vehiclepos.idPosition,
+        latitude:latitude,
+        longitude:longitude
+    })
+        await newtracking.save()
+        res.status(200).send(newtracking)
     }
+}catch(error){
+        res.status(500).json(error)
+}
 }
     
 
