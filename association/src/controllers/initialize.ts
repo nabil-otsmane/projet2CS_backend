@@ -4,6 +4,7 @@ import { getRepository } from "typeorm";
 import { Locataire } from "../entity/Locataire";
 import { Vehicule } from "../entity/Vehicule";
 import measureDistance from "../lib/measurement"
+import axios from "axios"
 
 interface VehiculeData {
     id: number,
@@ -97,9 +98,17 @@ export const closeConnection = function (this: Socket, redis: RedisClient) {
                 if (connection.idLocataire === locataire.id) {
                     let {idVehicule} = connection
                     getRepository("Vehicle").update({ idVehicle: idVehicule }, {availibility: "available"})
-                    redis.srem("connections", i, (_err) => {
-                        console.log("error while removing location.")
-                    });
+
+                    axios.get("http://" + process.env.LOCATION_SERVICE + "/updateVehicle?idVehicle=" + idVehicule)
+                    .then(() => {
+                        redis.srem("connections", i, (_err) => {
+                            console.log("error while removing location.")
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
                 }
             }
         })
