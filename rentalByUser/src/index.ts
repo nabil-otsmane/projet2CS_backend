@@ -15,10 +15,10 @@ app.use(json())
 app.use(cors())
 app.use(morgan("dev"))
 
-app.use('/pricing',Router)
+app.use('/',Router)
 var s;
 createConnection().then(async _connection => {   
-    s = app.listen(8080, () => {
+    s = app.listen(8000, () => {
         console.log("server started.")
     })
     
