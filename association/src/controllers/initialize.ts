@@ -2,26 +2,20 @@ import { RedisClient } from "redis"
 import { Socket } from "socket.io";
 import { Locataire } from "../entity/Locataire";
 import { Vehicule } from "../entity/Vehicule";
+import measureDistance from "../lib/measurement"
 
 interface VehiculeData {
     id: number,
 }
 
-interface AssociationData {
-    idLocataire: number,
-    idVehicule: number
+interface ILocataire {
+    id: number,
+    nom: string,
 }
 
-function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number){  // generally used geo measurement function
-    var R = 6378.137; // Radius of earth in KM
-    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    var d = R * c;
-    return d * 1000; // meters
+interface AssociationData {
+    locataire: ILocataire,
+    idVehicule: number
 }
 
 export const connect = function (this: Socket, redis: RedisClient) {
@@ -51,22 +45,23 @@ async function areClose(idVehicle: number, idLocataire: number): Promise<boolean
     let locataire = await Locataire.find({ where: {idUser: idLocataire} });
 
     if (vehicule.length === 0 || locataire.length === 0)
-        return false;
+        return true;
 
-    return measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
+    return true // measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
 }
 
 export const openConnection = function (this: Socket, redis: RedisClient) {
     
-    
-    return ({idLocataire, idVehicule}: AssociationData) => {
+    return ({locataire, idVehicule}: AssociationData) => {
+
+        console.log(idVehicule)
         redis.smembers("vehicules", async (err, vehicules) => {
             if (err) {
                 console.log("[association]: open vehicule error, " + err.message);
             } else {
                 let isRegistered = false;
                 let id = null;
-                for (let i in vehicules) {
+                for (let i of vehicules) {
                     let vehicule = JSON.parse(i);
                     if (vehicule.id === idVehicule) {
                         isRegistered = true;
@@ -74,13 +69,13 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
                         break;
                     }
                 }
-    
-    
+                
                 if (isRegistered) {
-                    if (await areClose(idVehicule, idLocataire)) {
-                        redis.sadd("connections", JSON.stringify({idLocataire, idVehicule}));
+                    if (await areClose(idVehicule, locataire.id)) {
+                        redis.sadd("connections", JSON.stringify({idLocataire: locataire.id, idVehicule}));
                         this.emit("link started")
-                        this.broadcast.to(id).emit("start link", {idLocataire});
+                        this.broadcast.to(id).emit("start link", {nomLocataire: locataire.nom});
+                        console.log("trying to connect " + locataire.id + " with vehicule " + idVehicule)
                     }
                 }
                 else {
