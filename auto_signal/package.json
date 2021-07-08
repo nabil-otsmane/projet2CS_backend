@@ -10,12 +10,16 @@
       "pg": "^8.6.0",
       "reflect-metadata": "^0.1.13",
       "request": "^2.88.2",
+
       "sqlite": "^4.0.23",
-      "typeorm": "0.2.32"
+      "server": "^1.0.33",
+      "typeorm": "^0.2.32"
    },
    "devDependencies": {
       "@types/express": "^4.17.11",
       "@types/jasmine": "^3.7.4",
+      "@types/jest": "^26.0.23",
+      "@types/mocha": "^8.2.2",
       "@types/node": "^15.0.1",
       "jasmine": "^3.7.0",
       "jasmine-ts": "^0.3.3",
@@ -27,7 +31,9 @@
       "start": "ts-node src/index.ts",
       "build": "tsc -p .",
       "start:dev": "nodemon --exec ts-node src/index.ts",
+
       "test-init": "./node_modules/jasmine/bin/jasmine.js init",
       "test": " jasmine-ts \"spec/*.js\""
+
    }
 }

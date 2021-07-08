@@ -16,14 +16,11 @@ export class Signal extends BaseEntity {
     sourceType: string;
 
     @Column()
-    idUserSource: number
-
-    @Column()
     idVehicle: number
 
     @Column()
     sent_at: Date
-   
+
     @Column({ nullable: true })
     treated: boolean
 
@@ -36,5 +33,10 @@ export class Signal extends BaseEntity {
     @Column({ nullable: true })
     validatedByAgent:number
     default:0
-    
+
+
+    @Column({ nullable: true })
+    idUserSource:number;
+    default:null;
+
 }

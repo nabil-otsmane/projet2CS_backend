@@ -18,10 +18,10 @@ export const printFacture = async (invoiceData: any, res?: any) => {
     <html>
       <head>
         <meta charset="utf-8">
-        
+
       </head>
       <body>
-        
+
       </body>
     </html>`,
                 attachments: [

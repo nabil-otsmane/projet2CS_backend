@@ -8,7 +8,7 @@ export const get = (_req: Request, res: Response) => {
     res.end("Subscription Service")
 }
 
-//Vérifie si le locataire a une abonnement actif ou non 
+//Vérifie si le locataire a une abonnement actif ou non
 export async function hasSubscription(req: Request, res: Response) {
     const subscription = await Subscription.find({
         relations: ["subTypeO", "tenant"],
@@ -304,8 +304,8 @@ export async function deleteExpiredSubscriptions(_req: Request, res: Response) {
     }
     res.status(201).json({
         msg: "operation successful! " +
-            numDeletedSubs +
-            " have been deleted."
+                                numDeletedSubs +
+                                         " have been deleted."
     })
 }
 /*

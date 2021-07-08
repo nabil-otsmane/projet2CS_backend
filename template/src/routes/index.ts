@@ -20,7 +20,7 @@ router.post('/rental/addRental', addRental);
 router.delete("/rental/deleteRental/:id", deleteRental);
 //get initial pricing per day by id rental
 router.get('/rental/pricingday/:id', getPricingPerDay);
-//get penalitie per day 
+//get penalitie per day
 router.get('/rental/penaliteday/:id', getPenalitiesPerDay);
 //get all vehicles
 router.get('/rental/vehiclesList', getVehicles);
@@ -30,7 +30,7 @@ router.get('/rental/vehiclesListAvailable', getVehiclesavailable);
 router.get('/rental/vehiclesListByState/:state', getVehiclesBystate);
 //get vehicle by id
 router.get('/rental/vehicle/:id', getVehicleById);
-//update vehicle 
+//update vehicle
 router.put("/rental/updateVehicle/:id", updateVehicle);
 //delete vehicle
 router.delete("/rental/deleteVehicle/:id", deleteVehicle);

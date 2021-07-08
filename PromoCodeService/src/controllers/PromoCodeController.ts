@@ -14,7 +14,7 @@ export async function getAllPromoCodes(_req: Request, res: Response) {
     //res.send({ promosLis: promoCodesList, pointNumber: 400 });
 }
 
-//for Web : returns list of promo codes in 
+//for Web : returns list of promo codes in
 export async function getAllPromoCodesPages(req: any, res: Response) {
 
     const perPage = 11

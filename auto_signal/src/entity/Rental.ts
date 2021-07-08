@@ -17,16 +17,16 @@ export class Rental extends BaseEntity {
     rentalstate:String;
 
     @Column()
-    restitutionDate:Date; 
+    restitutionDate:Date;
 
     @Column()
-    restitutionTime:String; 
+    restitutionTime:String;
 
     @Column()
-    rentaldate:Date; 
+    rentaldate:Date;
 
     @Column()
-    rentaltime:String; 
+    rentaltime:String;
 
     @Column()
     idTenant: number;

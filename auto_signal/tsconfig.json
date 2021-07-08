@@ -6,7 +6,7 @@
      "sourceMap": true,
      "outDir": "./build",
      "moduleResolution": "node",
- 
+
      "removeComments": true,
      "noImplicitAny": true,
      "strictNullChecks": true,

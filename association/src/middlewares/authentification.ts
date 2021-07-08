@@ -44,7 +44,7 @@ export function checkAuth(role: string | string[] | undefined) {
                     auth: token?.toString()
                 }
             })
-    
+
             if (response.status === 200 && response.data?.auth === true) {
                 _next()
             } else {

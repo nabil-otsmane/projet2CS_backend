@@ -14,4 +14,5 @@ export class Vehicule extends BaseEntity {
 
     @Column()
     availibility: string
+    
 }

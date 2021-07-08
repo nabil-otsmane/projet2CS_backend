@@ -8,6 +8,7 @@ import { Router } from 'express';
 
 
 import { getSignal, getSignals, addSignal, deleteSignal,updateSignalsState,getSignaTheftlInformation,getSignalPannesInformation,validateSignal} from '../controllers/Signal'
+import {  get,createSignalRemorque,createSignalTime} from '../controllers/autoSignalController';
 
 
 const router = Router();
@@ -19,6 +20,11 @@ router.get('/panne_signals', getSignalPannesInformation)
 router.get('/theft_signals', getSignaTheftlInformation)
 router.put('/signals_treated',updateSignalsState)
 router.put('/validate_signal',validateSignal)
+//user
+router.get('/', get);
+//etat de vehicule
+router.post('/estRemorquee',createSignalRemorque)
+router.post('/dateDepassee',createSignalTime)
 
 
 
