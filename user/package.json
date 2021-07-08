@@ -23,7 +23,8 @@
       "build": "tsc -p .",
       "start:dev": "nodemon --exec ts-node src/index.ts",
       "test-init": "./node_modules/jasmine/bin/jasmine.js init",
-      "test": "./node_modules/jasmine/bin/jasmine.js"
+      "test": "./node_modules/jasmine/bin/jasmine.js",
+      "publish:heroku": "cd ../ && git subtree push --prefix user/ heroku-user master || true"
    },
    "engines": {
       "node": "16.3.0"
