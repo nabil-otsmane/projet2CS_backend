@@ -37,6 +37,9 @@ apiEndpoints:
   signals:
     host: 54.37.87.85
     paths: '/signal/*'
+  signalements:
+    host: 54.37.87.85
+    paths: '/signalements/*'
   debugs:
     host: 54.37.87.85
     paths: '/*'
@@ -67,6 +70,8 @@ serviceEndpoints:
     url: 'http://association.api:8000'
   signals:
     url: 'http://signal.api:8000'
+  signalements:
+    url: 'http://signalement.api:8000'
 policies:
   - proxy
 pipelines:
@@ -77,6 +82,14 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: rentals 
+              changeOrigin: true
+  signalements:
+    apiEndpoints:
+      - signalements
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: signalements 
               changeOrigin: true
   payments:
     apiEndpoints:

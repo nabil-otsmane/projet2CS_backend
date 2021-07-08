@@ -69,6 +69,23 @@ services:
    default:
     aliases:
      - subscription.api
+ signalement_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./signals
+   target: development
+  volumes:
+   - ./signals:/src
+   - /src/node_modules
+  command: npm run start:dev
+  environment:
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - signalement.api
  create-facture:
   depends_on:
    - db_project

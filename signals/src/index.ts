@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
+import { createConnection } from "typeorm";
 
 import * as express from 'express';
 import { Request, Response, json } from "express";
@@ -17,17 +17,17 @@ app.use(morgan("dev"))
 app.use(json())
 
 
-app.use(Router)
+app.use("/signalements", Router)
 
 var server;
 
-createConnection().then(async _connection => {   
+createConnection().then(async _connection => {
     server = app.listen(8000, () => {
         console.log("server started.")
     });
 
     console.log(server == null);
-    
+
 
 }).catch(error => console.log(error));
 
