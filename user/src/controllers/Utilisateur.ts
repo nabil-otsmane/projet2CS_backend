@@ -23,12 +23,12 @@ export const getUtilisateur =  (req: Request, res: Response) => {
 export const addUtilisateur = async (req: Request, res: Response) => {
     try {
         const user = User.create({
-            lastName: req.body.nom,
-            firstName: req.body.prenom,
-            phoneNumber: req.body.numeroTelephone,
+            lastName: req.body.lastName,
+            firstName: req.body.firstName,
+            phoneNumber: req.body.phoneNumber,
             address: req.body.address,
             userName: req.body.userName,
-            userType: req.body.type,
+            userType: req.body.userType,
         })
     
         await user.save()

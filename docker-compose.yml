@@ -41,47 +41,47 @@ services:
       NODE_ENV: development
       DEBUG: src:*
     
-  notification:
-    build:
-      context: ./notifications
-      target: development
-    volumes:
-      - ./notifications:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8004:8000"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
+  # notification:
+  #   build:
+  #     context: ./notifications
+  #     target: development
+  #   volumes:
+  #     - ./notifications:/src
+  #     - /src/node_modules
+  #   command: npm run start
+  #   ports:
+  #     - "8004:8000"
+  #   environment: 
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
-  payment:
-    build:
-      context: ./PricingService
-      target: development
-    volumes:
-      - ./PricingService:/src
-      - /src/node_modules
-    command: npm run start
-    ports:
-      - "8006:8000"
-    environment: 
-      NODE_ENV: development
-      DEBUG: src:*
+  # payment:
+  #   build:
+  #     context: ./PricingService
+  #     target: development
+  #   volumes:
+  #     - ./PricingService:/src
+  #     - /src/node_modules
+  #   command: npm run start
+  #   ports:
+  #     - "8006:8000"
+  #   environment: 
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
-  gestion_taches_agent:
-    build:
-      context: ./gestion_taches_agent
-      target: development
-    volumes:
-      - ./gestion_taches_agent:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8001:8000"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
+  # gestion_taches_agent:
+  #   build:
+  #     context: ./gestion_taches_agent
+  #     target: development
+  #   volumes:
+  #     - ./gestion_taches_agent:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8001:8000"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
   user:
     build:
@@ -92,38 +92,38 @@ services:
       - /src/node_modules
     command: npm run start:dev
     ports:
-      - "8100:8000"
+      - "8100:80"
     environment:
       NODE_ENV: development
       DEBUG: src:*
 
-  tracking:
-    build:
-      context: ./tracking
-      target: development
-    volumes:
-      - ./tracking:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8003:8001"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
+  # tracking:
+  #   build:
+  #     context: ./tracking
+  #     target: development
+  #   volumes:
+  #     - ./tracking:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8004:8001"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
-  borne-vehicule:
-    build:
-      context: ./borne-vehicule
-      target: development
-    volumes:
-      - ./borne-vehicule:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8200:8000"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
+  # borne-vehicule:
+  #   build:
+  #     context: ./borne-vehicule
+  #     target: development
+  #   volumes:
+  #     - ./borne-vehicule:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8200:8000"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
 
   geolocalisation:
     build:
@@ -139,19 +139,19 @@ services:
       NODE_ENV: development
       DEBUG: src:*
 
-  authentication:
-    build:
-      context: ./Authentication
-      target: development
-    volumes:
-      - ./Authentication:/src
-      - /src/node_modules
-    command: npm run start:dev
-    ports:
-      - "8005:8000"
-    environment:
-      NODE_ENV: development
-      DEBUG: src:*
+  # authentication:
+  #   build:
+  #     context: ./Authentication
+  #     target: development
+  #   volumes:
+  #     - ./Authentication:/src
+  #     - /src/node_modules
+  #   command: npm run start:dev
+  #   ports:
+  #     - "8005:8000"
+  #   environment:
+  #     NODE_ENV: development
+  #     DEBUG: src:*
   stats:
     build:
       context: ./stats
@@ -192,4 +192,18 @@ services:
     environment: 
       NODE_ENV: development
       DEBUG: src:*
-      
+
+  log:
+    build:
+      context: ./log
+      target: development
+    volumes:
+      - ./log:/src
+      - /src/node_modules
+    command: npm run start
+    ports:
+      - "8003:8000"
+    environment: 
+      NODE_ENV: development
+      DEBUG: src:*
+  
