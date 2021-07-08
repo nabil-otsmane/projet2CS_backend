@@ -28,7 +28,7 @@ router.get('/rental/vehiclesList', getVehicles);
 router.get('/rental/vehiclesListAvailable', getVehiclesavailable);
 //get vehicles by state stopped ...
 //router.get('/rental/vehiclesListByState/:state', getVehiclesBystate);
-router.get('/rental/vehiclesListByState', getVehiclesBystate);
+router.get('/rental/vehiclesListByState/:state/:idBorne', getVehiclesBystate);
 //get vehicle by id
 router.get('/rental/vehicle/:id', getVehicleById);
 //update vehicle
