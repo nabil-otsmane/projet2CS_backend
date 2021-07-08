@@ -29,4 +29,10 @@ export class Locataire extends BaseEntity {
 
     @Column()
     validationDate: string
+
+    @Column({ nullable: true })
+    subCard: number
+
+    @Column({ nullable: true })
+    points: number
 }

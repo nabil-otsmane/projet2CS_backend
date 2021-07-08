@@ -3,6 +3,7 @@ import { Socket } from "socket.io";
 import { getRepository } from "typeorm";
 import { Locataire } from "../entity/Locataire";
 import { Vehicule } from "../entity/Vehicule";
+import measureDistance from "../lib/measurement"
 import axios from "axios"
 
 interface VehiculeData {
@@ -37,6 +38,27 @@ function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number)
 export const connect = function (this: Socket, redis: RedisClient) {
 
     return async ({ id }: VehiculeData) => {
+interface ILocataire {
+    id: number,
+    nom: string,
+}
+
+interface AssociationData {
+    locataire: ILocataire,
+    idVehicule: number
+}
+
+export const connect = function (this: Socket, redis: RedisClient) {
+    
+    return async ({id}: VehiculeData) => {
+
+        redis.smembers("vehicules", (_err, vehi) => {
+            for (let i of vehi) {
+                let vehicule = JSON.parse(i)
+                if (id === vehicule.id)
+                    redis.srem("vehicules", i)
+            }
+        })
         try {
             let vehicule = await Vehicule.find({ where: { idVehicle: id } });
 
@@ -63,7 +85,7 @@ async function areClose(idVehicle: number, idLocataire: number): Promise<boolean
     if (vehicule.length === 0 || locataire.length === 0)
         return true;
 
-    return measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
+    return true // measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
 }
 
 export const openConnection = function (this: Socket, redis: RedisClient) {
@@ -72,6 +94,7 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
 
         console.log(idVehicule)
         redis.smembers("vehicules", async (err, vehicules) => {
+
             if (err) {
                 console.log("[association]: open vehicule error, " + err.message);
             } else {
