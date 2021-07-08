@@ -16,8 +16,13 @@ export default function (redis: RedisClient) {
         socket.on("end location", function (this: Socket, ...args) {
             closeConnection.call(this, redis)(...args)
         })
+<<<<<<< HEAD
 
         socket.on("disconnect", function (this: Socket, ...args) {
+=======
+    
+        socket.on("disconnect", function (this: Socket, ...args) { 
+>>>>>>> a228cfe4620dc7f815401f8bb9f08d51d33beef2
             disconnect.call(this, redis)(...args);
         })
     }
