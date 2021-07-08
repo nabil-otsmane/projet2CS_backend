@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getRentals, getRentalById, updateRental, deleteRental, addRental, getRentalsByState } from '../controllers/RentalController';
+import { getRentals, getRentalById, updateRental, deleteRental, addRental, getRentalsByState, endRental, updateVehicleState } from '../controllers/RentalController';
 import { getPricingPerDay, getPenalitiesPerDay, get } from '../controllers/PricingController';
 import { getVehicles, getVehicleById, updateVehicle, deleteVehicle, getVehiclesavailable, getVehiclesBystate } from '../controllers/VehicleController';
 const router = Router();
@@ -36,5 +36,8 @@ router.put("/rental/updateVehicle/:id", updateVehicle);
 //delete vehicle
 router.delete("/rental/deleteVehicle/:id", deleteVehicle);
 
+
+router.post('rental/endRental/:idVehicle',endRental) ;
+router.put('rental/updateVehicleState',updateVehicleState);
 
 export default router;
