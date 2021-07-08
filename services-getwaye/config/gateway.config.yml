@@ -150,22 +150,6 @@ pipelines:
           - action:
               serviceEndpoint: rentalusers 
               changeOrigin: true
-  association:
-    apiEndpoints:
-      - association
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: association 
-              changeOrigin: true
-  debugs:
-    apiEndpoints:
-      - debugs
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: debugs 
-              changeOrigin: true
   signals:
     apiEndpoints:
       - signals
