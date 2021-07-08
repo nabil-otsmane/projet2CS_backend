@@ -19,6 +19,6 @@
       "start": "ts-node src/index.ts",
       "build": "tsc -p .",
       "start:dev": "nodemon --exec ts-node src/index.ts",
-      "publish:heroku": "cd ../ && git subtree push --prefix association/ heroku-association master || true"
+      "publish:heroku": "cd ../ && git subtree push --prefix stats/ heroku-stats master || true"
    }
 }
