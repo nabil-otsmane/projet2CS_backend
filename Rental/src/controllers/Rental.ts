@@ -13,6 +13,21 @@ export async function getRental( req:Request, res:Response){ //input : id user o
     res.json(rental);
 }
 
+export async function updateVehicleState(req: Request, res: Response) {
+  const idV= req.params.idVehicle;
+  try {
+    const vehicle=await Vehicle.findOneOrFail(idV)
+    vehicle.availibility="allocated";
+    await vehicle.save();
+    return res.json(vehicle);
+  } 
+  catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ error: "Something went wrong while updating ..." });
+  }
+}
 
 export async function endRental(req:Request, res:Response){
   const vehicle = await Vehicle.findOne(req.params.idVehicle)
