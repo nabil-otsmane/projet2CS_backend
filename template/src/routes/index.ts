@@ -37,7 +37,7 @@ router.put("/rental/updateVehicle/:id", updateVehicle);
 router.delete("/rental/deleteVehicle/:id", deleteVehicle);
 
 
-router.post('rental/endRental/:idVehicle',endRental) ;
-router.put('rental/updateVehicleState',updateVehicleState);
+router.post('/rental/endRental/:idVehicle',endRental) ;
+router.put('/rental/updateVehicleState',updateVehicleState);
 
 export default router;
