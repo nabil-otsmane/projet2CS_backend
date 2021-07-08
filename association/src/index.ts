@@ -10,6 +10,7 @@ import * as cors from 'cors';
 import * as morgan from 'morgan';
 import { Server, ServerOptions } from 'socket.io'
 import initConnection from './routes'
+import { REDIS_SERVICE, REDIS_TOKEN } from './constants';
 
 
 const app = express()
@@ -30,9 +31,9 @@ const options: Partial<ServerOptions> = {
 const socket = new Server(server, options);
 
 const redisClient = createClient({
-    host: "Projet2csCache.redis.cache.windows.net",
+    host: REDIS_SERVICE,
     port: 6379,
-    auth_pass: "gcDPcPY0B3s4oi5VJjyJuEuOmrIWviiy8psJsDyEoro="
+    auth_pass: REDIS_TOKEN
 });
 
 initConnection(socket, app, redisClient);
