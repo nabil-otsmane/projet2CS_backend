@@ -30,7 +30,9 @@ const options: Partial<ServerOptions> = {
 const socket = new Server(server, options);
 
 const redisClient = createClient({
-    url: `redis://${process.env.REDIS_SERVER}`
+    host: "Projet2csCache.redis.cache.windows.net",
+    port: 6379,
+    auth_pass: "gcDPcPY0B3s4oi5VJjyJuEuOmrIWviiy8psJsDyEoro="
 });
 
 initConnection(socket, app, redisClient);
@@ -38,7 +40,7 @@ initConnection(socket, app, redisClient);
 // starting http server
 createConnection()
 .then(async (_connection: Connection) => {
-    server.listen(process.env.PORT || 8000, () => {
+    server.listen(process.env.PORT || 8001, () => {
         console.log("server started.")
     })
 })
