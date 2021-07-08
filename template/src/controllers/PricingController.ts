@@ -19,7 +19,7 @@ export async function getPricingPerDay(_req: Request, res: Response) {
     
     if(rental){
         const vehicle = await Vehicle.findOne(rental.idVehicle);
-        const unitPricePDay= vehicle?.unitpriceperday ;
+        const unitPricePDay= vehicle?.unitPricePerDay ;
         const unitPricePerDay= Number(unitPricePDay);
         console.log(unitPricePerDay);
        const date2 =rental.plannedrestitutiondate;
@@ -49,7 +49,7 @@ export async function getPenalitiesPerDay(_req: Request, res: Response) {
     
     if(rental){
         const vehicle = await Vehicle.findOne(rental.idVehicle);
-        const unitPricePDay= vehicle?.unitpriceperday ;
+        const unitPricePDay= vehicle?.unitPricePerDay ;
         const unitPricePerDay= Number(unitPricePDay);
         console.log(unitPricePerDay);
        const date2 =rental.restitutionDate;
