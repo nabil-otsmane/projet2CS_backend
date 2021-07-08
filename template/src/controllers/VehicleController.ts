@@ -15,7 +15,10 @@ export async function getVehicles(_req: Request, res: Response) {
 
 export async function getVehiclesavailable(_req: Request, res: Response) {
     
-    const vehicles = await Vehicle.find({where:{availibility:"available"}});
+    const state=_req.params.state;
+    const idborne=_req.params.idBorne;
+    //const vehicles = await Vehicle.find({where:{availibility:state}});
+    const vehicles = await Vehicle.findOneOrFail({where:{availibility:state,idBorne:idborne}});
     res.json(vehicles)
 }
 

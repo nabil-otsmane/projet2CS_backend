@@ -3,7 +3,6 @@ import { Socket } from "socket.io";
 import { getRepository } from "typeorm";
 import { Locataire } from "../entity/Locataire";
 import { Vehicule } from "../entity/Vehicule";
-import measureDistance from "../lib/measurement"
 import axios from "axios"
 
 interface VehiculeData {
@@ -23,29 +22,29 @@ interface AssociationData {
 
 
 
-function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number){  // generally used geo measurement function
+function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number) {  // generally used geo measurement function
     var R = 6378.137; // Radius of earth in KM
     var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
     var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d * 1000; // meters
 }
 
 export const connect = function (this: Socket, redis: RedisClient) {
 
-    return async ({id}: VehiculeData) => {
+    return async ({ id }: VehiculeData) => {
         try {
-            let vehicule = await Vehicule.find({ where: { idVehicle: id }});
+            let vehicule = await Vehicule.find({ where: { idVehicle: id } });
 
             if (vehicule.length === 0) {
                 console.log("[association] connection error, cannot find vehicule of id " + id);
-                this.emit("error", { message: "Couldn't connect: Invalid id"});
+                this.emit("error", { message: "Couldn't connect: Invalid id" });
             } else {
-                let payload = {id, socketId: this.id};
+                let payload = { id, socketId: this.id };
                 console.log("connected vehicule of id: " + id + " using socketId: " + this.id);
                 redis.sadd("vehicules", JSON.stringify(payload));
 
@@ -58,8 +57,8 @@ export const connect = function (this: Socket, redis: RedisClient) {
 }
 
 async function areClose(idVehicle: number, idLocataire: number): Promise<boolean> {
-    let vehicule = await Vehicule.find({ where: {idVehicle} });
-    let locataire = await Locataire.find({ where: {idUser: idLocataire} });
+    let vehicule = await Vehicule.find({ where: { idVehicle } });
+    let locataire = await Locataire.find({ where: { idUser: idLocataire } });
 
     if (vehicule.length === 0 || locataire.length === 0)
         return true;
@@ -69,7 +68,7 @@ async function areClose(idVehicle: number, idLocataire: number): Promise<boolean
 
 export const openConnection = function (this: Socket, redis: RedisClient) {
 
-    return ({locataire, idVehicule}: AssociationData) => {
+    return ({ locataire, idVehicule }: AssociationData) => {
 
         console.log(idVehicule)
         redis.smembers("vehicules", async (err, vehicules) => {
@@ -89,14 +88,14 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
 
                 if (isRegistered) {
                     if (await areClose(idVehicule, locataire.id)) {
-                        redis.sadd("connections", JSON.stringify({idLocataire: locataire.id, idVehicule}));
+                        redis.sadd("connections", JSON.stringify({ idLocataire: locataire.id, idVehicule }));
                         this.emit("link started")
-                        this.broadcast.to(id).emit("start link", {nomLocataire: locataire.nom});
+                        this.broadcast.to(id).emit("start link", { nomLocataire: locataire.nom });
                         console.log("trying to connect " + locataire.id + " with vehicule " + idVehicule)
                     }
                 }
                 else {
-                    this.emit("link failed", { message: "vehicule not found."})
+                    this.emit("link failed", { message: "vehicule not found." })
                 }
             }
 
@@ -111,18 +110,18 @@ export const closeConnection = function (this: Socket, redis: RedisClient) {
                 let connection = JSON.parse(i)
 
                 if (connection.idLocataire === idLocataire) {
-                    let {idVehicule} = connection
-                    getRepository("Vehicle").update({ idVehicle: idVehicule }, {availibility: "available"})
+                    let { idVehicule } = connection
+                    getRepository("Vehicle").update({ idVehicle: idVehicule }, { availibility: "available" })
 
                     axios.get("http://" + process.env.LOCATION_SERVICE + "/updateVehicle?idVehicle=" + idVehicule)
-                    .then(() => {
-                        redis.srem("connections", i, (_err) => {
-                            console.log("error while removing location.")
-                        });
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                        .then(() => {
+                            redis.srem("connections", i, (_err) => {
+                                console.log("error while removing location.")
+                            });
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
 
                 }
             }

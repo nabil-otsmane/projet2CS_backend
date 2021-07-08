@@ -1,8 +1,5 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
 import { createServer } from 'http';
-
-import "reflect-metadata";
 import { Connection, createConnection } from "typeorm";
 import * as express from 'express';
 import { createClient } from 'redis'
@@ -10,7 +7,7 @@ import * as cors from 'cors';
 import * as morgan from 'morgan';
 import { Server, ServerOptions } from 'socket.io'
 import initConnection from './routes'
-
+dotenv.config()
 
 const app = express()
 
