@@ -19,7 +19,7 @@ let authenticationRoutes = new AuthenticationRoutes();
 app.use(`/auth`, authenticationRoutes.router);
 
 createConnection().then(async (_connection: Connection) => {
-  server = app.listen(5084, () => {
+  server = app.listen(8000, () => {
     console.log("Authentication Service Up 🚀");
   });
 });

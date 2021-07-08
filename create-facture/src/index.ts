@@ -16,7 +16,7 @@ app.use(express.static('public'))
 app.use(Router)
 
 createConnection().then(async _connection => {
-    app.listen(5056, () => {
+    app.listen(8000, () => {
         console.log("server started.")
     })
 

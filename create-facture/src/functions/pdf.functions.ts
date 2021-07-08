@@ -8,11 +8,13 @@ export const printFacture = async (invoiceData: any, res?: any) => {
 
     const ig = new InvoiceGenerator(invoiceData)
     ig.generate(fileStream, res, factureName + ".pdf")
-    if (!res) sendMail({
-        from: '"Service facturation" <facturation@gmail.com>',
-        to: invoiceData.user.email,
-        subject: "AutoLib dz : votre " + factureName,
-        html: `<!doctype html>
+    if (!res) {
+        try {
+            sendMail({
+                from: '"Service facturation" <facturation@gmail.com>',
+                to: invoiceData.user.email,
+                subject: "AutoLib dz : votre " + factureName,
+                html: `<!doctype html>
     <html>
       <head>
         <meta charset="utf-8">
@@ -22,11 +24,15 @@ export const printFacture = async (invoiceData: any, res?: any) => {
         
       </body>
     </html>`,
-        attachments: [
-            {
-                filename: factureName + ".pdf",
-                path: pathFacture
-            }
-        ]
-    })
+                attachments: [
+                    {
+                        filename: factureName + ".pdf",
+                        path: pathFacture
+                    }
+                ]
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }

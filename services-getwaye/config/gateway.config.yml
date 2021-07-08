@@ -12,7 +12,7 @@ apiEndpoints:
     paths: '/subscription/*'
   facturations:
     host: 54.37.87.85
-    paths: ['/bill/*','/download/bill/:token']
+    paths: ['/bill/*','/download/bill/*']
   vhicules:
     host: 54.37.87.85
     paths: '/cars/*'
@@ -22,24 +22,62 @@ apiEndpoints:
   auths:
     host: 54.37.87.85
     paths: '/auth/*'
+  rentals:
+    host: 54.37.87.85
+    paths: '/rental/*'
+  bornes:
+    host: 54.37.87.85
+    paths: '/bornes/*'
+  rentalusers:
+    host: 54.37.87.85
+    paths: '/rentalUser/*'
+  association:
+    host: 54.37.87.85
+    paths: '/association/*'
+  signals:
+    host: 54.37.87.85
+    paths: '/signal/*'
+  debugs:
+    host: 54.37.87.85
+    paths: '/*'
 serviceEndpoints:
   payments:
-    url: 'http://payment.api:5040'
+    url: 'http://payment.api:8000'
   pricings:
-    url: 'http://pricing.api:5030'
+    url: 'http://pricing.api:8000'
   subscriptions:
-    url: 'http://subscription.api:5020'
+    url: 'http://subscription.api:8000'
   facturations:
-    url: 'http://facture.api:5056'
+    url: 'http://facture.api:8000'
   vhicules:
-    url: 'http://vehicle.api:5000'
+    url: 'http://vehicle.api:8000'
   promotions:
-    url: 'http://promotion.api:5090'
+    url: 'http://promotion.api:8000'
   auths:
-    url: 'http://auth.api:5084'
+    url: 'http://auth.api:8000'
+  rentals:
+    url: 'http://vehicle.api:8000'
+  bornes:
+    url: 'http://bornes.api:8000'
+  rentalusers:
+    url: 'http://rentalUser.api:8000'
+  association:
+    url: 'http://association.api:8000'
+  debugs:
+    url: 'http://association.api:8000'
+  signals:
+    url: 'http://signal.api:8000'
 policies:
   - proxy
 pipelines:
+  rentals:
+    apiEndpoints:
+      - rentals
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: rentals 
+              changeOrigin: true
   payments:
     apiEndpoints:
       - payments
@@ -95,4 +133,44 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: auths 
+              changeOrigin: true
+  bornes:
+    apiEndpoints:
+      - bornes
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: bornes 
+              changeOrigin: true
+  rentalusers:
+    apiEndpoints:
+      - rentalusers
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: rentalusers 
+              changeOrigin: true
+  association:
+    apiEndpoints:
+      - association
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: association 
+              changeOrigin: true
+  debugs:
+    apiEndpoints:
+      - debugs
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: debugs 
+              changeOrigin: true
+  signals:
+    apiEndpoints:
+      - signals
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: signals 
               changeOrigin: true

@@ -3,7 +3,6 @@ import { Subscription } from "../entity/Subscription";
 import { SubscriptionType } from "../entity/SubscriptionType";
 import { Tenant } from "../entity/Tenant";
 
-
 // Function for testing server response
 export const get = (_req: Request, res: Response) => {
     res.end("Subscription Service")
@@ -11,17 +10,37 @@ export const get = (_req: Request, res: Response) => {
 
 //Vérifie si le locataire a une abonnement actif ou non 
 export async function hasSubscription(req: Request, res: Response) {
-    const tenant = await Tenant.findOne(req.params.idTenant)
-    if (tenant?.subCard != null) {
-        res.send(true)
+    const subscription = await Subscription.find({
+        relations: ["subTypeO", "tenant"],
+        where: {
+            idTenant: req.params.idTenant
+        }
+    })
+    if (subscription.length > 0) {
+        res.send(subscription[0].subState)
     } else {
-        res.send(false)
+        res.send("nope")
     }
 }
 
 export async function getSubTypes(_req: Request, res: Response) {
     const subTypes = await SubscriptionType.find()
     res.status(200).send(subTypes)
+}
+export async function addSubType(req: Request, res: Response) {
+    try {
+        let subType = SubscriptionType.create({
+            subTypeName: req.body.subTypeName,
+            subTypeDuration: req.body.subTypeDuration,
+            reductionRate: req.body.reductionRate,
+            bonusPointsRate: req.body.bonusPointsRate
+        })
+        await subType.save()
+        res.status(200).send(subType)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
 }
 
 export async function getSubType(req: Request, res: Response) {
@@ -53,9 +72,31 @@ export async function addSubscription(req: Request, res: Response) {
                         res.status(201).send(added)
                     }
                 } else {
-                    res.status(404).json({
-                        msg: "This tenant already has an ongoing subscription"
-                    })
+                    let subscription = await Subscription.findOne(tenant.subCard)
+                    if (subscription?.subState == 'expired') {
+
+                        //renouveller l'abonnement
+                        const subCard = Subscription.create({
+                            subType: Number(req.body.idSubType),
+                            creationDate: new Date(),
+                            expirationDate: new Date(
+                                subType.subTypeDuration * 3600000 * 24
+                                + (new Date()).getTime()),
+                            subState: 'pending',
+                            idTenant: req.body.idTenant
+                        })
+                        const added = await Subscription.save(subCard)
+                        if (added) {
+                            tenant.subCard = subCard.idSub
+                            tenant = await Tenant.save(tenant)
+                            res.status(201).send(added)
+                        }
+                    } else {
+                        res.status(404).json({
+                            msg: subscription?.subState
+                        })
+
+                    }
                 }
             } else {
                 res.status(404).json({
@@ -93,11 +134,29 @@ export async function activateSubscription(req: Request, res: Response) {
 
 //get all active Subscription Cards
 export async function getSubscriptionCards(_req: Request, res: Response) {
+    const perPage = 10
+    const page = parseInt(_req.query.page as string) || 1
     const subscriptions = await Subscription.find({
-        relations: ["subTypeO", "user"]
+        relations: ["subTypeO", "user"],
+        skip: (page - 1) * perPage,
+        take: perPage,
+        order: {
+            subState: "DESC"
+        }
     })
     res.status(200).json({
-        subs: subscriptions
+        ok: true,
+        data: {
+            list: subscriptions.map((item: any) => {
+                return {
+                    ...item,
+                    user: item.user[0] || {}
+                }
+            }),
+            currentPage: page,
+            perPage: perPage,
+            total: await Subscription.count()
+        }
     })
 }
 
@@ -154,10 +213,7 @@ export async function getSubscriptionByTenant(req: Request, res: Response) {
     if ((tenant) && (tenant.subCard)) {
         const subscr = await Subscription.findOne(tenant.subCard)
         if (subscr) {
-            res.status(200).json({
-                sub: subscr,
-                msg: "success"
-            })
+            res.status(200).send(subscr)
         } else {
             res.status(404).json({
                 msg: "Subscription not found."
@@ -171,22 +227,22 @@ export async function getSubscriptionByTenant(req: Request, res: Response) {
 }
 
 export async function debitBalance(req: Request, res: Response) {
-    const subCard = await Subscription.findOne(req.params.idSub)
+    const subCard = await Subscription.findOne(req.body.idSub)
     if (subCard) {
-        subCard.solde = subCard.solde - req.body.prix
-        const saved = await Subscription.save(subCard)
+        subCard.solde = subCard.solde - req.body.amount
+        const saved = await subCard.save()
         if (saved) {
-            res.status(201).json({
+            res.status(200).json({
                 balance: saved.solde,
                 msg: "success"
             })
         } else {
-            res.json({
+            res.status(500).json({
                 msg: "The changes could not be saved."
             })
         }
     } else {
-        res.json({
+        res.status(500).json({
             msg: "Card doesn't exist."
         })
     }
@@ -295,5 +351,25 @@ export async function updateSuscriptionType(req: Request, res: Response) {
                 msg: "This operation was not successful"
             })
         }
+    }
+}
+
+export async function deleteSubscription(req: Request, res: Response) {
+    const subCard = await Subscription.findOne(req.params.idSub, {
+        relations: ['tenant']
+    })
+    if (subCard) {
+        if (subCard.tenant) {
+            subCard.tenant.subCard = null
+            await subCard.tenant.save()
+        }
+        await subCard.remove();
+        res.status(201).json({
+            msg: "success"
+        })
+    } else {
+        res.json({
+            msg: "Card doesn't exist."
+        })
     }
 }

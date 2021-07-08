@@ -1,5 +1,13 @@
 version: '3.8'
 services:
+ redis:
+  image: "redis:alpine"
+  environment:
+   - ALLOW_EMPTY_PASSWORD=yes
+  networks:
+   default:
+    aliases:
+     - redis.service
  db_project:
   image: postgres
   ports:
@@ -15,8 +23,6 @@ services:
   build:
    context: ./payment
    target: development
-  ports:
-   - "5040:5040"
   volumes:
    - ./payment:/src
    - /src/node_modules
@@ -38,8 +44,6 @@ services:
    - ./PricingService:/src
    - /src/node_modules
   command: npm run start:dev
-  ports:
-   - "5030:5030"
   environment: 
    NODE_ENV: development
    DEBUG: src:*
@@ -57,8 +61,6 @@ services:
    - ./SubscriptionService:/src
    - /src/node_modules
   command: npm run start:dev
-  ports:
-   - "5020:5020"
   environment: 
    NODE_ENV: development
    DEBUG: src:*
@@ -76,8 +78,6 @@ services:
    - ./create-facture:/src
    - /src/node_modules
   command: npm run start:dev
-  ports:
-   - "5056:5056"
   environment: 
    NODE_ENV: development
    DEBUG: src:*
@@ -95,8 +95,6 @@ services:
    - ./template:/src
    - /src/node_modules
   command: npm run start:dev
-  ports:
-   - "5000:5000"
   environment: 
    NODE_ENV: development
    DEBUG: src:*
@@ -125,8 +123,6 @@ services:
    - ./PromoCodeService:/src
    - /src/node_modules
   command: npm run start:dev
-  ports:
-   - "5090:5090"
   environment: 
    NODE_ENV: development
    DEBUG: src:*
@@ -143,9 +139,7 @@ services:
   volumes:
    - ./Authentication:/src
    - /src/node_modules
-  command: npm start
-  ports:
-   - "5084:5084"
+  command: npm run start:dev
   environment: 
    NODE_ENV: development
    DEBUG: src:*
@@ -153,3 +147,88 @@ services:
    default:
     aliases:
      - auth.api
+ rentalbyuser_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./rentalByUser
+   target: development
+  volumes:
+   - ./rentalByUser:/src
+   - /src/node_modules
+  command: npm run start:dev
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - rentalUser.api
+ borne_services:
+  depends_on:
+   - db_project
+  build:
+   context: ./borne-vehicule
+   target: development
+  volumes:
+   - ./borne-vehicule:/src
+   - /src/node_modules
+  command: npm run start:dev
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - bornes.api
+ association:
+  depends_on:
+   - db_project
+  build:
+   context: ./association
+   target: development
+  volumes:
+   - ./association:/src
+   - /src/node_modules
+  ports:
+   - "7001:8000"
+  command: npm run start:dev
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - association.api
+ auto_signal:
+  depends_on:
+   - db_project
+  build:
+   context: ./auto_signal
+   target: development
+  volumes:
+   - ./auto_signal:/src
+   - /src/node_modules
+  command: npm run start:dev
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - signal.api
+ tdm_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./tdm
+   target: development
+  ports:
+    - "5600:3000"
+  volumes:
+   - ./tdm:/src
+   - /src/node_modules
+  command: npm run dev
+  environment: 
+   NODE_ENV: development
+   DEBUG: src:*

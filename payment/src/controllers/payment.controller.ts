@@ -1,5 +1,5 @@
 import { createCustomer, createPaymentMethod, attachPaymentMethod, payUserAmount, fetchCustomerPaymentMethods } from '../services';
-import { StripeCustomers, PaymentMethods, Rental } from '../entity'
+import { StripeCustomers, PaymentMethods, Rental, PromoCode } from '../entity'
 import { applyReduction } from './promo.controller'
 import { FACTURATION_URL } from '../config'
 import axios from 'axios'
@@ -81,6 +81,7 @@ export const addPaymentMethod = async (req: any, res: any) => {
 export const payForCustomer = async (req: any, res: any) => {
     try {
         const user = req.user
+        var promoCode
         if (['rentalRate', 'penaltyRate'].indexOf(req.body.type) === -1) {
             console.log("This api can pay just for new rental or penalty")
             return res.status(500).send(
@@ -89,6 +90,18 @@ export const payForCustomer = async (req: any, res: any) => {
                     message: "This api can pay just for new rental or penalty"
                 }
             );
+        }
+        if (req.body.idCodePromo) {
+            promoCode = await PromoCode.findOne(req.body.idCodePromo)
+            if (!promoCode) {
+                console.log("Code promo invalide")
+                return res.status(500).send(
+                    {
+                        ok: false,
+                        message: "Please use a valide code promo to process payment"
+                    }
+                );
+            }
         }
         if (typeof req.body.amount === "number" && req.body.amount < 0) {
             console.log("The amount you will pay must greater than 0")
@@ -129,24 +142,36 @@ export const payForCustomer = async (req: any, res: any) => {
                 }
             );
         }
-        let payed = await payUserAmount(customer.cusromerId, req.body.paymentId, req.body.amount)
-        rental.rentalstate = "paid"
-        rental.save()
-        const payedAmount = payed.amount / 100
-        try {
-            axios.post(FACTURATION_URL + '/bill/add', {
-                idRental: req.body.idRental,
-                typeBill: req.body.type,
-                amountToBill: payedAmount
-            })
-        } catch (e) {
-            res.status(400).send(e)
+        let amount = req.body.amount
+        if (promoCode) {
+            amount = await applyReduction(promoCode.idPromoCode, rental.idTenant, amount)
+            if (amount && !amount.ok) {
+                console.log(amount.message)
+                return res.status(402).send(
+                    {
+                        ok: false,
+                        message: amount.message
+                    }
+                )
+            }
+            amount = amount.amount
         }
-
-        console.log({
-            amount: payedAmount,
-            reciep: payed.charges.data[0].receipt_url
+        let payed = await payUserAmount(customer.cusromerId, req.body.paymentId, amount)
+        rental.rentalstate = "paid"
+        await rental.save()
+        const payedAmount = payed.amount / 100
+        console.log(req.body.type)
+        axios.post(FACTURATION_URL + '/bill/add', {
+            idRental: req.body.idRental,
+            typeBill: req.body.type,
+            amountToBill: payedAmount
         })
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err.response)
+            })
         return res.status(200).send(
             {
                 ok: true,
@@ -158,7 +183,7 @@ export const payForCustomer = async (req: any, res: any) => {
         );
 
     } catch (e) {
-        console.log(e)
+        console.log(e.raw)
         return res.status(400).send(
             {
                 ok: false,
@@ -172,13 +197,9 @@ export const fetchAllCards = async (req: any, res: any) => {
     const user = req.user
     let customer = await StripeCustomers.findOne({ where: { userId: user.idUser } })
     if (!customer) {
-        return res.status(200).send(
-            {
-                ok: true,
-                data: []
-            }
-        );
+        return res.status(200).send([]);
     }
     let cards = await fetchCustomerPaymentMethods(customer.cusromerId)
-    return res.status(200).send(cards);
+    console.log(cards)
+    return res.status(200).send(cards || []);
 }

@@ -13,6 +13,7 @@ export const addBill = async (req: any, res: any) => {
         }
     )
     var bill = await Bill.findOne({ where: { idRental: req.body.idRental } })
+    console.log(req.body.typeBill)
     if (req.body.typeBill === "penaltyRate") {
         if (!bill) return res.status(500).send(
             {

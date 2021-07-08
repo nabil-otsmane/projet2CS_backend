@@ -31,7 +31,7 @@ export class Subscription extends BaseEntity {
     @Column()
     idTenant: number;
 
-    @ManyToOne(() => SubscriptionType, subTypeO => subTypeO.subs)
+    @ManyToOne(() => SubscriptionType)
     @JoinColumn({ name: "subType" })
     subTypeO: SubscriptionType
 

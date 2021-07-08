@@ -13,7 +13,7 @@ app.use(cors())
 app.use(morgan("dev"))
 app.use("/payment", Router)
 createConnection().then(async _connection => {
-    app.listen(5040, () => {
+    app.listen(8000, () => {
         console.log("server started.")
     })
 }).catch(error => console.log(error));
