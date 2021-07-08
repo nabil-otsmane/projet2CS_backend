@@ -50,7 +50,7 @@ serviceEndpoints:
   payments:
     url: 'http://payment.api:8000'
   rentals:
-    url: 'http://rental.api:8000'
+    url: 'http://rentals.api:8000'
   pricings:
     url: 'http://pricing.api:8000'
   subscriptions:
