@@ -3,6 +3,12 @@ import {Rental} from "../entity/Rental";
 import {Tenant} from "../entity/Tenant";
 import { Vehicle } from "../entity/Vehicle";
  
+
+
+export async function get(_req: Request, res: Response) {
+  res.end("Rental service")
+}
+
 export async function getRental( req:Request, res:Response){ //input : id user output: idRental and id Tenant
   const  tenant = await Tenant.find({
         where : {idUser : req.body.idUser}
