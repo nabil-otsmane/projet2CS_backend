@@ -74,8 +74,22 @@ export async function updateVehicleState(req: Request, res: Response) {
   try {
     const vehicle = await Vehicle.findOneOrFail(idV)
     vehicle.availibility = "allocated";
+    const rental = await Rental.findOneOrFail({
+      where: [{
+        idVehicle: idV
+      },
+      {
+        rentalstate: 'active'
+      }]
+    })
+
+    rental.rentalstate='paid'
+    await rental.save();
     await vehicle.save();
-    return res.json(vehicle);
+    return res.json({
+      vehicle : vehicle,
+      rental : rental
+    });
   }
   catch (err) {
     console.log(err);
@@ -94,12 +108,12 @@ export async function endRental(req: Request, res: Response) {
           idVehicle: req.params.idVehicle
         },
         {
-          rentalstate: 'active'
+          rentalstate: 'paid'
         }]
       })
 
       if (rental) {
-        rental.rentalstate = 'paid'
+        rental.rentalstate = 'archived'
         var saveRental = await Rental.save(rental)
 
         if (saveRental) {
