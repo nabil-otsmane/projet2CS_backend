@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, Timestamp} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Timestamp } from "typeorm";
 
 @Entity("Signal")
 export class Signal extends BaseEntity {
@@ -28,15 +28,14 @@ export class Signal extends BaseEntity {
     treatmentDate: Date
 
     @Column({ nullable: true })
-    treatmentDescription:String
+    treatmentDescription: String
 
     @Column({ nullable: true })
-    validatedByAgent:number
-    default:0
+    validatedByAgent: number
+    default: 0
 
 
     @Column({ nullable: true })
-    idUserSource:number;
-    default:null;
+    idUserSource: number;
 
 }
