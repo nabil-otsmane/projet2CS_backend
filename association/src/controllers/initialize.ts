@@ -3,7 +3,6 @@ import { Socket } from "socket.io";
 import { getRepository } from "typeorm";
 import { Locataire } from "../entity/Locataire";
 import { Vehicule } from "../entity/Vehicule";
-import measureDistance from "../lib/measurement"
 import axios from "axios"
 
 interface VehiculeData {
@@ -35,22 +34,10 @@ function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number)
     return d * 1000; // meters
 }
 
+
 export const connect = function (this: Socket, redis: RedisClient) {
 
     return async ({ id }: VehiculeData) => {
-interface ILocataire {
-    id: number,
-    nom: string,
-}
-
-interface AssociationData {
-    locataire: ILocataire,
-    idVehicule: number
-}
-
-export const connect = function (this: Socket, redis: RedisClient) {
-    
-    return async ({id}: VehiculeData) => {
 
         redis.smembers("vehicules", (_err, vehi) => {
             for (let i of vehi) {

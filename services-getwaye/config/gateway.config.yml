@@ -43,9 +43,6 @@ apiEndpoints:
   debugs:
     host: 54.37.87.85
     paths: '/*'
-  rentals:
-    host: 54.37.87.85
-    paths: '/rentals/*'
 serviceEndpoints:
   payments:
     url: 'http://payment.api:8000'
@@ -63,8 +60,6 @@ serviceEndpoints:
     url: 'http://promotion.api:8000'
   auths:
     url: 'http://auth.api:8000'
-  rentals:
-    url: 'http://vehicle.api:8000'
   bornes:
     url: 'http://bornes.api:8000'
   rentalusers:
