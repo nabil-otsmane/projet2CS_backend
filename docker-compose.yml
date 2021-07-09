@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
  redis:
   image: "redis:alpine"
@@ -163,8 +162,8 @@ services:
     DEBUG: src:*
   networks:
     default:
-    aliases:
-    - rentals.api
+     aliases:
+      - rentals.api
  auth_service:
   depends_on:
    - db_project
