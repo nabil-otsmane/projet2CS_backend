@@ -7,6 +7,12 @@ export class Panne extends BaseEntity {
     idPanne: number;
 
     @Column()
+    dateNotifPanne:Date;
+
+    @Column()
+    idAgentSentNotif:number;
+
+    @Column()
     state:String;
 
     @Column()
@@ -15,6 +21,6 @@ export class Panne extends BaseEntity {
     @Column()
     description:String; 
 
-    /*@Column()
-    sevirityLevel:number;*/
+    @Column()
+    severityLevel:number;
 }

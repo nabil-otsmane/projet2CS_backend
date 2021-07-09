@@ -8,6 +8,8 @@ import * as morgan from 'morgan';
 import { Server, ServerOptions } from 'socket.io'
 import initConnection from './routes'
 dotenv.config()
+import { REDIS_SERVICE, REDIS_TOKEN } from './constants';
+
 
 const app = express()
 
@@ -22,16 +24,14 @@ const server = createServer(app);
 // initialising socket.io server
 const options: Partial<ServerOptions> = {
     path: "/socket",
-    cors: {
-        origin: "http://127.0.0.1:5500",
-        methods: ["GET", "POST"]
-    }
 };
 
 const socket = new Server(server, options);
 console.log(process.env.REDIS_SERVER)
 const redisClient = createClient({
-    url: `redis://${process.env.REDIS_SERVER}`
+    host: REDIS_SERVICE,
+    port: 6379,
+    auth_pass: REDIS_TOKEN
 });
 
 initConnection(socket, app, redisClient);

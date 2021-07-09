@@ -34,9 +34,18 @@ function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number)
     return d * 1000; // meters
 }
 
+
 export const connect = function (this: Socket, redis: RedisClient) {
 
     return async ({ id }: VehiculeData) => {
+
+        redis.smembers("vehicules", (_err, vehi) => {
+            for (let i of vehi) {
+                let vehicule = JSON.parse(i)
+                if (id === vehicule.id)
+                    redis.srem("vehicules", i)
+            }
+        })
         try {
             let vehicule = await Vehicule.find({ where: { idVehicle: id } });
 
@@ -63,7 +72,7 @@ async function areClose(idVehicle: number, idLocataire: number): Promise<boolean
     if (vehicule.length === 0 || locataire.length === 0)
         return true;
 
-    return measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
+    return true // measureDistance(vehicule[0].latitude, vehicule[0].longitude, locataire[0].latitude, locataire[0].longitude) <= 50;
 }
 
 export const openConnection = function (this: Socket, redis: RedisClient) {
@@ -72,6 +81,7 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
 
         console.log(idVehicule)
         redis.smembers("vehicules", async (err, vehicules) => {
+
             if (err) {
                 console.log("[association]: open vehicule error, " + err.message);
             } else {
@@ -87,9 +97,10 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
                 }
 
                 if (isRegistered) {
-                    if (await areClose(idVehicule, locataire.id)) {
+                    if (true/*await areClose(idVehicule, locataire.id)*/) {
                         redis.sadd("connections", JSON.stringify({ idLocataire: locataire.id, idVehicule }));
                         this.emit("link started")
+                        this.broadcast.emit("launch discovery", { nomBluetooth: locataire.nom });
                         this.broadcast.to(id).emit("start link", { nomLocataire: locataire.nom });
                         console.log("trying to connect " + locataire.id + " with vehicule " + idVehicule)
                     }
