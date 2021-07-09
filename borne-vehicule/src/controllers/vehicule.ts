@@ -169,7 +169,6 @@ export const updateInfoVehicle = async (req: Request, res: Response) => {
       // Update Vehicle Borne
       vehicle.idBorne = idBorne
 
-
       // Update Number of occupied places in the newest borne
       borne = await Borne.findOneOrFail({ idBorne })
       borne.nbOccupiedPlaces++;
