@@ -1,6 +1,6 @@
 import { RedisClient } from 'redis';
 import { Socket } from 'socket.io';
-import { connect, openConnection, disconnect, closeConnection } from '../controllers/initialize';
+import { connect, openConnection, disconnect, closeConnection, stopAssociation } from '../controllers/initialize';
 
 export default function (redis: RedisClient) {
 
@@ -20,5 +20,8 @@ export default function (redis: RedisClient) {
         socket.on("disconnect", function (this: Socket, ...args) {
             disconnect.call(this, redis)(...args);
         })
+        socket.on("stop association", function (this: Socket, ...args) {
+            stopAssociation.call(this, redis)(...args)
+        });
     }
 }

@@ -34,7 +34,21 @@ function measureDistance(lat1: number, lon1: number, lat2: number, lon2: number)
     return d * 1000; // meters
 }
 
+export const stopAssociation = function (this: Socket, redis: RedisClient) {
 
+    return () => {
+
+        redis.smembers("vehicules", async (err) => {
+            if (err) {
+                console.log("[association]: open vehicule error, " + err.message);
+            } else {
+                console.log("Entered here")
+                this.broadcast.emit("stop association");
+            }
+
+        })
+    }
+}
 export const connect = function (this: Socket, redis: RedisClient) {
 
     return async ({ id }: VehiculeData) => {
