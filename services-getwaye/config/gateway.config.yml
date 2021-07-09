@@ -37,20 +37,17 @@ apiEndpoints:
   signals:
     host: 54.37.87.85
     paths: '/signal/*'
-  signalements:
-    host: 54.37.87.85
-    paths: '/signalements/*'
-  users:
-    host: 54.37.87.85
-    paths: '/users/*'
   debugs:
     host: 54.37.87.85
     paths: '/*'
+  rentals:
+    host: 54.37.87.85
+    paths: '/rentals/*'
 serviceEndpoints:
-  users:
-    url: 'http://users.api:8000'
   payments:
     url: 'http://payment.api:8000'
+  rentals:
+    url: 'http://rentals.api:8000'
   pricings:
     url: 'http://pricing.api:8000'
   subscriptions:
@@ -63,6 +60,8 @@ serviceEndpoints:
     url: 'http://promotion.api:8000'
   auths:
     url: 'http://auth.api:8000'
+  rentals:
+    url: 'http://vehicle.api:8000'
   bornes:
     url: 'http://bornes.api:8000'
   rentalusers:
@@ -73,19 +72,9 @@ serviceEndpoints:
     url: 'http://association.api:8000'
   signals:
     url: 'http://signal.api:8000'
-  signalements:
-    url: 'http://signalement.api:8000'
 policies:
   - proxy
 pipelines:
-  users:
-    apiEndpoints:
-      - users
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: users 
-              changeOrigin: true
   rentals:
     apiEndpoints:
       - rentals
@@ -93,14 +82,6 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: rentals 
-              changeOrigin: true
-  signalements:
-    apiEndpoints:
-      - signalements
-    policies:
-      - proxy:
-          - action:
-              serviceEndpoint: signalements 
               changeOrigin: true
   payments:
     apiEndpoints:
