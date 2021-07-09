@@ -13,7 +13,7 @@ app.use(json());
 app.use(cors());
 app.use(morgan("dev"));
 
-app.use('/bornes', Router);
+app.use(Router);
 
 createConnection()
   .then(async (_connection: Connection) => {
