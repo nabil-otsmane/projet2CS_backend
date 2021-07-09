@@ -38,7 +38,6 @@ export const addSignal = async (req: Request, res: Response) => {
         idVehicle: req.body.idVehicle,
         sent_at: new Date,
     })
-
     await signal.save()
     res.status(200).send(signal)
 }

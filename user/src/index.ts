@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
+import { createConnection } from "typeorm";
 
 import * as express from 'express';
 import { Request, Response, json } from "express";
@@ -14,11 +14,11 @@ app.use(cors())
 app.use(morgan("dev"))
 
 
-app.use(Router)
+app.use("/users", Router)
 
 var server;
 
-createConnection().then(async _connection => {   
+createConnection().then(async _connection => {
     server = app.listen(process.env.PORT || 8000, () => {
         console.log("server started.")
     });

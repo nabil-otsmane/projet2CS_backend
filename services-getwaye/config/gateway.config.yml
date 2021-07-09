@@ -40,10 +40,15 @@ apiEndpoints:
   signalements:
     host: 54.37.87.85
     paths: '/signalements/*'
+  users:
+    host: 54.37.87.85
+    paths: '/users/*'
   debugs:
     host: 54.37.87.85
     paths: '/*'
 serviceEndpoints:
+  users:
+    url: 'http://users.api:8000'
   payments:
     url: 'http://payment.api:8000'
   rentals:
@@ -75,6 +80,14 @@ serviceEndpoints:
 policies:
   - proxy
 pipelines:
+  users:
+    apiEndpoints:
+      - users
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: users 
+              changeOrigin: true
   rentals:
     apiEndpoints:
       - rentals

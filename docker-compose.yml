@@ -251,6 +251,23 @@ services:
    default:
     aliases:
      - signal.api
+ users_service:
+  depends_on:
+   - db_project
+  build:
+   context: ./user
+   target: development
+  volumes:
+   - ./user:/src
+   - /src/node_modules
+  command: npm run start:dev
+  environment:
+   NODE_ENV: development
+   DEBUG: src:*
+  networks:
+   default:
+    aliases:
+     - users.api
  tdm_service:
   depends_on:
    - db_project
