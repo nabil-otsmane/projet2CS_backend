@@ -17,9 +17,13 @@ export async function subscriptionState(req: Request, res: Response){
         }
     })
     if(subscription.length>0){
-        res.send(subscription[0].subState)
+        res.json({
+            msg : subscription[0].subState
+        })
     }else{
-        res.send("nope")
+        res.json({
+            msg : "no subscription"
+        })
     }
     
 }
