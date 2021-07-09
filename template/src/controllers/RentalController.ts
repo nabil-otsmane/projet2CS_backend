@@ -106,21 +106,21 @@ export async function endRental(req: Request, res: Response) {
           vehicle.availibility = 'available'
           var saveVehicle = await Vehicle.save(vehicle)
           if (saveVehicle) {
-            res.send("success")
+              res.json("success")
           } else {
-            res.send("Error saving vehicle state")
+            res.json("Error saving vehicle state")
           }
         } else {
-          res.send("Error saving rental state")
+          res.json("Error saving rental state")
         }
 
       } else {
-        res.send("No active rental associated with this vehicle")
+        res.json("No active rental associated with this vehicle")
       }
     } else {
-      res.send("Vehicle is " + vehicle.availibility)
+      res.json("Vehicle is " + vehicle.availibility)
     }
   } else {
-    res.send("Vehicle doesn't exist")
+    res.json("Vehicle doesn't exist")
   }
 }
