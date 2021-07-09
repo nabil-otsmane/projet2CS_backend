@@ -3,6 +3,7 @@ import { Socket } from "socket.io";
 import { ExtendedError } from "socket.io/dist/namespace";
 import axios from 'axios'
 import { NextFunction, Request, Response } from "express";
+import { AUTH_SERVICE } from "../constants";
 
 /**
  * this middleware is used to check authentification of users before starting or using a vehicule
@@ -10,7 +11,7 @@ import { NextFunction, Request, Response } from "express";
 export async function socketAuth(socket: Socket, next: (err?: ExtendedError | undefined) => void) {
     try {
         let token = socket.handshake.auth.token;
-        let response = await axios.get(`http://${process.env.AUTH_SERVICE}/`, {
+        let response = await axios.get(AUTH_SERVICE, {
             headers: {
                 auth: token.toString()
             }
@@ -39,7 +40,7 @@ export function checkAuth(role: string | string[] | undefined) {
     return async function auth(_req: Request, _res: Response, _next: NextFunction) {
         try {
             let token = _req.headers.auth;
-            let response = await axios.get(`http://${process.env.AUTH_SERVICE}/check/${query}`, {
+            let response = await axios.get(`${AUTH_SERVICE}/check/${query}`, {
                 headers: {
                     auth: token?.toString()
                 }

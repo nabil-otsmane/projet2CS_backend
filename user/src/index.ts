@@ -19,7 +19,7 @@ app.use(Router)
 var server;
 
 createConnection().then(async _connection => {   
-    server = app.listen(8000, () => {
+    server = app.listen(process.env.PORT || 8000, () => {
         console.log("server started.")
     });
 
