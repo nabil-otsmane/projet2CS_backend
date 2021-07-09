@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import { IsEnum } from "class-validator";
 
 @Entity("Vehicle")
 export class Vehicle extends BaseEntity {
@@ -48,9 +47,8 @@ export class Vehicle extends BaseEntity {
     enum: ["available", "unavailable"],
     default: "available",
   })
-  @IsEnum(["available", "unavailable"])
   availibility: String;
 
   @Column()
-  chassisNumber:string;
+  chassisNumber: string;
 }
