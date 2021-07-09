@@ -131,23 +131,6 @@ services:
    default:
     aliases:
      - promotion.api
-rental_service:
-depends_on:
-    - db_project
-build:
-    context: ./Rental
-    target: development
-volumes:
-    - ./Rental:/src
-    - /src/node_modules
-command: npm run start:dev
-environment:
-    NODE_ENV: development
-    DEBUG: src:*
-networks:
-    default:
-    aliases:
-    - rentals.api
  auth_service:
   depends_on:
    - db_project
