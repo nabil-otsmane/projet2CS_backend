@@ -37,6 +37,6 @@ router.put("/updateVehicle/:id", updateVehicle);
 router.delete("/deleteVehicle/:id", deleteVehicle);
 
 router.post('/endRental/:idVehicle',endRental) ;
-router.put('/updateVehicleState',updateVehicleState);
+router.put('/updateVehicleState/:idVehicle',updateVehicleState);
 
 export default router;
