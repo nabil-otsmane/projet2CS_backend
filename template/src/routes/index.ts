@@ -5,36 +5,38 @@ import { getVehicles, getVehicleById, updateVehicle, deleteVehicle, getVehiclesa
 const router = Router();
 
 console.log('rouuute');
-router.get('/rental/', get);
+router.get('/', get);
 //Get all rentals
-router.get('/rental/rentalsList', getRentals);
+router.get('/rentalsList', getRentals);
 //Get rentals by rentalstate active ...
-router.get('/rental/rentalsListByState/:state', getRentalsByState);
+router.get('/rentalsListByState/:state', getRentalsByState);
 //get one rental by id
-router.get('/rental/rental/:id', getRentalById);
+router.get('/rental/:id', getRentalById);
 //update rental
-router.put("/rental/updateRental/:id", updateRental);
+router.put("/updateRental/:id", updateRental);
 //add new rental
-router.post('/rental/addRental', addRental);
+router.post('/addRental', addRental);
 //delete rental by id
-router.delete("/rental/deleteRental/:id", deleteRental);
+router.delete("/deleteRental/:id", deleteRental);
 //get initial pricing per day by id rental
-router.get('/rental/pricingday/:id', getPricingPerDay);
+router.get('/pricingday/:id', getPricingPerDay);
 //get penalitie per day
-router.get('/rental/penaliteday/:id', getPenalitiesPerDay);
+router.get('/penaliteday/:id', getPenalitiesPerDay);
 //get all vehicles
-router.get('/rental/vehiclesList', getVehicles);
+router.get('/vehiclesList', getVehicles);
 //get availibale vehicles
-router.get('/rental/vehiclesListAvailable', getVehiclesavailable);
+router.get('/vehiclesListAvailable', getVehiclesavailable);
 //get vehicles by state stopped ...
-//router.get('/rental/vehiclesListByState/:state', getVehiclesBystate);
-router.get('/rental/vehiclesListByState/:state/:idBorne', getVehiclesBystate);
+//router.get('/vehiclesListByState/:state', getVehiclesBystate);
+router.get('/vehiclesListByState/:state/:idBorne', getVehiclesBystate);
 //get vehicle by id
-router.get('/rental/vehicle/:id', getVehicleById);
+router.get('/vehicle/:id', getVehicleById);
 //update vehicle
-router.put("/rental/updateVehicle/:id", updateVehicle);
+router.put("/updateVehicle/:id", updateVehicle);
 //delete vehicle
-router.delete("/rental/deleteVehicle/:id", deleteVehicle);
+router.delete("/deleteVehicle/:id", deleteVehicle);
 
+router.post('/endRental/:idVehicle',endRental) ;
+router.put('/updateVehicleState',updateVehicleState);
 
 export default router;

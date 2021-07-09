@@ -15,7 +15,7 @@ app.use(json())
 app.use(cors())
 app.use(morgan("dev"))
 
-app.use("/cars", Router)
+app.use('/rental',Router)
 
 createConnection().then(async _connection => {
     app.listen(8000, () => {
