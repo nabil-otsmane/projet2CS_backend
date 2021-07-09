@@ -87,9 +87,10 @@ export const openConnection = function (this: Socket, redis: RedisClient) {
                 }
 
                 if (isRegistered) {
-                    if (await areClose(idVehicule, locataire.id)) {
+                    if (true/*await areClose(idVehicule, locataire.id)*/) {
                         redis.sadd("connections", JSON.stringify({ idLocataire: locataire.id, idVehicule }));
                         this.emit("link started")
+                        this.broadcast.emit("launch discovery", { nomBluetooth: locataire.nom });
                         this.broadcast.to(id).emit("start link", { nomLocataire: locataire.nom });
                         console.log("trying to connect " + locataire.id + " with vehicule " + idVehicule)
                     }
