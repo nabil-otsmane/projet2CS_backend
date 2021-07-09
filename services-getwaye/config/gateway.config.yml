@@ -40,13 +40,13 @@ apiEndpoints:
   debugs:
     host: 54.37.87.85
     paths: '/*'
-  rentals:
+  rental:
     host: 54.37.87.85
     paths: '/rentals/*'
 serviceEndpoints:
   payments:
     url: 'http://payment.api:8000'
-  rentals:
+  rental:
     url: 'http://rentals.api:8000'
   pricings:
     url: 'http://pricing.api:8000'
@@ -82,6 +82,14 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: rentals 
+              changeOrigin: true
+  rental:
+    apiEndpoints:
+      - rental
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: rental
               changeOrigin: true
   payments:
     apiEndpoints:

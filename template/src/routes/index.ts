@@ -36,7 +36,6 @@ router.put("/rental/updateVehicle/:id", updateVehicle);
 //delete vehicle
 router.delete("/rental/deleteVehicle/:id", deleteVehicle);
 
-
 router.post('/rental/endRental/:idVehicle',endRental) ;
 router.put('/rental/updateVehicleState',updateVehicleState);
 
