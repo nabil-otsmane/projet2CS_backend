@@ -46,7 +46,7 @@ export async function getUtilisateurs(_req: Request, res: Response) {
 
 export const updateUtilisateur = async (req: Request, res: Response) => {
     
-    if(!req.body.idTypeUtilisateur || !req.body.nom || !req.body.prenom || !req.body.numeroTelephone) {
+    if(!req.body.userName || !req.body.nom || !req.body.prenom || !req.body.numeroTelephone || !req.body.address) {
         return res.status(400).send({
             message: "Champs vides"
         });
