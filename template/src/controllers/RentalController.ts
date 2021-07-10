@@ -141,7 +141,7 @@ export async function endRental(req: Request, res: Response) {
     res.json("Vehicle doesn't exist")
   }*/
   const idVehicle = parseInt(req.params.idVehicle);
-  const { idBorne } = req.body;
+  const idBorne = parseInt(req.params.idBorne);
   console.log(idBorne)
   let borne: Borne
   let idBorneVar: number
