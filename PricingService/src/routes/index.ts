@@ -12,7 +12,7 @@ router.get('/getRealTimePricing/:unitPrice/:rentalDuration',getRealTimePricing)
 router.get('/getPricingPerDay/:id', getPricingPerDay)
 router.get('/getPricingPerHour/:id', getPricingPerHour)
 router.get('/getSubReducedPrice/:idSub/:basePrice', getSubscriptionPrice)
-router.get('/getReductionPrice/:basePrice/:idPromoCode', getReductionPrice)
+router.get('/getReductionPrice/:basePrice/:idPromoCode/:idTenant', getReductionPrice)
 router.get('/applyPromoCode/:idTenant/:idPromoCode', applyPromoCode)
 //apparently this won't be used
 router.get('/getPenalties/:id', getPenalties)
