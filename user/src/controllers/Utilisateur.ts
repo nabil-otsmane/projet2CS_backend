@@ -83,6 +83,7 @@ export const deleteUtilisateur = async (req: Request, res: Response) => {
     .then(() => {
         res.send({message: "Utilisateur supprimé avec succés!"});
     }).catch(err => {
+        console.log(err.message)
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
                 message: "Utilisateur non trouvé id " + req.params.userId
