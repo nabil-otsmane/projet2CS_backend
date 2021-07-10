@@ -8,4 +8,11 @@ export class Rental extends BaseEntity {
 
     @Column()
     idTenant: number;
+
+    @Column()
+    idVehicle: number;
+
+    @Column()
+    rentalstate: String;
+
 }

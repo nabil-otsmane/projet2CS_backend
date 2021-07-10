@@ -1,4 +1,5 @@
 import { mailer } from '../config'
 export const sendMail = async (mail: any) => {
-    await mailer.sendMail(mail);
+    console.log(mail);
+    mailer.sendMail(mail);
 }

@@ -1,6 +1,6 @@
 import { User } from '../entity'
 export const authToken = async (req: any, res: any, next: Function) => {
-    const user = await User.findOne({ where: { idUser: 5 } })
+    const user = await User.findOne({ where: { idUser: 11 } })
     if (user) {
         req.user = user;
         return next()
@@ -10,4 +10,5 @@ export const authToken = async (req: any, res: any, next: Function) => {
             errors: "Authentification required"
         })
     }
+
 }

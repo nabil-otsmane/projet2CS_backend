@@ -3,18 +3,15 @@ import { PromoCode } from "../entity/PromoCode";
 import { Tenant } from "../entity/Tenant";
 
 // get the price after applying the chosen reduction
-export async function getReductionPrice(_req : Request, _res: Response){
+export async function getReductionPrice(_req: Request, _res: Response) {
     const basePrice = Number(_req.params.basePrice)
     const promoCode = await PromoCode.findOne(_req.params.idPromoCode)
-
-    console.log(promoCode)
-    console.log(promoCode?.reductionRate)
-    if(promoCode){
+    if (promoCode) {
         _res.json({
             price: calculateReduction(basePrice, promoCode.reductionRate),
             msg: "success"
         })
-    }else{
+    } else {
         _res.json({
             msg: "Failed to find Promo Code."
         })
@@ -22,29 +19,29 @@ export async function getReductionPrice(_req : Request, _res: Response){
 }
 
 // Substracts the points from a tenant when he chooses to apply a promo code
-export async function applyPromoCode(_req : Request, _res: Response){
+export async function applyPromoCode(_req: Request, _res: Response) {
     const tenant = await Tenant.findOne(_req.params.idTenant)
     const promoCode = await PromoCode.findOne(_req.params.idPromoCode)
 
-    if(promoCode){
-        if(tenant&&(tenant.accountState=='Activated')){
-            if(tenant.points>=promoCode.pricePoints){
-                    tenant.points = tenant.points - promoCode.pricePoints
-                    console.log(tenant.points)
-                    const result = await Tenant.save(tenant);
-                    _res.json(tenant);
-                
-            }else{
+    if (promoCode) {
+        if (tenant && (tenant.accountState == 'Activated')) {
+            if (tenant.points >= promoCode.pricePoints) {
+                tenant.points = tenant.points - promoCode.pricePoints
+                console.log(tenant.points)
+                const result = await Tenant.save(tenant);
+                _res.json(tenant);
+
+            } else {
                 _res.json({
                     msg: "You don't have enough points for this purchase."
                 })
             }
-        }else{
+        } else {
             _res.json({
                 msg: "Your account is currently unavailable or suspended."
             })
         }
-    }else{
+    } else {
         _res.json({
             msg: "Failed to find Promo Code."
         })

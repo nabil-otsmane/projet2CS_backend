@@ -46,19 +46,19 @@ const subscript2 = {
     subState: "active",
     idSub: 3
 }
-describe("Testing Subscription Service", () => {    
+describe("Testing Subscription Service", () => {
     describe("GET none existing URL /", function() {
         it("should return error 404", async () => {
             const {status} = await request(app).get("/")
             expect(status).toEqual(404)
-        }); 
+        });
     })
     describe("GET /subscription/", function() {
         it("should return the sentence Subscription Service", async () => {
             const {status, text} = await request(app).get("/subscription")
             expect(status).toEqual(200)
             expect(text).toEqual("Subscription Service")
-        }); 
+        });
     })
     describe("GET /subscription/hasSubscription", function() {
         it("should return true", async () => {
@@ -70,21 +70,21 @@ describe("Testing Subscription Service", () => {
                     subCard: 3
                 }
             )));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).get("/subscription/hasSubscription/1")
             expect(status).toEqual(200)
             expect(text).toEqual('true')
-        }); 
+        });
     })
     describe("GET /subscription/hasSubscription", function() {
         it("should return false", async () => {
             spyOn(Tenant, "findOne").and.returnValue(
                 new Promise<any>((resolve, _reject) => resolve(tenant2)));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).get("/subscription/hasSubscription/1")
             expect(status).toEqual(200)
             expect(text).toEqual('false')
-        }); 
+        });
     })
     describe("GET /subscription/getSubTypes", function() {
         it("should return list of subscriptions", async () => {
@@ -93,9 +93,9 @@ describe("Testing Subscription Service", () => {
                     subType1,
                     subType2
                 ]
-                
+
             )));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).get("/subscription/getSubTypes")
             expect(status).toEqual(200)
             expect(text).toEqual(JSON.stringify([
@@ -114,7 +114,7 @@ describe("Testing Subscription Service", () => {
                     bonusPointsRate: 0.25
                 }
             ]))
-        }); 
+        });
     })
 
     describe("POST /subscription/addSub", function() {
@@ -136,7 +136,7 @@ describe("Testing Subscription Service", () => {
                 await new Promise<any>((resolve, _reject) => resolve(subscript)));
             spyOn(Tenant, "save").and.returnValue(
                 new Promise<any>((resolve, _reject) => resolve(tenant)));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).post("/subscription/addSub",{
                     idTenant:1,
                     idSubType:3
@@ -152,7 +152,7 @@ describe("Testing Subscription Service", () => {
                     idSub: 3
                 }
             ))
-        }); 
+        });
     })
     describe("POST /subscription/activateSub", function() {
         it("should return a success message", async () => {
@@ -168,7 +168,7 @@ describe("Testing Subscription Service", () => {
             )));
             spyOn(Subscription, "save").and.returnValue(
                 new Promise<any>((resolve, _reject) => resolve(subscript2)));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).post("/subscription/activateSub/1")
             expect(status).toEqual(201)
             expect(text).toEqual(JSON.stringify(
@@ -176,16 +176,16 @@ describe("Testing Subscription Service", () => {
                     msg : "success"
                 }
             ))
-        }); 
+        });
     })
     describe("GET /subscription/getSubByTenant", function() {
         it("should return the tenants Subscription", async () => {
             spyOn(Tenant, "findOne").and.returnValue(
                 new Promise<any>((resolve, _reject) => resolve(tenant)));
             spyOn(Subscription, "findOne").and.returnValue(
-               await new Promise<any>((resolve, _reject) => 
+               await new Promise<any>((resolve, _reject) =>
                             resolve(subscript2)));
-            const {status, text} = 
+            const {status, text} =
             await request(app).get("/subscription/getSubByTenant/1")
             expect(status).toEqual(200)
             expect(text).toEqual(JSON.stringify({
@@ -199,15 +199,15 @@ describe("Testing Subscription Service", () => {
                 },
                 msg: "success"
             }))
-        }); 
+        });
     })
 
     describe("GET /subscription/getSubCards", function() {
         it("should return list of SubCards", async () => {
             spyOn(Subscription, "find").and.returnValues(
-               await new Promise<any>((resolve, _reject) => 
+               await new Promise<any>((resolve, _reject) =>
                             resolve([subscript2])));
-            const {status, text} = 
+            const {status, text} =
             await request(app).get("/subscription/getSubCards")
             expect(status).toEqual(200)
             expect(text).toEqual(JSON.stringify({
@@ -220,7 +220,7 @@ describe("Testing Subscription Service", () => {
                     idSub: 3
                 }]
             }))
-        }); 
+        });
     })
     describe("GET /subscription/getBalance/:idSub", function() {
         it("should return a success message and solde value 12000.0", async () => {
@@ -234,7 +234,7 @@ describe("Testing Subscription Service", () => {
                     idSub:3
                 }
             )));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).get("/subscription/getBalance/1")
             expect(status).toEqual(201)
             expect(text).toEqual(JSON.stringify(
@@ -243,7 +243,7 @@ describe("Testing Subscription Service", () => {
                     msg : "success"
                 }
             ))
-        }); 
+        });
     })
     describe("POST /subscription/debitBalance/:idSub", function() {
         it("should return a success message and solde", async () => {
@@ -259,12 +259,12 @@ describe("Testing Subscription Service", () => {
             )));
             spyOn(Subscription, "save").and.returnValue(
                 new Promise<any>((resolve, _reject) => resolve(subscript2)));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).post("/subscription/debitBalance/1")
             expect(status).toEqual(201)
             console.log(JSON.parse(text))
             //expect((JSON.parse(text)).)
-        }); 
+        });
     })
     describe("POST /subscription/debitBalance/:idSub", function() {
         it("should return a success message and solde", async () => {
@@ -280,50 +280,45 @@ describe("Testing Subscription Service", () => {
             )));
             spyOn(Subscription, "save").and.returnValue(
                 new Promise<any>((resolve, _reject) => resolve(subscript2)));
-            const {status, text} = 
+            const {status, text} =
                 await request(app).post("/subscription/debitBalance/1")
             expect(status).toEqual(201)
             console.log(JSON.parse(text))
             //expect((JSON.parse(text)).)
-        }); 
+        });
     })
     describe("POST /subscription/deleteExpiredSubs", function() {
         it("should return it should not delete the card", async () => {
             spyOn(Subscription, "find").and.returnValues(
-                await new Promise<any>((resolve, _reject) => 
-                            resolve([subscript2])));      
-            const {status, text} = 
+                await new Promise<any>((resolve, _reject) =>
+                            resolve([subscript2])));
+            const {status, text} =
                 await request(app).post("/subscription/deleteExpiredSubs")
             expect(status).toEqual(201)
             expect(text).toEqual(JSON.stringify({
                 msg: "operation successful! 0 have been deleted."
             }))
-        }); 
+        });
     })
     describe("POST /subscription/deleteExpiredSubs", function() {
         it("should return delete the card because it expired", async () => {
             subscript2.expirationDate = new Date("2021-05-29T00:35:20.459Z")
             spyOn(Subscription, "find").and.returnValues(
-                await new Promise<any>((resolve, _reject) => 
+                await new Promise<any>((resolve, _reject) =>
                             resolve([subscript2])));
             spyOn(Tenant, "findOne").and.returnValue(
-                new Promise<any>((resolve, _reject) => resolve(tenant)));    
+                new Promise<any>((resolve, _reject) => resolve(tenant)));
             spyOn(Tenant, "save").and.returnValue(
-                new Promise<any>((resolve, _reject) => resolve(tenant)));  
+                new Promise<any>((resolve, _reject) => resolve(tenant)));
             spyOn(Subscription, "save").and.returnValues(
-                await new Promise<any>((resolve, _reject) => 
-                                resolve(subscript2)));       
-            const {status, text} = 
+                await new Promise<any>((resolve, _reject) =>
+                                resolve(subscript2)));
+            const {status, text} =
                 await request(app).post("/subscription/deleteExpiredSubs")
             expect(status).toEqual(201)
             expect(text).toEqual(JSON.stringify({
                 msg: "operation successful! 1 have been deleted."
             }))
-        }); 
+        });
     })
 })
-
-
-
-
-

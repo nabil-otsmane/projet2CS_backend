@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getManager } from "typeorm";
+import { getManager } from 'typeorm'
 import { PromoCode } from "../entity/PromoCode";
 
 
@@ -7,29 +7,28 @@ import { PromoCode } from "../entity/PromoCode";
 export const get = (_req: Request, res: Response) => {
     res.end("Promotion Codes Service")
 }
-//for Kotlin : returns list of promo codes in json array format
-export async function getAllPromoCodes(_req: Request, res:Response) {
+
+export async function getAllPromoCodes(_req: Request, res: Response) {
     const promoCodesList = await PromoCode.find()
-    res.json(promoCodesList)
+    res.send(promoCodesList)
+    //res.send({ promosLis: promoCodesList, pointNumber: 400 });
 }
 
-//for Web : returns list of promo codes in 
-export async function getAllPromoCodesPages(req: any, res:Response) {
+//for Web : returns list of promo codes in
+export async function getAllPromoCodesPages(req: any, res: Response) {
 
-    const perPage = 10
+    const perPage = 11
     const page = parseInt(req.query.page) || 1
     try {
         const queryList = getManager()
             .createQueryBuilder()
             .from(PromoCode, "promocode")
-        console.log(queryList)
         const total = await queryList.getCount();
         const promoCodesList = await queryList
             .limit(perPage)
             .offset((page - 1) * perPage)
             .orderBy("promocode.idPromoCode", "ASC")
             .getRawMany();
-        console.log(promoCodesList)
         res.status(200).send({
             ok: true,
             data: {
@@ -44,62 +43,62 @@ export async function getAllPromoCodesPages(req: any, res:Response) {
     }
 }
 
-export async function addPromoCode(req: Request, res:Response) {
+export async function addPromoCode(req: Request, res: Response) {
     const promoCode = PromoCode.create({
-       pricePoints : req.body.price,
-       reductionRate : req.body.reductRate
+        pricePoints: req.body.pricePoints,
+        reductionRate: req.body.reductionRate
     })
     const saved = await PromoCode.save(promoCode)
-    if(saved){
+    if (saved) {
         res.json({
-            msg : "success"
+            msg: "success"
         })
-    }else{
+    } else {
         res.json({
-            msg : "failed"
+            msg: "failed"
         })
     }
 }
 
-export async function deletePromoCode(req: Request, res:Response) {
+export async function deletePromoCode(req: Request, res: Response) {
     const deleted = await PromoCode.delete(req.params.idPromoCode)
-    if(deleted){
+    if (deleted) {
         res.json({
-            msg : "success"
+            msg: "success"
         })
-    }else{
+    } else {
         res.json({
-            msg : "failed"
+            msg: "failed"
         })
     }
 }
 
-export async function updatePromoCode(req: Request, res:Response) {
-    let promoCode= await PromoCode.findOne(req.body.idPromoCode)
-    
-    if(promoCode){
-        if(req.body.pricePoints){
+export async function updatePromoCode(req: Request, res: Response) {
+    let promoCode = await PromoCode.findOne(req.body.idPromoCode)
+
+    if (promoCode) {
+        if (req.body.pricePoints) {
             promoCode.pricePoints = req.body.pricePoints
         }
 
-        if(req.body.reductionRate){
+        if (req.body.reductionRate) {
             promoCode.reductionRate = req.body.reductionRate
         }
-         
+
         const saved = await PromoCode.save(promoCode)
-        if(saved){
+        if (saved) {
             res.json({
                 msg: "success",
                 promoCode: promoCode
             })
-        }else{
+        } else {
             res.status(500).json({
                 msg: "This operation was not successful"
             })
         }
-    }else{
+    } else {
         res.status(404).json({
-            msg : "Promo code doesn't exist"
+            msg: "Promo code doesn't exist"
         })
     }
 }

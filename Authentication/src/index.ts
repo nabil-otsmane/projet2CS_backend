@@ -16,10 +16,10 @@ app.use(cors());
 app.use(morgan("dev"));
 
 let authenticationRoutes = new AuthenticationRoutes();
-app.use(`/`, authenticationRoutes.router);
+app.use(`/auth`, authenticationRoutes.router);
 
 createConnection().then(async (_connection: Connection) => {
-  server = app.listen(process.env.PORT || 8000, () => {
+  server = app.listen(8000, () => {
     console.log("Authentication Service Up 🚀");
   });
 });

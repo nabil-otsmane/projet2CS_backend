@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity,
-                 OneToOne, JoinColumn } from "typeorm";
+import {
+    Entity, PrimaryGeneratedColumn, Column, BaseEntity,
+    OneToOne, JoinColumn
+} from "typeorm";
 import { Subscription } from "./Subscription";
 
 
@@ -11,14 +13,16 @@ export class Tenant extends BaseEntity {
 
     @Column()
     accountState: string;
+    @Column()
+    idUser: number;
 
-    @Column({ 
+    @Column({
         type: 'integer',
         nullable: true
     })
-    subCard!: number|null;
+    subCard!: number | null;
 
-    @OneToOne(()=> Subscription, sub => sub.tenant)
-    @JoinColumn({ name: "subCard"})
-    sub : Subscription
+    @OneToOne(() => Subscription, sub => sub.tenant)
+    @JoinColumn({ name: "subCard" })
+    sub: Subscription
 }

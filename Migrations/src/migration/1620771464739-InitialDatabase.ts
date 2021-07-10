@@ -162,11 +162,15 @@ export class InitialDatabase1620771464739 implements MigrationInterface {
                 },
                 {
                     name: "speed",
-                    type: "float"
+                    type: "float",
+                    isNullable:true,
+                    default:null
                 },
                 {
-                    name: "numberOfplaces",
-                    type: "varchar"
+                    name: "numberOfPlaces",
+                    type: "varchar",
+                    isNullable:true,
+                    default:null
                 }
 
             ]

@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity("Vehicle")
 export class Vehicule extends BaseEntity {
@@ -14,4 +14,5 @@ export class Vehicule extends BaseEntity {
 
     @Column()
     availibility: string
+
 }

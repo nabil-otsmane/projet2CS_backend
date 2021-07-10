@@ -50,9 +50,20 @@ export const fetchCustomerPaymentMethods = async (customerId: string) => {
     if (Array.isArray(paymentMethods.data)) {
         return paymentMethods.data.map((method: any) => {
             return {
-                paymentId: method.id,
-                brand: method.card.brand,
-                last4: method.card.last4
+	            paymentId: method.id,
+	            card:{
+	            	brand: method.card.brand,
+	                last4: method.card.last4,
+	                exp_month:method.card.exp_month,
+	                exp_year:method.card.exp_year
+	            },
+	            address:{
+	            	city: method.billing_details.address.city,
+			      	country: method.billing_details.address.country,
+			      	line1: method.billing_details.address.line1,
+			      	postal_code: method.billing_details.address.postal_code
+	            },
+	            name:method.billing_details.name      
             }
         })
     }

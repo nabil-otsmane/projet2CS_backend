@@ -11,9 +11,9 @@ const app = express()
 app.use(json())
 app.use(cors())
 app.use(morgan("dev"))
-app.use(Router)
+app.use("/payment", Router)
 createConnection().then(async _connection => {
-    app.listen(5040, () => {
+    app.listen(8000, () => {
         console.log("server started.")
     })
 }).catch(error => console.log(error));

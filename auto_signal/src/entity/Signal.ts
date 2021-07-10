@@ -1,5 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, Timestamp} from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Timestamp } from "typeorm";
 
 @Entity("Signal")
 export class Signal extends BaseEntity {
@@ -8,25 +7,35 @@ export class Signal extends BaseEntity {
     idSignal: number;
 
     @Column()
-    signalType:String;
+    signalType: string
 
     @Column()
-    message:String;
+    message: string;
 
     @Column()
-    sourceType:String;
+    sourceType: string;
+
+    @Column()
+    idVehicle: number
+
+    @Column()
+    sent_at: Date
 
     @Column({ nullable: true })
-    idUserSource:number;
-    default:null;
-   
-    @Column()
-    idVehicle:number;
+    treated: boolean
 
-    @Column()
-    sent_at:Date;
+    @Column({ nullable: true })
+    treatmentDate: Date
 
-    @Column()
-    treated:boolean;
+    @Column({ nullable: true })
+    treatmentDescription: String
+
+    @Column({ nullable: true })
+    validatedByAgent: number
+    default: 0
+
+
+    @Column({ nullable: true })
+    idUserSource: number;
 
 }

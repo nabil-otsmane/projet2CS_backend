@@ -1,9 +1,11 @@
 FROM node:14-alpine as base
 
 WORKDIR /src
+
 COPY package*.json /src/
 EXPOSE 8000
 RUN npm ci
+
 COPY . /src
 
 

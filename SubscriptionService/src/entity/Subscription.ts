@@ -1,9 +1,11 @@
 import { type } from "node:os";
-import { Entity, PrimaryGeneratedColumn, Column, 
-                BaseEntity, ManyToOne, JoinColumn, OneToOne } from "typeorm";
+import {
+    Entity, PrimaryGeneratedColumn, Column,
+    BaseEntity, ManyToOne, JoinColumn, OneToOne, ManyToMany, JoinTable
+} from "typeorm";
 import { SubscriptionType } from "./SubscriptionType";
 import { Tenant } from "./Tenant";
-
+import { User } from './User'
 
 @Entity("Subscription")
 export class Subscription extends BaseEntity {
@@ -19,7 +21,7 @@ export class Subscription extends BaseEntity {
 
     @Column()
     expirationDate: Date;
-    
+
     @Column()
     solde: number;
 
@@ -29,12 +31,25 @@ export class Subscription extends BaseEntity {
     @Column()
     idTenant: number;
 
-    @ManyToOne(()=> SubscriptionType, subTypeO => subTypeO.subs)
-    @JoinColumn({ name: "subType"})
-    subTypeO : SubscriptionType
+    @ManyToOne(() => SubscriptionType)
+    @JoinColumn({ name: "subType" })
+    subTypeO: SubscriptionType
 
-    @OneToOne(()=> Tenant, tenant => tenant.sub)
-    @JoinColumn({ name: "idTenant"})
-    tenant : Tenant
+    @OneToOne(() => Tenant, tenant => tenant.sub)
+    @JoinColumn({ name: "idTenant" })
+    tenant: Tenant
 
+    @ManyToMany(() => User, user => user.idUser)
+    @JoinTable({
+        name: "Tenant", // table name for the junction table of this relation
+        joinColumn: {
+            name: "subCard",
+            referencedColumnName: "idSub"
+        },
+        inverseJoinColumn: {
+            name: "idUser",
+            referencedColumnName: "idUser"
+        }
+    })
+    user: User
 }
