@@ -272,17 +272,22 @@ export async function getSubscriptionByTenant(req: Request, res:Response) {
 }
 
 export async function debitBalance(req:Request, res:Response){
-    const subCard = await Subscription.findOne(req.body.idSub)
-    if(subCard){
-        if(subCard.subState=='expired'){
-            if(subCard.solde >= req.body.prix){
-                subCard.solde = subCard.solde - req.body.prix
-                const saved = await Subscription.save(subCard)
+    const sub = await Subscription.findOne({
+        relations : ["subTypeO"],
+        where: { 
+            idSub : req.body.idSub
+        }
+    })
+    const price = Number(req.body.prix)
+
+    if(sub){
+        const reducedPrice = price - (price*sub.subTypeO.reductionRate)
+        if(sub.subState=='expired'){
+            if(sub.solde >= reducedPrice){
+                sub.solde = sub.solde - reducedPrice
+                const saved = await Subscription.save(sub)
                 if(saved){
-                    res.status(201).json({
-                        balance : saved.solde,
-                        msg: "success"
-                    })
+                    res.status(201).json(saved)
                 }else{
                     res.status(500).json({
                         msg: "The changes could not be saved."
