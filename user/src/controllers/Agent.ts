@@ -5,7 +5,7 @@ import {Agent} from "../entity/Agent";
 
 export const getAgent =  (req: Request, res: Response) => {
 
-    Agent.findOne({idAgent: parseInt(req.params.agentId)})
+    Agent.findOne({idUser: parseInt(req.params.agentId)})
     .then(agent => {
         res.status(200).send(agent);
     }).catch(err => {
