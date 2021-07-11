@@ -45,7 +45,7 @@ apiEndpoints:
     paths: '/signalements/*'
   users:
     host: 54.37.87.85
-    paths: '/users/*'
+    paths: '/user/*'
 serviceEndpoints:
   payments:
     url: 'http://payment.api:8000'

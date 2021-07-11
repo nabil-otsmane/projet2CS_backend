@@ -6,10 +6,26 @@ import {Entity, PrimaryGeneratedColumn, Column, BaseEntity,PrimaryColumn, OneToO
 @Entity("Borne")
 export class Borne extends BaseEntity {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     idBorne: number;
 
     @Column()
-    city:String;
+    nbOccupiedPlaces: number;
+
+    @Column()
+    nbTotalPlaces: number;
+
+    @Column()
+    nbMaintenanceAgents: number;
+
+
+    @Column()
+    longitude: string;
+
+    @Column()
+    latitude: string;
+
+    @Column()
+    city: string;
 
 }

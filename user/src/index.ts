@@ -14,7 +14,7 @@ app.use(cors())
 app.use(morgan("dev"))
 
 
-app.use("/users", Router)
+app.use("/user", Router)
 
 var server;
 

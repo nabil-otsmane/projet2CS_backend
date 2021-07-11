@@ -3,47 +3,52 @@ import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, Double} from "typeor
 @Entity("Vehicle")
 export class Vehicle extends BaseEntity {
 
+    
     @PrimaryGeneratedColumn()
-    idVehicle: number;
+  idVehicle: number;
 
-    @Column()
-    unitPricePerHour: String;
+  @Column()
+  unitPricePerHour: number;
 
-    @Column()
-    unitPricePerDay: String;
+  @Column()
+  unitPricePerDay: number;
 
-    @Column()
-    vehicleType: String;
+  @Column()
+  vehicleType: String;
 
-    @Column()
-    vehiclebrand: String;
+  @Column()
+  vehiclebrand: String;
 
-    @Column()
-    vehiclemodel: String;
+  @Column()
+  vehiclemodel: String;
 
-    @Column()
-    availibility: String;
+  @Column()
+  fuelType: String;
 
-    @Column()
-    image:String;
+  @Column()
+  registrationNumber: String;
 
-    @Column()
-    vehicleColor:String;
+  @Column()
+  vehicleColor: String;
 
-    @Column()
-    registrationNumber:String;
+  @Column()
+  idBorne: Number;
 
-    @Column()
-    idBorne: number;
+  @Column({ type: "float" })
+  longitude: Number;
 
-    @Column()
-    fuelType:String;
+  @Column({ type: "float" })
+  latitude: Number;
 
-    @Column()
-    longitude:number;
-   
-    @Column()
-    latitude:number;
+  @Column()
+  image: String;
+
+  @Column({
+    type: "enum",
+    enum: ["available", "allocated"],
+    default: "available",
+  })
+  availibility: String;
 
     @Column()
     chassisNumber:String;

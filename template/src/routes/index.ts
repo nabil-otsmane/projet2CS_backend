@@ -28,7 +28,7 @@ router.get('/vehiclesList', getVehicles);
 router.get('/vehiclesListAvailable', getVehiclesavailable);
 //get vehicles by state stopped ...
 //router.get('/vehiclesListByState/:state', getVehiclesBystate);
-router.get('/vehiclesListByState/:state/:idBorne', getVehiclesBystate);
+router.get('/vehiclesListByState/:state/:idBorne', getVehiclesavailable);
 //get vehicle by id
 router.get('/vehicle/:id', getVehicleById);
 //update vehicle
@@ -36,7 +36,7 @@ router.put("/updateVehicle/:id", updateVehicle);
 //delete vehicle
 router.delete("/deleteVehicle/:id", deleteVehicle);
 
-router.post('/endRental/:idVehicle',endRental) ;
+router.post('/endRental/:idVehicle/:idBorne',endRental) ;
 router.put('/updateVehicleState/:idVehicle',updateVehicleState);
 
 export default router;

@@ -1,16 +1,19 @@
 import { Router } from 'express';
-import { get, getSubTypes, addSubscription,getSubscriptionCards,getSubscriptionByTenant, 
-    deleteExpiredSubscriptions, activateSubscription, subscriptionState,getSubType,
+import {
+    get, getSubTypes, addSubscription, getSubscriptionCards, getSubscriptionByTenant,
+    deleteExpiredSubscriptions, activateSubscription, subscriptionState, getSubType,
     debitBalance, getBalance, rechargeCard, updateSuscriptionType, getActiveSubscriptions,
-    getPendingSubscriptions, getExpiredSubscriptions, reductionPrice}
-     from '../controllers/SubscriptionController'
+    getPendingSubscriptions, getExpiredSubscriptions, reductionPrice, deleteSubspcription, addSubType
+}
+    from '../controllers/SubscriptionController'
 const router = Router();
 
 
 router.get('/', get);
 router.get('/getSubTypes', getSubTypes)
-router.get('/subState/:idTenant',subscriptionState)
-router.get('/getSubType/:idSubType',getSubType)
+router.get('/subState/:idTenant', subscriptionState)
+router.get('/getSubType/:idSubType', getSubType)
+router.post('/addSubType', addSubType)
 router.get('/getSubByTenant/:idTenant', getSubscriptionByTenant)
 router.get('/getSubCards', getSubscriptionCards)
 router.get('/getBalance/:idSub', getBalance)
@@ -20,6 +23,7 @@ router.get('/getExpiredSubs', getExpiredSubscriptions)
 router.post('/addSub', addSubscription)
 router.post('/activateSub/:idSub', activateSubscription)
 router.post('/deleteExpiredSubs', deleteExpiredSubscriptions)
+router.delete('/deleteSubscription/:idSub', deleteSubspcription)
 router.post('/debitBalance', debitBalance)
 router.post('/rechargeCard', rechargeCard)
 router.get('/reductionPriceSub', reductionPrice)

@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import { Borne } from "../entity/Borne";
 import { Rental } from "../entity/Rental";
 import { Vehicle } from '../entity/Vehicle'
+import { VehiclePosition } from "../entity/VehiclePosition";
+import { VehicleTracking } from "../entity/VehicleTracking";
 
 export const get = (_req: Request, res: Response) => {
   res.end("Pricing service.");
@@ -100,7 +103,7 @@ export async function updateVehicleState(req: Request, res: Response) {
 }
 
 export async function endRental(req: Request, res: Response) {
-  const vehicle = await Vehicle.findOne(req.params.idVehicle)
+ /* const vehicle = await Vehicle.findOne(req.params.idVehicle)
   if (vehicle) {
     if (vehicle.availibility.toLocaleLowerCase() == 'allocated') {
       const rental = await Rental.findOne({
@@ -136,5 +139,89 @@ export async function endRental(req: Request, res: Response) {
     }
   } else {
     res.json("Vehicle doesn't exist")
-  }
+  }*/
+  const idVehicle = parseInt(req.params.idVehicle);
+  const idBorne = parseInt(req.params.idBorne);
+  console.log(idBorne)
+  let borne: Borne
+  let idBorneVar: number
+  let rental
+  let tracking
+
+  try {
+    const vehicle = await Vehicle.findOneOrFail({idVehicle})
+    console.log(vehicle)
+    // Update Borne Vehicle
+    if (idBorne == null) {
+      throw "Id Borne Invalide"
+    } else {
+      // ASK ASMA IF N'incrémenté Le nombre de place f l borne la9dima
+      idBorneVar = (vehicle.idBorne as unknown) as number;
+      // Update Number of occupied places in the previous borne
+      borne = await Borne.findOneOrFail({ idBorne: idBorneVar });
+      borne.nbOccupiedPlaces--;
+      await borne.save();
+
+      // Update Vehicle Borne
+      vehicle.idBorne = idBorne
+
+      // Update Number of occupied places in the newest borne
+      borne = await Borne.findOneOrFail({ idBorne })
+      borne.nbOccupiedPlaces++;
+      await borne.save();
+    }
+
+    // Update the Vehicle Position
+    // Tell Asma That Rental Ou Vehicle Position fihom des données Marahoumsh Cohérente
+
+    // 01- Get The last rental relative to that vehicule
+    rental = await Rental.find({ idVehicle })
+    const latestOne = new Date(Math.max.apply(null, rental.map(function (e) {
+      return new Date(e.rentaldate);
+    })));
+    rental = await Rental.findOneOrFail({ idVehicle, rentaldate: latestOne })
+
+    // 02- Access to Table Tracking & Get The last inserted tracking of that vehicle
+    const position = await VehiclePosition.findOneOrFail({ idRental: rental.idRental })
+    tracking = await VehicleTracking.find({ idPosition: position.idPosition })
+    const lastTrack = Math.max.apply(null, tracking.map(function (e) {
+      return e.idTrack;
+    }))
+    tracking = await VehicleTracking.findOneOrFail({ idTrack: lastTrack })
+
+    // 03-use the tracking info( longitude & latitude) to update the position of the vehicle in vehicle table (longitude and latitude)
+    vehicle.latitude = tracking.latitude
+    vehicle.longitude = tracking.longitude
+    await vehicle.save();
+    if(vehicle.availibility.toLocaleLowerCase()=='allocated'){
+
+      if(rental){
+          rental.rentalstate='archived'
+          var saveRental = await Rental.save(rental)
+
+          if(saveRental){
+            vehicle.availibility='available'
+            var saveVehicle = await Vehicle.save(vehicle)
+            if(saveVehicle){
+                 return res.json("success")
+            }else{
+              return res.status(505).json("Error saving vehicle state")
+            }
+          }else{
+            return res.status(505).json("Error saving rental state")
+          }
+
+      }else{
+        return res.status(404).json("No active rental associated with this vehicle")
+      }
+    }else{
+      return res.status(404).json("Vehicle is " + vehicle.availibility)
+    }
+    
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ error: "Something went wrong while updating vehicle borne..." });
+}
 }
