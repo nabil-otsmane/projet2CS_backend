@@ -3,23 +3,21 @@ import { Rental} from "../entity/Rental";
 import { Vehicle} from "../entity/Vehicle";
 import { Tenant} from "../entity/Tenant";
 import { Bill} from "../entity/Bill";
-import { O_NOFOLLOW } from "node:constants";
 
 // Function for testing server response
 export async function get(_req: Request, res: Response) {
     res.end("RentalByUserId Service")
 }
 export async function getRental(_req:Request , res : Response){
-    const idUser = _req.params.idUser;
-    const tenant= await Tenant.find({
-        where : {idUser : idUser}
+    const idRental = _req.params.idUser;
+    const rental= await Rental.find({
+        where : {idRental : idRental}
     });
-   const len = tenant.length;
-   console.log(len);
-    if(tenant){
-        const  rental= await Rental.find({
+  
+    if(rental){
+      /*  const  rental= await Rental.find({
             where : {idTenant : tenant[1].idTenant},order:{plannedrestitutiondate:"DESC"}
-        });
+        });*/
         const date2 =rental[0].plannedrestitutiondate;
       const date1=rental[0].rentaldate;
       
