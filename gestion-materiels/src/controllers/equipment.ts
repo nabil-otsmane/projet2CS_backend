@@ -48,7 +48,7 @@ export const addEquip = async (req: Request, res: Response) => {
  */
 export async function getEquips(_req: Request, res: Response) {
   try {
-    const Equips = await Equipment.find({ relations: ["usedEquipments"] });
+    const Equips = await Equipment.find();
     console.log(Equips);
     return res.json(Equips);
   } catch (err) {

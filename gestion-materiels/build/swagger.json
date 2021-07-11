@@ -1,0 +1,133 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8080",
+    "info": {
+        "version": "1.0.0",
+        "title": "Documentation du service materiel",
+        "description": "Cette documentation contient tout les endpoint du service materiel : Equipment / UsedEquipment. \nVeuillez-trouvez tout les détails dans la section models. ",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "tags": [
+        {
+            "name": "Equipment",
+            "description": "Tout les méthodes sur le endpoint equipment :"
+        }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "definitions": {
+        "UsedEquipment": {
+            "type": "object",
+            "properties": {
+                "idUsedEquipment": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                }
+            }
+        },
+        "Equipment": {
+            "type": "object",
+            "properties": {
+                "idEquipment": {
+                    "type": "number"
+                },
+                "equipmentName": {
+                    "type": "string"
+                },
+                "unitPrice": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "usedEquipments": {
+                    "type": "array",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/UsedEquipment"
+                    }
+                }
+            }
+        },
+        "Task": {
+            "type": "object",
+            "properties": {
+                "idTask": {
+                    "type": "number"
+                },
+                "idAgent": {
+                    "type": "number"
+                },
+                "idVehicle": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "idTaskState": {
+                    "type": "number"
+                },
+                "usedEquipments": {
+                    "type": "array",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/UsedEquipment"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/equipment": {
+            "get": {
+                "tags": ["Equipment"],
+                "description": "API endpoint pour avoir tout les équipements dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404*",
+                "summary": "API endpoint pour avoir tout les équipements dans le système",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idEquipment": {
+                                    "example": "number"
+                                },
+                                "equipmentName": {
+                                    "type": "string"
+                                },
+                                "unitPrice": {
+                                    "type": "number"
+                                },
+                                "category": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
