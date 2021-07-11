@@ -21,7 +21,7 @@ export async function getRental(_req:Request , res : Response){
         const date2 =rental[0].plannedrestitutiondate;
       const date1=rental[0].rentaldate;
       
-       const diffjour = Math.abs(date2.getTime() - date1.getTime())/(3600000*24);
+       const diffjour = Math.trunc(Math.abs(date2.getTime() - date1.getTime())/(3600000*24));
        //const difference=diffTime
       
        //if(diffTime==0){
