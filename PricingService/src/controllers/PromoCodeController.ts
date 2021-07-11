@@ -7,10 +7,10 @@ export async function getReductionPrice(req: Request, res: Response) {
     const basePrice = Number(req.params.basePrice)
     const promoCode = await PromoCode.findOne(req.params.idPromoCode)
     const tenant = await Tenant.findOne(req.params.idTenant)
-    if (promoCode) {
+    if (promoCode && tenant) {
         res.json({
             price: calculateReduction(basePrice, promoCode.reductionRate),
-            currentPoints : tenant.points-promoCode.pricePoints,
+            currentPoints: tenant.points - promoCode.pricePoints,
             msg: "success"
         })
     } else {
