@@ -3,6 +3,11 @@ import { getManager } from "typeorm";
 import { read } from "node:fs";
 import { Task } from "../entity/Task";
 import { TaskModel } from "../entity/TaskModel";
+import { Rental } from "../entity/Rental";
+import { VehicleState } from "../entity/VehicleState";
+import { Vehicule } from "../entity/Vehicle";
+
+const axios = require("axios");
 
 /**
  * Welcome endpoint for task management service.
@@ -38,6 +43,7 @@ export const addTask = async (req: Request, res: Response) => {
   } = req.body;
   try {
     const taskModel = await TaskModel.findOneOrFail({ id: idTaskModel });
+    // Task Creation
     const task = Task.create({
       idAgent,
       idVehicle,
@@ -49,6 +55,35 @@ export const addTask = async (req: Request, res: Response) => {
       endDate,
     });
     await task.save();
+
+    // Update Vehicle To Maintained
+    const vehicle = await Vehicule.findOneOrFail({ idVehicle })
+    vehicle.availibility = "maintained"
+    await vehicle.save();
+
+    var data = JSON.stringify({
+      title: "Notification d'une tâche",
+      body: "Vous avez une nouvelle notification : " + taskTitle,
+      idAgent,
+    });
+
+    var config = {
+      method: "post",
+      url: "https://volet-maintenance.herokuapp.com/service-taskNotif/fcm",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios(config)
+      .then(() => {
+        console.log("POST FCM");
+      })
+      .catch(function (error: any) {
+        console.log(error);
+      });
+
     return res.send(task);
   } catch (err) {
     console.log(err);
@@ -68,7 +103,21 @@ export async function getTasks(_req: Request, res: Response) {
     const tasks = await Task.find({
       relations: ["usedEquipments", "taskModel", "taskModel.steps"],
     });
-    console.log(tasks);
+    tasks.map((item: any) => {
+      item.steps = item.taskModel.steps;
+      delete item.taskModel;
+      return item;
+    });
+    /* 
+    tasks.map((item) => {
+      console.log(item.taskModel.steps);
+    }); */
+
+    // const steps = tasks.taskModel.steps;
+    /* tasks.map((item) => {
+      const steps = item.taskModel.steps;
+      item.steps = steps;
+    }); */
     return res.json(tasks);
   } catch (err) {
     console.log(err);
@@ -80,15 +129,44 @@ export async function getTasks(_req: Request, res: Response) {
 export async function updateTaskState(req: Request, res: Response) {
   const id = req.params.id;
   try {
+    let msg = "";
     const task = await Task.findOneOrFail({
       relations: ["usedEquipments", "taskModel", "taskModel.steps"],
       where: {
         uuid: id,
-      }, 
+      },
     });
     task.idTaskState = req.body.idTaskState;
     await task.save();
-    return res.json(task);
+    if ((task.idTaskState = 1)) {
+      msg = "tache n'est pas affecté";
+    }
+    if ((task.idTaskState = 2)) {
+      msg = "La tâche est en cours";
+    }
+    if ((task.idTaskState = 3)) {
+      msg = "La tâche a été terminé";
+      //change vidange inside the table vehicle state
+      if ((task.taskModel.id = 2)) {
+        // task vidange
+        const idVehicule = task.idVehicle;
+        const rental = await Rental.find({
+          idVehicle: idVehicule,
+          rentalstate: "active",
+        });
+        const vehicleState = await VehicleState.findOneOrFail({
+          idRental: rental[rental.length - 1].idRental,
+        });
+        vehicleState.vidange = vehicleState.vidange + 10000;
+        await vehicleState.save();
+        // Update Vehicule State To Available
+        const vehicle = await Vehicule.findOneOrFail({ idVehicle: idVehicule })
+        vehicle.availibility = "available"
+        await vehicle.save();
+      }
+    }
+
+    return res.json(msg);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
@@ -104,7 +182,6 @@ export async function updateTaskState(req: Request, res: Response) {
  */
 export async function updateTask(req: Request, res: Response) {
   const id = req.params.id;
-  console.log("Hello");
 
   try {
     const task = await Task.findOneOrFail({
@@ -125,6 +202,7 @@ export async function updateTask(req: Request, res: Response) {
     return res.status(500).json(err);
   }
 }
+
 
 //Delete
 export async function deleteTask(req: Request, res: Response) {
@@ -171,9 +249,36 @@ export async function getTaskByAgentId(req: Request, res: Response) {
       .where("task.idAgent = :id", { id: id })
       .leftJoinAndSelect("task.usedEquipments", "usedEquipments")
       .leftJoinAndSelect("task.taskModel", "taskModel")
+      .leftJoinAndSelect("taskModel.steps", "Steps")
       .getMany();
 
+    tasks.map((item: any) => {
+      item.steps = item.taskModel.steps;
+      delete item.taskModel;
+      return item;
+    });
+
     return res.send(tasks);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+}
+
+export async function setTaskEndDate(req: Request, res: Response) {
+  const id = req.params.id;
+
+  try {
+    const task = await Task.findOneOrFail({
+      relations: ["taskModel", "taskModel.steps"],
+      where: {
+        uuid: id,
+      },
+    });
+
+    task.endDate = req.body.endDate || task.endDate;
+    await task.save();
+    return res.json("Date modifié avec succés");
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

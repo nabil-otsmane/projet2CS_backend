@@ -14,13 +14,17 @@ const app = express();
 app.use(json());
 app.use(cors());
 app.use(morgan("dev"));
-app.use("/agentTasks-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/service-task/agentTasks-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
-app.use(Router);
+app.use("/service-task", Router);
 
 createConnection()
   .then(async (_connection) => {
-    const server = app.listen(8000, () => {
+    const server = app.listen(process.env.PORT || 8000, () => {
       console.log("Service gestion de tâche up 🚀");
     });
     module.exports = server;

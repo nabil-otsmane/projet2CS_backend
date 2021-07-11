@@ -14,18 +14,22 @@ const app = express();
 app.use(json());
 app.use(cors());
 app.use(morgan("dev"));
-app.use("/material-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/service-materiel/material-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 dotenv.config();
 
-app.use(Router);
+app.use("/service-materiel", Router);
 
 createConnection()
   .then(async (_connection: Connection) => {
-    const server = app.listen(process.env.SERVICE_PORT || 8080, () => {
+    const server = app.listen(process.env.PORT || 8080, () => {
       console.log(
         `🚀 Materials Up --> 🏠 LocalHost:${
-          process.env.SERVICE_PORT || 8080
+          process.env.PORT || 8080
         } || 🐳 Docker:8002 `
       );
     });

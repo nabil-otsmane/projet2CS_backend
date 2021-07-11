@@ -8,6 +8,7 @@ import {
   updateTaskState,
   getTaskByAgentId,
   updateTask,
+  setTaskEndDate
 } from "../controllers/task";
 import {
   addTaskModel,
@@ -25,6 +26,7 @@ router.get("/task", getTasks);
 router.post("/task", addTask);
 router.put("/taskState/:id", updateTaskState);
 router.put("/task/:id", updateTask);
+router.put("/taskEndDate/:id", setTaskEndDate);
 router.delete("/task/:id", deleteTask);
 router.get("/task/:id", getTask);
 router.get("/task/agent/:id", getTaskByAgentId);

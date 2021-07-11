@@ -29,10 +29,10 @@ export const addUsedEquip = async (req: Request, res: Response) => {
     if (errors.length > 0) throw errors;
 
     await usedEquip.save();
-    return res.send(usedEquip);
+    return res.status(200).json({ token: 1 });
   } catch (err) {
     console.log(err);
-    return res.status(500).json(err);
+    return res.status(500).json({ token: 0 });
   }
 };
 

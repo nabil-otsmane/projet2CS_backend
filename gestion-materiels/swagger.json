@@ -1,6 +1,6 @@
 {
   "swagger": "2.0",
-  "host": "localhost:8080",
+  "host": "service-equipment.herokuapp.com",
   "info": {
     "version": "1.0.0",
     "title": "Documentation du service materiel",
@@ -20,7 +20,7 @@
       "description": "Tout les méthodes sur le endpoint usedEquipment :"
     }
   ],
-  "schemes": ["http"],
+  "schemes": ["https", "http"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "definitions": {
@@ -92,7 +92,7 @@
     }
   },
   "paths": {
-    "/equipment": {
+    "/service-materiel/equipment": {
       "get": {
         "tags": ["Equipment"],
         "description": "API endpoint pour avoir tout les équipements dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 ✅ \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
@@ -186,7 +186,7 @@
         }
       }
     },
-    "/equipment/{id}": {
+    "/service-materiel/equipment/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -313,7 +313,7 @@
         }
       }
     },
-    "/usedEquipment": {
+    "/service-materiel/usedEquipment": {
       "get": {
         "tags": ["UsedEquipment"],
         "description": "API endpoint pour avoir tout les équipements à utiliser dans le système \n \n*Une requête de récupération avec succès va retourner un Status code HTTP 200 ✅ \nUne requête de récupération qui échoue va retourner un Status code HTTP 500 🖥️🆘 \nSinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404 ❌ *",
@@ -372,7 +372,7 @@
       },
       "post": {
         "tags": ["UsedEquipment"],
-        "description": "API endpoint pour créer un nouveau équipement à utiliser dans le système \n \n*Une requête de création avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
+        "description": "API endpoint pour créer un nouveau équipement à utiliser dans le système \n \n*Une requête de création avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de création qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
         "summary": "API endpoint pour créer un équipement à utiliser dans le système 🏭",
         "parameters": [
           {
@@ -399,67 +399,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "uuid": {
-                  "example": "26ac7bdf-fe8e-4ed7-8344-4afffde0b493"
-                },
-                "createdAt": {
-                  "example": "2021-05-27T18:08:32.953Z"
-                },
-                "updatedAt": {
-                  "example": "2021-05-27T18:08:32.953Z"
-                },
-                "description": {
-                  "example": "J'ai utiliser 20 litres d'huile Quoi !"
-                },
-                "quantity": {
-                  "example": 20
-                },
-                "equipment": {
-                  "type": "object",
-                  "properties": {
-                    "uuid": {
-                      "example": "e6f255d0-7241-46ce-92bc-27dad153b411"
-                    },
-                    "createdAt": {
-                      "example": "2021-05-25T19:57:13.887Z"
-                    },
-                    "updatedAt": {
-                      "example": "2021-05-25T19:57:13.887Z"
-                    },
-                    "unitPrice": {
-                      "example": "8"
-                    },
-                    "category": {
-                      "example": "Liquide"
-                    }
-                  }
-                },
-                "task": {
-                  "type": "object",
-                  "properties": {
-                    "uuid": {
-                      "example": "969f0417-0611-4f7c-9fc3-1f4b3ca22573"
-                    },
-                    "idAgent": {
-                      "example": 100
-                    },
-                    "idVehicle": {
-                      "example": 1
-                    },
-                    "description": {
-                      "example": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."
-                    },
-                    "idTaskState": {
-                      "example": 1
-                    }
-                  }
-                }
-              }
-            }
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"
@@ -470,7 +410,7 @@
         }
       }
     },
-    "/usedEquipment/{id}": {
+    "/service-materiel/usedEquipment/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -538,7 +478,7 @@
       },
       "put": {
         "tags": ["UsedEquipment"],
-        "description": "API endpoint pour modifier un équipement à utiliser, déja existant, dans le système \n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌",
+        "description": "API endpoint pour modifier un équipement à utiliser, déja existant, dans le système \n \n*Une requête de modification avec succès va retourner un Status code HTTP 200 *✅* \nUne requête de récupération qui échoue va retourner un Status code HTTP 500* 🖥️🆘 \n *Sinon le endpoint n'existe pas et la requête va retourner un Status code HTTP 404* ❌ \n\n La description de l'équipement à utiliser doit avoir plus de 4 caractères",
         "summary": "API endpoint pour modifier un équipement à utiliser, déja existant, dans le système 🔄",
         "parameters": [
           {
