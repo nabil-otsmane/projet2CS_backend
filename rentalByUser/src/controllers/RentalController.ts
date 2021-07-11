@@ -3,6 +3,7 @@ import { Rental} from "../entity/Rental";
 import { Vehicle} from "../entity/Vehicle";
 import { Tenant} from "../entity/Tenant";
 import { Bill} from "../entity/Bill";
+import { O_NOFOLLOW } from "node:constants";
 
 // Function for testing server response
 export async function get(_req: Request, res: Response) {
@@ -17,9 +18,9 @@ export async function getRental(_req:Request , res : Response){
    console.log(len);
     if(tenant){
         const  rental= await Rental.find({
-            where : {idTenant : tenant[1].idTenant}
+            where : {idTenant : tenant[1].idTenant},order:{plannedrestitutiondate:"DESC"}
         });
-
+        const lenren=rental.length
         const  vehicle= await Vehicle.find({
             where : {idVehicle : rental[0].idVehicle}
         });
@@ -28,7 +29,7 @@ export async function getRental(_req:Request , res : Response){
             where : {idRental : rental[0].idRental}
         })
         res.json({
-            rental: rental ,
+            rental: rental[0] ,
             vehicle: vehicle ,
             bill: bill
         });

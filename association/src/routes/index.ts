@@ -19,7 +19,8 @@ export default function (io: Server, app: Express, redis: RedisClient) {
         res.send(result);
     })
 
-    app.get("/vehicules", async function (_req, res) {
+    //app.get("/vehicules", async function (_req, res) {
+    app.get("/vehicules", Auth(["decision_maker", "account_admin", "technical_admin"]), async function (_req, res) {
         const result = await getVehicules(redis)
         res.send(result);
     })

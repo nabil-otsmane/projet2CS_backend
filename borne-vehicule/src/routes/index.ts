@@ -13,6 +13,8 @@ import {
   updateVehicule,
   deleteVehicule,
   getVehiculesByBorneId,
+  updateInfoVehicle,
+  getRentalVehicle,
 } from "../controllers/vehicule";
 
 const router = Router();
@@ -30,5 +32,10 @@ router.get("/vehicules", getVehicules);
 router.get("/vehicules/:idVehicule", getVehicule);
 router.put("/vehicules/:idVehicule", updateVehicule);
 router.delete("/vehicules/:idVehicule", deleteVehicule);
+
+
+router.get("/updateVehicle/:id", updateInfoVehicle)
+router.get("/rentalVeh/:id", getRentalVehicle)
+
 
 export default router;

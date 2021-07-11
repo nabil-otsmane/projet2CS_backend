@@ -118,16 +118,28 @@ class InvoiceGenerator {
     }
 
 
-    generate(fileStream: any) {
-        let theOutput = new PDFGenerator
-
+    async generate(fileStream: any, res?: any, filename?: any) {
+        let theOutput = new PDFGenerator({ bufferPages: true })
+        if (res) {
+            let buffers: any = [];
+            theOutput.on('data', buffers.push.bind(buffers));
+            theOutput.on('end', () => {
+                let pdfData = Buffer.concat(buffers);
+                res.writeHead(200, {
+                    'Content-Length': Buffer.byteLength(pdfData),
+                    'Content-Type': 'application/pdf',
+                    'Content-disposition': `attachment;filename=${filename}`,
+                })
+                    .end(pdfData);
+            });
+        }
         theOutput.pipe(fileStream)
-
         this.generateHeaders(theOutput)
-
         this.generateTable(theOutput)
 
         theOutput.end()
+
+
 
     }
 }

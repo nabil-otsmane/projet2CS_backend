@@ -14,9 +14,9 @@ export class User extends BaseEntity {
     lastName:String;
 
     @Column()
-    address:String;
+    phoneNumber:number;
 
     @Column()
-    phoneNumber:number;
+    address:String;
 
 }

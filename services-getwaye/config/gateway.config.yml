@@ -1,0 +1,194 @@
+http:
+  port: 7000
+apiEndpoints:
+  payments:
+    host: 54.37.87.85
+    paths: '/payment/*'
+  pricings:
+    host: 54.37.87.85
+    paths: '/pricing/*'
+  subscriptions:
+    host: 54.37.87.85
+    paths: '/subscription/*'
+  facturations:
+    host: 54.37.87.85
+    paths: ['/bill/*','/download/bill/*']
+  vhicules:
+    host: 54.37.87.85
+    paths: '/cars/*'
+  promotions:
+    host: 54.37.87.85
+    paths: '/promocode/*'
+  auths:
+    host: 54.37.87.85
+    paths: '/auth/*'
+  rentals:
+    host: 54.37.87.85
+    paths: '/rental/*'
+  bornes:
+    host: 54.37.87.85
+    paths: '/bornes/*'
+  rentalusers:
+    host: 54.37.87.85
+    paths: '/rentalUser/*'
+  association:
+    host: 54.37.87.85
+    paths: '/association/*'
+  signals:
+    host: 54.37.87.85
+    paths: '/signal/*'
+  rental:
+    host: 54.37.87.85
+    paths: '/rentals/*'
+  signalements:
+    host: 54.37.87.85
+    paths: '/signalements/*'
+  users:
+    host: 54.37.87.85
+    paths: '/users/*'
+serviceEndpoints:
+  payments:
+    url: 'http://payment.api:8000'
+  rental:
+    url: 'http://rentals.api:8000'
+  pricings:
+    url: 'http://pricing.api:8000'
+  subscriptions:
+    url: 'http://subscription.api:8000'
+  facturations:
+    url: 'http://facture.api:8000'
+  vhicules:
+    url: 'http://vehicle.api:8000'
+  promotions:
+    url: 'http://promotion.api:8000'
+  auths:
+    url: 'http://auth.api:8000'
+  rentals:
+    url: 'http://vehicle.api:8000'
+  bornes:
+    url: 'http://bornes.api:8000'
+  rentalusers:
+    url: 'http://rentalUser.api:8000'
+  association:
+    url: 'http://association.api:8000'
+  signals:
+    url: 'http://signal.api:8000'
+  users:
+    url: 'http://users.api:8000'
+  signalements:
+    url: 'http://signalement.api:8000'
+policies:
+  - proxy
+pipelines:
+  rentals:
+    apiEndpoints:
+      - rentals
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: rentals 
+              changeOrigin: true
+  rental:
+    apiEndpoints:
+      - rental
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: rental
+              changeOrigin: true
+  payments:
+    apiEndpoints:
+      - payments
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: payments 
+              changeOrigin: true
+  pricings:
+    apiEndpoints:
+      - pricings
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: pricings 
+              changeOrigin: true
+  subscriptions:
+    apiEndpoints:
+      - subscriptions
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: subscriptions 
+              changeOrigin: true
+  facturations:
+    apiEndpoints:
+      - facturations
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: facturations 
+              changeOrigin: true
+  vhicules:
+    apiEndpoints:
+      - vhicules
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: vhicules 
+              changeOrigin: true
+  promotions:
+    apiEndpoints:
+      - promotions
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: promotions 
+              changeOrigin: true
+  auths:
+    apiEndpoints:
+      - auths
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: auths 
+              changeOrigin: true
+  bornes:
+    apiEndpoints:
+      - bornes
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: bornes 
+              changeOrigin: true
+  rentalusers:
+    apiEndpoints:
+      - rentalusers
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: rentalusers 
+              changeOrigin: true
+  signals:
+    apiEndpoints:
+      - signals
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: signals 
+              changeOrigin: true
+  users:
+    apiEndpoints:
+      - users
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: users 
+              changeOrigin: true
+  signalements:
+    apiEndpoints:
+      - signalements
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: signalements 
+              changeOrigin: true
