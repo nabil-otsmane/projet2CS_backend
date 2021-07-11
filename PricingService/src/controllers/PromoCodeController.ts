@@ -3,16 +3,18 @@ import { PromoCode } from "../entity/PromoCode";
 import { Tenant } from "../entity/Tenant";
 
 // get the price after applying the chosen reduction
-export async function getReductionPrice(_req: Request, _res: Response) {
-    const basePrice = Number(_req.params.basePrice)
-    const promoCode = await PromoCode.findOne(_req.params.idPromoCode)
-    if (promoCode) {
-        _res.json({
+export async function getReductionPrice(req: Request, res: Response) {
+    const basePrice = Number(req.params.basePrice)
+    const promoCode = await PromoCode.findOne(req.params.idPromoCode)
+    const tenant = await Tenant.findOne(req.params.idTenant)
+    if (promoCode && tenant) {
+        res.json({
             price: calculateReduction(basePrice, promoCode.reductionRate),
+            currentPoints: tenant.points - promoCode.pricePoints,
             msg: "success"
         })
     } else {
-        _res.json({
+        res.json({
             msg: "Failed to find Promo Code."
         })
     }
